@@ -1,0 +1,12 @@
+wait should be an instance of Move
+
+
+json of actions should be in form of
+    "action_class:action_instance_name":{
+        "second_action_class:second_action_instance_name":[argument1,argument2],
+        "third_action_class:third_action_instance_name":[argument1,argument2],
+        "yields":#
+    }
+    actions must be done in descending order, so the last listed action must be done after the previous
+    the last statement should be how many units of the relevant resource (if it returns a resource) are generated.
+    

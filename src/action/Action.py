@@ -1,5 +1,6 @@
 class Action:
-
+    def parse():
+        print 'done'
 
 
 
@@ -13,7 +14,6 @@ class InteractWithGameObject(VariableStaticAction):
 class PlaceObject(InteractWithGameObject):
 class HarvestResource(InteractWithGameObject):
 class Move(VariableStaticAction):
-class Wait(VariableStaticAction):
 
 
 
