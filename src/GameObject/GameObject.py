@@ -1,0 +1,3 @@
+class GameObject:
+    
+class Resource:
