@@ -1,0 +1,50 @@
+{
+    "acquireResource:wood":{
+        "requires":{},
+        "locateObject":["wood"],
+        "moveToObject":["wood"],
+        "switchToObject":["pickaxe",0,1],
+        "harvestResource":["wood"],
+        "yields":1
+    },
+    "acquireResource:stone":{
+        "requires":{
+            "obtainResource":["pickaxe",1,1]
+        },
+        "locateObject":["stone"],
+        "moveToObject":["stone"],
+        "switchToObject":["pickaxe",1,1],
+        "harvestResource":["stone"],
+        "yields":1
+    },
+    "acquireResource:stick":{
+        "requires":{
+            "acquireResource":["wood plank",2]
+        },
+        "interactWithGameObject":["player inventory"],
+        "craftObject":["stick"],
+        "yields":4
+    },
+    "acquireResource:[wood,stone,iron,gold,diamond] pickaxe":{
+        "requires":{
+            "acquireResource":["[wood plank,cobblestone,iron,gold,diamond]",3],
+            "acquireResource":["stick",2]
+        },
+        "obtainResource":["crafting bench"],
+        "note":"place the crafting bench if it didn't exist?",
+        "craftObject":["[wood,stone,iron,gold,diamond] pickaxe"],
+        "yields":1
+    },
+
+
+
+
+
+
+
+
+
+    "note":"obtainResource could mean find a new one, access an existing one, or use one from player inv",
+    "note2":"acquireResource means find new",
+    "note3":"accessResource means use existing and DONT find new"
+}
