@@ -1,2 +1,2 @@
 run_basic:
-	@echo test
+	@python src/main.py

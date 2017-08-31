@@ -1,3 +1,3 @@
 class GameObject:
-    
-class Resource:
+
+class Resource(GameObject):
