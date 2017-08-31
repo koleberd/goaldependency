@@ -7,7 +7,7 @@ import json
 def bracketSplit(strg,ind):
     if type(strg) != str or '[' not in strg:
         return strg
-    return strg.split('[')[1].split(']')[0].split(',')[ind] + strg.split(']')[1]
+    return strg.split('[')[0] + strg.split('[')[1].split(']')[0].split(',')[ind] + strg.split(']')[1]
 
 
 #ind is used for bracketsplit
@@ -31,16 +31,18 @@ def parseAction(name,actions):
     #for each action name, run create a new action set and use the index of the action name for any other isntances of []
     for ind in range(0,len(actionName)):
         thisActionName = actionType + ':' + actionName[ind]
-        actionSet[thisActionName] = {}
+        actionSet[thisActionName] = {'actionList':{}}
         for key in actions:
             if 'yield' in key:
                 actionSet[thisActionName]['yield'] = actions[key]
-                continue
-            if key == 'requires':
+            elif key == 'children':
                 actionSet[thisActionName]['children'] = {}
-                print (actions['requires'])
-                for req in actions['requires']:
-                    actionSet[thisActionName]['children'].update(parseRequirement(req,actions['requires'][req],ind))
+                print (actions['children'])
+                for req in actions['children']:
+                    actionSet[thisActionName]['children'].update({bracketSplit(req,ind):actions['children'][req]})
+            else:
+                actionSet[thisActionName]['actionList'].update({bracketSplit(key,ind):actions[key]})
+
 
 
     return actionSet

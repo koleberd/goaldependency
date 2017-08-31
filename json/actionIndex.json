@@ -1,6 +1,6 @@
 {
     "acquireResource:wood":{
-        "requires":{},
+        "children":{},
         "locateObject:wood":[],
         "moveToObject:wood":[],
         "switchToObject:axe":[0,1],
@@ -8,7 +8,7 @@
         "yields":1
     },
     "acquireResource:stone":{
-        "requires":{
+        "children":{
             "obtainResource:pickaxe":[1,1]
         },
         "locateObject:stone":[],
@@ -18,7 +18,7 @@
         "yields":1
     },
     "acquireResource:stick":{
-        "requires":{
+        "children":{
             "acquireResource:wood plank":[2]
         },
         "interactWithGameObject:player inventory":[],
@@ -26,7 +26,7 @@
         "yields":4
     },
     "acquireResource:[wood,stone,iron,gold,diamond] pickaxe":{
-        "requires":{
+        "children":{
             "acquireResource:[wood plank,cobblestone,iron,gold,diamond]":[3],
             "acquireResource:stick":[2]
         },
