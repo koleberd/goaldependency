@@ -30,11 +30,37 @@
             "acquireResource:[wood plank,cobblestone,iron,gold,diamond]":[3],
             "acquireResource:stick":[2]
         },
-        "obtainResource:crafting bench":[],
+        "accessResource:crafting bench":[],
         "craftObject:[wood,stone,iron,gold,diamond] pickaxe":[],
         "yields":1
     },
+    "accessResource:crafting bench":{
+        "locateObject:crafting bench":[],
+        "moveToObject:crafting bench":[],
+        "interactWithGameObject:crafting bench":[]
+    },
 
+
+
+    "note static actions":0,
+    "switchToObject:<>":{
+
+    },
+    "locateObject:<>":{
+        "note":"rotate or move, how to represent conditional"
+    },
+    "moveToObject:<>":{
+        "note":"wasd"
+    },
+    "interactWithGameObject:crafting bench":{
+        "rightclick":"rightclick"
+    },
+    "interactWithGameObject:player inventory":{
+        "press i":"press i"
+    },
+    "harvestResource:<>":{
+        "hold for some amount of time":[]
+    },
 
 
 

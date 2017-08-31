@@ -1,6 +1,5 @@
 import json
 
-#load GameObject index
 
 #returns the original string if not inclosed in brackets,
 #   otherwise, returns the ind-th item in the brackets (separated with commas)
@@ -8,13 +7,6 @@ def bracketSplit(strg,ind):
     if type(strg) != str or '[' not in strg:
         return strg
     return strg.split('[')[0] + strg.split('[')[1].split(']')[0].split(',')[ind] + strg.split(']')[1]
-
-
-#ind is used for bracketsplit
-def parseRequirement(name,args,ind):
-    if len(args) == 0:
-        return {name:[]}
-    return {(name + ':' + bracketSplit(args[0],ind)):args[1:]}
 
 #returns an array of parsed actions
 def parseAction(name,actions):
@@ -37,7 +29,6 @@ def parseAction(name,actions):
                 actionSet[thisActionName]['yield'] = actions[key]
             elif key == 'children':
                 actionSet[thisActionName]['children'] = {}
-                print (actions['children'])
                 for req in actions['children']:
                     actionSet[thisActionName]['children'].update({bracketSplit(req,ind):actions['children'][req]})
             else:
@@ -47,23 +38,32 @@ def parseAction(name,actions):
 
     return actionSet
 
-with open('json/resourceIndex.json') as jsfl:
-    resourceIndexJson = json.load(jsfl)
+def parseResource(name, tags):
 
-resourceIndex = {}
+def loadActionIndex():
+    with open('json/actionIndex.json') as jsfl:
+        actionIndexJson = json.load(jsfl)
 
-for key in resourceIndexJson:
-    load = 'nothing'
+    actionIndex = {}
+    for key in actionIndexJson:
+        actionIndex.update(parseAction(key,actionIndexJson[key]))
 
-#load action index
-with open('json/actionIndex.json') as jsfl:
-    actionIndexJson = json.load(jsfl)
+    for key in actionIndex:
+        print(key)
+        print(actionIndex[key])
 
-actionIndex = {}
 
-for key in actionIndexJson:
-    actionIndex.update(parseAction(key,actionIndexJson[key]))
+def loadResourceIndex():
+    with open('json/resourceIndex.json') as jsfl:
+        resourceIndexJson = json.load(jsfl)
 
-for key in actionIndex:
-    print(key)
-    print(actionIndex[key])
+    resourceIndex = {}
+
+    for key in resourceIndexJson:
+        load = 'nothing'
+
+
+
+
+#loadActionIndex()
+loadResourceIndex()
