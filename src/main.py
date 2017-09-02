@@ -1,5 +1,9 @@
 import json
-
+import decomposer
+from action import *
+import gameObject
+import playerState
+import gameState
 
 #returns the original string if not inclosed in brackets,
 #   otherwise, returns the ind-th item in the brackets (separated with commas)
@@ -11,7 +15,7 @@ def bracketSplit(strg,ind):
 #returns an array of parsed actions
 def parseAction(name,actions):
     if 'note' in name:
-        return []
+        return {}
     actionType = name.split(':')[0]
     actionName = [name.split(':')[1]]
 
@@ -23,22 +27,28 @@ def parseAction(name,actions):
     #for each action name, run create a new action set and use the index of the action name for any other isntances of []
     for ind in range(0,len(actionName)):
         thisActionName = actionType + ':' + actionName[ind]
-        actionSet[thisActionName] = {'actionList':{}}
-        for key in actions:
-            if 'yield' in key:
-                actionSet[thisActionName]['yield'] = actions[key]
-            elif key == 'children':
-                actionSet[thisActionName]['children'] = {}
-                for req in actions['children']:
-                    actionSet[thisActionName]['children'].update({bracketSplit(req,ind):actions['children'][req]})
-            else:
-                actionSet[thisActionName]['actionList'].update({bracketSplit(key,ind):actions[key]})
+        actionSet[thisActionName] = {'actionList':[]}
+        actionSet[thisActionName]['yields'] = actions['yields']
+        actionSet[thisActionName]['children'] = {}
+
+        for child in actions['children']:
+            actionSet[thisActionName]['children'].update(
+                {bracketSplit(child,ind):actions['children'][child]})
+        for item in actions['actionList']:
+
+            act,args = list(item.items())[0]
+            actionSet[thisActionName]['actionList'].append(bracketSplit(act,ind) + str(args))
 
 
 
-    return actionSet
-
-def parseResource(name, tags):
+    actionSetConverted = {}
+    for name in actionSet:
+        actionSetConverted.update(
+            {name:SequentialAction( actionSet[name]['children'],
+                                    actionSet[name]['actionList'],
+                                    actionSet[name]['yields'])}
+        )
+    return actionSetConverted
 
 def loadActionIndex():
     with open('json/actionIndex.json') as jsfl:
@@ -49,21 +59,36 @@ def loadActionIndex():
         actionIndex.update(parseAction(key,actionIndexJson[key]))
 
     for key in actionIndex:
-        print(key)
-        print(actionIndex[key])
 
+        print(key + ':')
+        for child in actionIndex[key].children:
+            print(child)
+        print('then')
+        for act in actionIndex[key].actionList:
+            print(act)
+        print()
+
+
+
+def parseResource(name, tags):
+    do = 'nothing'
 
 def loadResourceIndex():
+    resourceIndexJson = {}
     with open('json/resourceIndex.json') as jsfl:
         resourceIndexJson = json.load(jsfl)
 
     resourceIndex = {}
-
     for key in resourceIndexJson:
-        load = 'nothing'
+        resourceIndex.update({key:resourceIndexJson[key]})
+
+    for key in resourceIndex:
+        print('---')
+        print(key)
 
 
 
 
-#loadActionIndex()
-loadResourceIndex()
+
+loadActionIndex()
+#loadResourceIndex()

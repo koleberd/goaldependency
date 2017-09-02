@@ -1,28 +1,44 @@
 {
     "acquireResource:wood":{
         "children":{},
-        "locateObject:wood":[],
-        "moveToObject:wood":[],
-        "switchToObject:axe":[0,1],
-        "harvestResource:wood":[],
+        "actionList":[
+            {"locateObject:wood":[]},
+            {"moveToObject:wood":[]},
+            {"switchToObject:axe":[0,1]},
+            {"harvestResource:wood":[]}
+        ],
         "yields":1
     },
     "acquireResource:stone":{
         "children":{
-            "obtainResource:pickaxe":[1,1]
+            "acquireResource:pickaxe":[1,1]
         },
-        "locateObject:stone":[],
-        "moveToObject":[],
-        "switchToObject:pickaxe":[1,1],
-        "harvestResource:stone":[],
+        "actionList":[
+            {"locateObject:stone":[]},
+            {"moveToObject":[]},
+            {"switchToObject:pickaxe":[1,1]},
+            {"harvestResource:stone":[]}
+        ],
         "yields":1
+    },
+    "acquireResource:wood plank":{
+        "children":{
+            "acquireResource:wood":[1]
+        },
+        "actionList":[
+            {"interactWithGameObject:player inventory":[]},
+            {"craftObject:wood plank":[]}
+        ],
+        "yields":4
     },
     "acquireResource:stick":{
         "children":{
             "acquireResource:wood plank":[2]
         },
-        "interactWithGameObject:player inventory":[],
-        "craftObject:stick":[],
+        "actionList":[
+            {"interactWithGameObject:player inventory":[]},
+            {"craftObject:stick":[]}
+        ],
         "yields":4
     },
     "acquireResource:[wood,stone,iron,gold,diamond] pickaxe":{
@@ -30,44 +46,23 @@
             "acquireResource:[wood plank,cobblestone,iron,gold,diamond]":[3],
             "acquireResource:stick":[2]
         },
-        "accessResource:crafting bench":[],
-        "craftObject:[wood,stone,iron,gold,diamond] pickaxe":[],
+        "actionList":[
+            {"accessResource:crafting bench":[]},
+            {"craftObject:[wood,stone,iron,gold,diamond] pickaxe":[]}
+        ],
         "yields":1
     },
     "accessResource:crafting bench":{
-        "locateObject:crafting bench":[],
-        "moveToObject:crafting bench":[],
-        "interactWithGameObject:crafting bench":[]
+        "children":{},
+        "actionList":[
+            {"locateObject:crafting bench":[]},
+            {"moveToObject:crafting bench":[]},
+            {"interactWithGameObject:crafting bench":[]}
+        ],
+        "yields":0
     },
-
-
-
-    "note static actions":0,
-    "switchToObject:<>":{
-
-    },
-    "locateObject:<>":{
-        "note":"rotate or move, how to represent conditional"
-    },
-    "moveToObject:<>":{
-        "note":"wasd"
-    },
-    "interactWithGameObject:crafting bench":{
-        "rightclick":"rightclick"
-    },
-    "interactWithGameObject:player inventory":{
-        "press i":"press i"
-    },
-    "harvestResource:<>":{
-        "hold for some amount of time":[]
-    },
-
-
-
-
-
-
-
+    "note6":"find way to represent 'or' type decision",
+    "note5":"find alternate to acquiring wood plank (rather than crafting it, actually find it)",
     "note4":"obtain crafting bench: place the crafting bench if it didn't exist?",
     "note":"obtainResource could mean find a new one, access an existing one, or use one from player inv",
     "note2":"acquireResource means find new",
