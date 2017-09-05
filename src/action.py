@@ -129,7 +129,10 @@ class SequentialAction(DynamicAction):
     def __init__(self,children,actionList,yld):
         super().__init__()
         self.children = children
+        self.childrenReference = children
         self.actionList = actionList
+        self.actionListRefernce = actionList
+        self.accumulation = {}
         self.currentAction = 0 #is incremented to match the action in actionList it's on
         self.yld = yld
     def isCompleted(self,playerSt,gameSt):
@@ -147,5 +150,4 @@ class SequentialAction(DynamicAction):
         if isCompleted(playerSt,gameSt):
             completed = True
             return
-        
         #otherwise execute the last item on the actionlist if the children are completed

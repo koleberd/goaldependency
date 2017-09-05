@@ -50,6 +50,24 @@ def parseAction(name,actions):
         )
     return actionSetConverted
 
+def parseActionFromName(name,args,index):
+    switch = {
+        "interactWithGameObject":InteractWithGameObject(args),
+        "placeObject":PlaceObject(args),
+        "harvestResource":HarvestResource(args),
+        "move":Move(args),
+        "craftObject":CraftObject(args),
+        "dropObject":DropObject(args),
+        "useObject":UseObject(args),
+        "switchToObject":SwitchToObject(args),
+
+        "moveToLocation":MoveToLocation(args),
+        "locateObject":LocateObject(args),
+        "pickUpResource":PickUpResource(args)
+    }
+    return switch.get(name,index[name])
+
+
 def loadActionIndex():
     with open('json/actionIndex.json') as jsfl:
         actionIndexJson = json.load(jsfl)
