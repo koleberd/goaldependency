@@ -4,7 +4,7 @@
         "actionList":[
             {"locateObject:wood":[]},
             {"moveToObject:wood":[]},
-            {"switchToObject:axe":[0,1]},
+            {"switchToObject:<tool>":["axe",0,1]},
             {"harvestResource:wood":[]}
         ],
         "yields":1
@@ -16,7 +16,7 @@
         "actionList":[
             {"locateObject:stone":[]},
             {"moveToObject":[]},
-            {"switchToObject:pickaxe":[1,1]},
+            {"switchToObject:<tool>":["pickaxe",1,1]},
             {"harvestResource:stone":[]}
         ],
         "yields":1

@@ -97,18 +97,29 @@ class ConditionalAction(DynamicAction):
         nextAction(playerSt,gameSt).execute(playerSt,gameSt)
 
 class MoveToLocation(ConditionalAction):
+    #target might be coordinates
+    def __init__(self,target):
+        self.target = target
     def isCompleted(playerSt,gameSt):
         return True
     def nextAction(playerSt,gameSt):
         return StaticAction()
 
 class LocateObject(ConditionalAction):
+    #target is a GameObject
+    def __init__(self,target):
+        super().__init__(self)
+        self.target = target
     def isCompleted(playerSt,gameSt):
         return True
     def nextAction(playerSt,gameSt):
         return StaticAction()
 
 class PickUpResource(ConditionalAction):
+    #target is a Resource
+    def __init__(self,target):
+        super().__init__(self)
+        self.target = target
     def isCompleted(playerSt,gameSt):
         return True
     def nextAction(playerSt,gameSt):
@@ -121,13 +132,20 @@ class SequentialAction(DynamicAction):
         self.actionList = actionList
         self.currentAction = 0 #is incremented to match the action in actionList it's on
         self.yld = yld
-
-    def execute(self,playerSt,gameSt):
-        self.completed = True
+    def isCompleted(self,playerSt,gameSt):
+        compl = self.completed
         for child in children:
-            self.completed &= child.completed
+            if type(child) != Action:
+                return False
+            compl &= child.completed
         for act in actionList: #needs to be rewritten to account for actionList resetting of currentAction
-            self.completed &= act.completed
-        if self.completed:
+            if type(act) != Action:
+                return False
+            compl &= act.completed
+        return compl
+    def execute(self,playerSt,gameSt):
+        if isCompleted(playerSt,gameSt):
+            completed = True
             return
+        
         #otherwise execute the last item on the actionlist if the children are completed

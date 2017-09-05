@@ -59,7 +59,7 @@ def loadActionIndex():
         actionIndex.update(parseAction(key,actionIndexJson[key]))
 
     for key in actionIndex:
-
+        continue
         print(key + ':')
         for child in actionIndex[key].children:
             print(child)
@@ -68,10 +68,12 @@ def loadActionIndex():
             print(act)
         print()
 
+    return actionIndex
+
 
 
 def parseResource(name, tags):
-    do = 'nothing'
+    return {name, Resource(tags)}
 
 def loadResourceIndex():
     resourceIndexJson = {}
@@ -83,12 +85,25 @@ def loadResourceIndex():
         resourceIndex.update({key:resourceIndexJson[key]})
 
     for key in resourceIndex:
+        continue
         print('---')
         print(key)
 
+    return resourceIndex
+
+def filterResources(tag):
+    do = 'nothing'
+
+def calculateAccumulations():
+    do = 'nothing'
+    #for every sequential action, calculate the cumulative yield of all of its children sequential actions with the same name and store them as a property of that sequential action
+
+actionIndex = loadActionIndex()
+resourceIndex = loadResourceIndex()
+
+calculateAccumulations()
+
+targetAction = actionIndex['acquireResource:stick']
 
 
-
-
-loadActionIndex()
-#loadResourceIndex()
+print(targetAction.children)
