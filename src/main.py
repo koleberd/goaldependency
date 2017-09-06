@@ -1,6 +1,8 @@
 import json
 import decomposer
 from action import *
+from gameState import *
+from playerState import *
 import gameObject
 import playerState
 import gameState
@@ -116,12 +118,33 @@ def calculateAccumulations():
     do = 'nothing'
     #for every sequential action, calculate the cumulative yield of all of its children sequential actions with the same name and store them as a property of that sequential action
 
-actionIndex = loadActionIndex()
-resourceIndex = loadResourceIndex()
+def selectAction(dtree,history):
+    return dtree
 
-calculateAccumulations()
+def loadAndRun():
+    actionIndex = loadActionIndex()
+    resourceIndex = loadResourceIndex()
 
-targetAction = actionIndex['acquireResource:stick']
+    calculateAccumulations()
 
+    goal = actionIndex['acquireResource:stick']
 
-print(targetAction.children)
+    print(goal.children)
+
+    actionsExecuted = []
+
+    gs = GameState()
+    ps = PlayerState()
+
+    while not goal.completed:
+        #get visual input
+        #process visual input (segment/cluster)
+
+        #update gamestate and playerstate
+        gs.update()
+        ps.update()
+
+        chosenAction = selectAction(goal,actionsExecuted)
+        actionsExecuted.append(chosenAction.execute(gs,ps))
+
+loadAndRun()

@@ -137,7 +137,7 @@ class SequentialAction(DynamicAction):
         self.yld = yld
     def isCompleted(self,playerSt,gameSt):
         compl = self.completed
-        for child in children:
+        for child in self.children:
             if type(child) != Action:
                 return False
             compl &= child.completed
@@ -146,8 +146,19 @@ class SequentialAction(DynamicAction):
                 return False
             compl &= act.completed
         return compl
+    def reset(self):
+        currentAction = 0
+        self.actionList = self.actionListRefernce
     def execute(self,playerSt,gameSt):
-        if isCompleted(playerSt,gameSt):
+        if self.isCompleted(playerSt,gameSt):
             completed = True
             return
-        #otherwise execute the last item on the actionlist if the children are completed
+
+        #if children aren't done, turn both children from strings into Actions if they aren't already
+        #   pick a child and execute that child
+        #else
+        #   pick the bottommost action in action list
+        #   turn it from a string into an action
+        #   execute that action
+
+        #return the action that was executed
