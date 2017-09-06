@@ -14,16 +14,16 @@ class StaticAction(Action):
         self.completed = True
 
 class VariableStaticAction(StaticAction):
-    def __init__(self,obj):
-        super().__init__(self)
+    def __init__(self):
+        super().__init__()
 
 class UserInputAction(VariableStaticAction):
-    def __init__(self,obj):
-        super().__init__(self)
+    def __init__(self):
+        super().__init__()
 
 class InteractWithGameObject(UserInputAction):
     def __init__(self,obj):
-        super().__init__(self)
+        super().__init__()
         self.obj = obj
     def execute(self,playerSt,gameSt):
         super().execute(self,playerSt,gameSt)
@@ -32,13 +32,16 @@ class InteractWithGameObject(UserInputAction):
         else:
             press = "right click"
 class PlaceObject(UserInputAction):
+    def __init__(self,obj):
+        super().__init__()
+        self.obj = obj
     def execute(self,playerSt,gameSt,object):
         super().execute(self,playerSt,gameSt)
         press = 'right click'
 class HarvestResource(UserInputAction):
-    def __init__(self,res):
-        super().__init__(self)
-        self.res = res
+    def __init__(self,obj):
+        super().__init__()
+        self.obj = obj
     def execute(self,playerSt,gameSt):
         super().execute(self,playerSt,gameSt)
         hold = 1 #1 second
@@ -46,7 +49,7 @@ class HarvestResource(UserInputAction):
         press = ('left click for %d seconds').format(hold)
 class Move(UserInputAction):
     def __init__(self,direction='none',rotation='none',pitch='none'):
-        super().__init__(self)
+        super().__init__()
         self.direction = direction
         self.rotation = rotation
         self.pitch = pitch
@@ -66,7 +69,7 @@ class Move(UserInputAction):
 
 class ScriptAction(VariableStaticAction):
     def __init__(self,obj):
-        super().__init__(self)
+        super().__init__()
         self.obj = obj
 class CraftObject(ScriptAction):
     def execute(self,playerSt,gameSt):
@@ -108,7 +111,7 @@ class MoveToLocation(ConditionalAction):
 class LocateObject(ConditionalAction):
     #target is a GameObject
     def __init__(self,target):
-        super().__init__(self)
+        super().__init__()
         self.target = target
     def isCompleted(playerSt,gameSt):
         return True
@@ -118,7 +121,7 @@ class LocateObject(ConditionalAction):
 class PickUpResource(ConditionalAction):
     #target is a Resource
     def __init__(self,target):
-        super().__init__(self)
+        super().__init__()
         self.target = target
     def isCompleted(playerSt,gameSt):
         return True
@@ -149,11 +152,18 @@ class SequentialAction(DynamicAction):
     def reset(self):
         currentAction = 0
         self.actionList = self.actionListRefernce
+
     def execute(self,playerSt,gameSt):
         if self.isCompleted(playerSt,gameSt):
             completed = True
             return
 
+        for child in self.children:
+            if type(self.children[child]) != Action:
+                children[child] = parseActionFromName(child,self.children[child],self.actionIndex)
+
+        for child in self.children:
+            do = 'nothing'
         #if children aren't done, turn both children from strings into Actions if they aren't already
         #   pick a child and execute that child
         #else

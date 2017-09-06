@@ -39,7 +39,7 @@ def parseAction(name,actions):
         for item in actions['actionList']:
 
             act,args = list(item.items())[0]
-            actionSet[thisActionName]['actionList'].append(bracketSplit(act,ind) + str(args))
+            actionSet[thisActionName]['actionList'].append({bracketSplit(act,ind):args})
 
 
 
@@ -52,22 +52,6 @@ def parseAction(name,actions):
         )
     return actionSetConverted
 
-def parseActionFromName(name,args,index):
-    switch = {
-        "interactWithGameObject":InteractWithGameObject(args),
-        "placeObject":PlaceObject(args),
-        "harvestResource":HarvestResource(args),
-        "move":Move(args),
-        "craftObject":CraftObject(args),
-        "dropObject":DropObject(args),
-        "useObject":UseObject(args),
-        "switchToObject":SwitchToObject(args),
-
-        "moveToLocation":MoveToLocation(args),
-        "locateObject":LocateObject(args),
-        "pickUpResource":PickUpResource(args)
-    }
-    return switch.get(name,index[name])
 
 
 def loadActionIndex():
@@ -79,18 +63,16 @@ def loadActionIndex():
         actionIndex.update(parseAction(key,actionIndexJson[key]))
 
     for key in actionIndex:
-        continue
+        
         print(key + ':')
         for child in actionIndex[key].children:
-            print(child)
+            print(child + '-' + str(actionIndex[key].children[child]))
         print('then')
         for act in actionIndex[key].actionList:
             print(act)
         print()
 
     return actionIndex
-
-
 
 def parseResource(name, tags):
     return {name, Resource(tags)}
@@ -111,6 +93,28 @@ def loadResourceIndex():
 
     return resourceIndex
 
+def parseActionFromName(name,args,index):
+    switch = {
+        "interactWithGameObject":InteractWithGameObject(name.split(':')[1]),
+        "placeObject":PlaceObject(name.split(':')[1]),
+        "harvestResource":HarvestResource(name.split(':')[1]),
+        "move":Move(args),
+        "craftObject":CraftObject(name.split(':')[1]),
+        "dropObject":DropObject(args),
+        "useObject":UseObject(args),
+        "switchToObject":SwitchToObject(args),
+
+        "moveToLocation":MoveToLocation(args),
+        "locateObject":LocateObject(args),
+        "pickUpResource":PickUpResource(args)
+    }
+    parsed = switch.get(name.split(':')[0])
+    if parsed != None:
+        return parsed
+    else:
+        return index(name)
+
+
 def filterResources(tag):
     do = 'nothing'
 
@@ -118,8 +122,24 @@ def calculateAccumulations():
     do = 'nothing'
     #for every sequential action, calculate the cumulative yield of all of its children sequential actions with the same name and store them as a property of that sequential action
 
-def selectAction(dtree,history):
+def selectAction(dtree,gameState,playerState,history):
+    if type(dtree) == StaticAction or type(dtree) == ConditionalAction:
+        return dtree
+    #type must be SequentialAction
     return dtree
+
+def decomposeAction(seqAction,index):
+    for ind in range(0,len(seqAction.actionList)):
+        name,args = list(seqAction.actionList[ind].items())[0]
+        #print(name + '-' + str(args))
+
+        seqAction.actionList[ind] = {name:parseActionFromName(name,args,index)}
+
+    print(seqAction.actionList)
+
+
+
+
 
 def loadAndRun():
     actionIndex = loadActionIndex()
@@ -129,14 +149,16 @@ def loadAndRun():
 
     goal = actionIndex['acquireResource:stick']
 
-    print(goal.children)
+    #decomposeAction(goal,actionIndex)
+    #print(goal.children)
 
-    actionsExecuted = []
+    actionSelected = []
+    actionsExecuted = [] # need to keep track of the action selected and the action executed
 
     gs = GameState()
     ps = PlayerState()
 
-    while not goal.completed:
+    while not goal.completed and False:
         #get visual input
         #process visual input (segment/cluster)
 
@@ -145,6 +167,8 @@ def loadAndRun():
         ps.update()
 
         chosenAction = selectAction(goal,actionsExecuted)
+
+        actionsSelected.append(chosenAction)
         actionsExecuted.append(chosenAction.execute(gs,ps))
 
 loadAndRun()
