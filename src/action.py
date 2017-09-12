@@ -4,10 +4,33 @@ import gameState
 
 
 class Action:
-    def __init__(self):
-        self.completed = False
-    def execute(self,playerSt,gameSt):
+    def __init__(self,ps_res,ps_req,use_metric):
+        self.ps_res = ps_res
+        self.ps_req = ps_req
+        self.use_metric = use_meteric
+    def execute(self):
         do = 'nothing'
+    def clone(self):
+        return Action(self.ps_res,self.ps_req,self.use_metric)
+
+class ActionTarget:
+    def __init__(self,act):
+        self.act = act
+
+        self.childPST = None
+    def getUseMeteric(self):
+        return act.use_metric #splus a bunch of other shit
+    def attachChild(self,pst):
+        self.childPST = pst
+    def clone(self):
+        res = ActionTarget(act.clone())
+        if(childPST != None):
+            res.attachChild(chlidPST.clone())
+        return res
+    def getRequirement(self):
+        return self.act.ps_req
+    def getChild(self):
+        return self.childPST
 
 class StaticAction(Action):
     def execute(self,playerSt,gameSt):
@@ -172,3 +195,10 @@ class SequentialAction(DynamicAction):
         #   execute that action
 
         #return the action that was executed
+
+
+class ActionFactory:
+
+    #returns an action that fulfills the PlayerState requirement, or None if an action couldn't be produced
+    def getActions(ps):
+        return None
