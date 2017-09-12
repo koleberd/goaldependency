@@ -63,7 +63,7 @@ def loadActionIndex():
         actionIndex.update(parseAction(key,actionIndexJson[key]))
 
     for key in actionIndex:
-        
+
         print(key + ':')
         for child in actionIndex[key].children:
             print(child + '-' + str(actionIndex[key].children[child]))
@@ -170,5 +170,3 @@ def loadAndRun():
 
         actionsSelected.append(chosenAction)
         actionsExecuted.append(chosenAction.execute(gs,ps))
-
-loadAndRun()
