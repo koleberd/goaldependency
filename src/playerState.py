@@ -73,3 +73,10 @@ class PlayerState:
         return self.lookedAt == None and len(self.buffs) == 0
     def clone(self):#not complete
         return PlayerState()
+    def isEmpty(self):
+        return self.lookedAt == None and len(self.buffs) == 0 and len(self.inventory) == 0
+    def isAttribute(self):
+        res = len(self.buffs) + len(self.inventory)
+        if self.lookedAt != None:
+            res += 1
+        return res == 1

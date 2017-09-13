@@ -1,5 +1,3 @@
-import json
-import decomposer
 from action import *
 from gameState import *
 from playerState import *
@@ -8,11 +6,6 @@ from playerStateSolution import *
 from actionTarget import *
 from playerStateFactory import *
 from actionFactory import *
-
-
-import gameObject
-import playerState
-import gameState
 
 
 def decomposePS(ps, parentPSS, parentPST, parentAT):
@@ -60,6 +53,6 @@ def prunePST(pst):
 
 toplvlps = PlayerState()
 #add things to the top level ps
-toplvlps.inventory[PlayerStateFactory.getResourceByName('cobblestone')] = 200
+toplvlps.inventory['cobblestone'] = 200
 toplvlpst = decomposePS(toplvlps,None,None,None)
 prunePST(toplvlpst)
