@@ -1,2 +1,3 @@
 run_basic:
-	@python src/playerState.py
+	@rm -r -f src/__pycache__
+	@python src/main.py
