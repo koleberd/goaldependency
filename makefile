@@ -1,2 +1,2 @@
 run_basic:
-	@python src/main.py
+	@python src/playerState.py
