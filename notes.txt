@@ -1,12 +1,37 @@
-wait should be an instance of Move
+
+	how are multiple branches pursued if they're showing cumulative?
+		upwards propagation of required resources after action completion?
+
+	look at sims for scheduling processes
+
+	cost with environmental factors in addition to just distance (related to time)
+	cache use times for individual types so only have to evaluate one individual branch once
+		costs held by PSS
+	branch pruning?
+		prune anything without any leaves
+	how to make scales variable?
+	which actions can be effectively scaled?
+		path finding algorithms
 
 
-json of actions should be in form of
-    "action_class:action_instance_name":{
-        "second_action_class:second_action_instance_name":[argument1,argument2],
-        "third_action_class:third_action_instance_name":[argument1,argument2],
-        "yields":#
-    }
-    actions must be done in descending order, so the last listed action must be done after the previous
-    the last statement should be how many units of the relevant resource (if it returns a resource) are generated.
-    
+	cost learned by clocking action execution times
+		for variable time processes like path finding???
+			different instances of path finding for different resources types
+				finding trees might require different process than finding stone
+			constant times like how long to hit a block are pointless to learn because it depends on tool
+				is it really pointless to learn?
+					potentially results in overuse of tools/excess harvested resources
+	cost scalar learned by comparing anticipated time, estimated scaled time, and actual scaled time and adjusting in the direction of (actual scaled time - estimated scaled time)
+		learned after task completion
+
+	when applying scales, store predicted time in table for each unique action target
+
+		each leaf action target calculates its estimated scaled time
+		this is totalled in its parent PSS
+		that parent PSS's parent PST's parent AT's parent PSS totals the total cost from all unique child child child PSS's, plus the sum cost from its child AT's
+
+		same as
+		select top level PST
+		its cost equals the sum of the cheapest child PSS for each attribute
+			the child PSS"s cost equals the sum of costs of child AT's plus the sum of all unique PST's
+				--how to differentiate between PSTs with common PSS's
