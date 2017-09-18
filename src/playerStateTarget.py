@@ -5,6 +5,7 @@ from playerStateSolution import *
 class PlayerStateTarget:
     def __init__(self,ps):
         self.ps = ps
+        self.satisfied = PlayerState()
         self.parent = None
         self.attributeList = {}
         attrs = self.ps.breakIntoAttrs()
@@ -15,3 +16,5 @@ class PlayerStateTarget:
         self.attributeList[attrName].append(pss)
     def addParent(self,parent):
         self.parent = parent
+    def isFulfilled(self):
+        return self.satisfied >= self.ps

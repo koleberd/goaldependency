@@ -40,10 +40,10 @@ class PlayerState:
     def __lt__(self,other):
         res = True
         for item in self.inventory:
-            if self.inventory[item] > other.inventory[item]:
+            if other.inventory[item] != None and self.inventory[item] >= other.inventory[item]:
                 res = False
         for buff in self.buffs:
-            if self.buffs[buff] > other.buffs[buff]:
+            if other.buffs[buff] != None and self.buffs[buff] >= other.buffs[buff]:
                 res = False
         return res
     def __le__(self,other):
@@ -51,10 +51,10 @@ class PlayerState:
     def __gt__(self,other):
         res = True
         for item in self.inventory:
-            if self.inventory[item] < other.inventory[item]:
+            if other.inventory[item] != None and self.inventory[item] <= other.inventory[item]:
                 res = False
         for buff in self.buffs:
-            if self.buffs[buff] < other.buffs[buff]:
+            if other.buffs[buff] != None and self.buffs[buff] <= other.buffs[buff]:
                 res = False
         return res
     def __ge__(self,other):
@@ -71,8 +71,6 @@ class PlayerState:
         return res
     def isPoolable(self):
         return self.lookedAt == None and len(self.buffs) == 0
-    def clone(self):#not complete
-        return PlayerState()
     def isEmpty(self):
         return self.lookedAt == None and len(self.buffs) == 0 and len(self.inventory) == 0
     def isAttribute(self):
@@ -80,3 +78,14 @@ class PlayerState:
         if self.lookedAt != None:
             res += 1
         return res == 1
+    def fulfills(self,other):
+        res = True
+        for item in other.inventory:
+            if self.inventory[item] == None or self.inventory[item] < other.inventory[item]:
+                res = False
+        for buff in other.buffs:
+            if self.buffs[buff] == None or self.buffs[buff] < other.buffs[buff]:
+                res = False
+        return res
+    def clone(self):#not complete
+        return PlayerState()
