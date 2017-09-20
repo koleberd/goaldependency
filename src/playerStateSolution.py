@@ -23,12 +23,12 @@ class PlayerStateSolution:
         return self.ps
     def getTotal(self):
         total = PlayerState()
-        for child in children:
+        for child in self.children:
             total = total + child.getResult()
         return total
     def getRequired(self):
         total = self.ps.clone()#need to start with at least 1 stack so unaddable attributes tally up
-        for parent in parents[1:]:
+        for parent in self.parents[1:]:
             total = total + self.ps
         return total
     def isFulfilled(self):

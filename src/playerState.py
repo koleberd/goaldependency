@@ -10,7 +10,7 @@ class PlayerState:
         inv = obj['inventory'] if 'inventory' in obj.keys() else {}
         buf = obj['buffs'] if 'buff' in obj.keys() else {}
         lok = obj['lookedAt'] if 'lookedAt' in obj.keys() else None
-        
+
 
         return PlayerState(inv,buf,lok)
     ## gets resource under cursor
@@ -26,10 +26,10 @@ class PlayerState:
             return False
         res = True
         for item in self.inventory:
-            if self.inventory[item] != other.inventory[item]:
+            if not item in other.inventory.keys() or self.inventory[item] != other.inventory[item]:
                 res = False
         for buff in self.buffs:
-            if self.buffs[buff] != other.buffs[buff]:
+            if not buff in other.buffs.keys() or self.buffs[buff] != other.buffs[buff]:
                 res = False
         if self.lookedAt != other.lookedAt:
             res = False

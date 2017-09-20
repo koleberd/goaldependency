@@ -55,9 +55,7 @@ def decomposePS2(ps):
 
     actFactory = ActionFactory()
 
-    levelIndex = decomposeAT(proxyAT)
-
-
+    levelIndex = decomposeAT(proxyAT,actFactory)
     #levelIndex in form of
     #len % 3 == 0 -> PST
     #len % 3 == 1 -> PSS
@@ -170,7 +168,7 @@ def decomposeAT(at,factory):
 
 
 tps = PlayerState(inventory={'wood':1})
-rps = PlayerState(inventory={'wood':1})
+
 
 
 fact = ActionFactory()
@@ -179,4 +177,5 @@ fact = ActionFactory()
 acts = fact.getActions(tps)
 
 
-print(acts[0].ps_res.inventory)
+tps2 = PlayerState(inventory={'wood':1})
+decomposePS2(tps2)

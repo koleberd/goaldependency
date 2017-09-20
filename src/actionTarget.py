@@ -30,8 +30,8 @@ class ActionTarget:
         #if it's complete, update parent pss with self.act.ps_res
     def isCyclicRequirement(self,ps):
         res = False
-        if parent != None and len(parent.parents) > 0:
-            res |= ps.fulfills(pst.attributeList[parent.ps])
-            if parent.parents[0].parent != None:
-                res |= parent.parents[0].parent.isCyclicRequirement(ps)
+        if self.parent != None and len(self.parent.parents) > 0:
+            res |= ps.fulfills(pst.attributeList[self.parent.ps])
+            if self.parent.parents[0].parent != None:
+                res |= self.parent.parents[0].parent.isCyclicRequirement(ps)
         return res
