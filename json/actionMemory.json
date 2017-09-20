@@ -1,0 +1,23 @@
+{
+    "locateWood":{
+        "prereq":{
+        },
+        "result":{
+            "lookedAt":"wood"
+        },
+        "function":"alg1:wood",
+        "cost":15
+    },
+    "breakWood":{
+        "prereq":{
+            "lookedAt":"wood"
+        },
+        "result":{
+            "inventory":{
+                "wood":1
+            }
+        },
+        "function":"hitObject:wood,hand",
+        "cost":2
+    }
+}

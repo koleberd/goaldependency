@@ -5,6 +5,11 @@ class PlayerState:
         self.inventory = inventory
         self.buffs = buffs
         self.lookedAt = lookedAt
+    def parsePlayerStateJSON(obj):#not complete
+        inv = obj['inventory'] if 'inventory' in obj.keys() else {}
+        buf = obj['buffs'] if 'buff' in obj.keys() else {}
+        lok = obj['lookedAt'] if 'lookedAt' in obj.keys() else None
+        return PlayerState(inv,buf,lok)
     ## gets resource under cursor
     # return a GameObject
     def getObjectUnderCrosshairs(self):
@@ -14,6 +19,8 @@ class PlayerState:
     def getBuffs(self):
         return self.buffs
     def __eq__(self,other):
+        if type(other) != type(self):
+            return False
         res = True
         for item in self.inventory:
             if self.inventory[item] != other.inventory[item]:
@@ -81,11 +88,12 @@ class PlayerState:
     def fulfills(self,other):
         res = True
         for item in other.inventory:
-            if self.inventory[item] == None or self.inventory[item] < other.inventory[item]:
+            if not item in self.inventory.keys() or self.inventory[item] < other.inventory[item]:
                 res = False
         for buff in other.buffs:
-            if self.buffs[buff] == None or self.buffs[buff] < other.buffs[buff]:
+            if not buff in self.buffs.keys() or self.buffs[buff] < other.buffs[buff]:
                 res = False
+        res &= self.lookedAt == other.lookedAt
         return res
     def clone(self):#not complete
         return PlayerState()

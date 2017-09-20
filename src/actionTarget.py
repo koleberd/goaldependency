@@ -9,7 +9,7 @@ class ActionTarget:
         self.child = None
         self.parent = None
     def getUseMeteric(self):
-        return act.use_metric
+        return act.cost
     def addChild(self,child):
         self.child = child
     def addParent(self,parent):

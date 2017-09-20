@@ -1,5 +1,7 @@
 from gameObject import *
-from playerState import PlayerState
+from action import *
+from playerState import *
+
 import json
 
 class ActionFactory:
@@ -9,6 +11,7 @@ class ActionFactory:
         do = 'nothing'
     def pathfind3(obj):
         do = 'nothing'
+        # return some lambda
     pathfinders = {
         'alg1':pathfind1,
         'alg2':pathfind2,
@@ -17,28 +20,29 @@ class ActionFactory:
     def __init__(self):
         with open('json/resourceIndex.json') as jsfl:
             self.resourceIndex = json.load(jsfl)
+        with open('json/actionMemory.json') as jsfl:
+            actMemory = json.load(jsfl)
+        self.actionMemory = []
+
+        for key in actMemory:
+            self.actionMemory.append(self.parseActionJSON(actMemory[key]))
+        print(self.actionMemory[1].ps_res.inventory)
     #returns an action that fulfills the PlayerState requirement, or None if an action couldn't be produced
     #@classmethod
+    def getFunction(self,name,args):
+        return None
+    def parseActionJSON(self,obj):
+        return Action(  PlayerState.parsePlayerStateJSON(obj['prereq']),
+                        PlayerState.parsePlayerStateJSON(obj['result']),
+                        obj['cost'],
+                        self.getFunction(obj['function'].split(":")[0],obj['function'].split(":")[1]))
+
+    #1. try to find an action with the desired output
+    #2. if that can't be found, try one that hasn't been tried with the lowest cost??? - not sure if this is the right way to experiment
     def getActions(self,ps):#not complete
-        if not ps.isAttribute():
-            return []
         ret = []
-        if ps.lookedAt != None:#not tested
-            for alg in pathfinders:
-                ret.append(Action(PlayerState(lookedAt=ps.lookedAt),PlayerState(),0,pathfinders[alg](ps.lookedAt)))#read use metric from somewhere?
-        if len(ps.inventory) == 1:
-
-            resN,qnt = list(ps.inventory.items())[0]
-            res = self.resourceIndex[resN]
-            if res == None:
-                return []
-            if res['environmental'] != None:
-                toolType = res['environmental']['toolType']
-                toolLevel = res['environmental']['toolLevel']
-
-                
-
-        if len(ps.buffs) == 1:#not complete
-            do = 'nothing'
-
+        for act in self.actionMemory:
+            print(act.ps_res.inventory)
+            if act.ps_res.fulfills(ps):
+                ret.append(act)
         return ret
