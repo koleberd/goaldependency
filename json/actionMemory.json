@@ -8,7 +8,7 @@
         "function":"alg1:wood",
         "cost":15
     },
-    "breakWood":{
+    "harvestWood":{
         "prereq":{
             "lookedAt":"wood"
         },
@@ -17,7 +17,95 @@
                 "wood":1
             }
         },
-        "function":"hitObject:wood,hand",
+        "function":"harvestObject:wood,hand",
         "cost":2
+    },
+    "craftPlank":{
+        "prereq":{
+            "inventory":{
+                "wood":1
+            }
+        },
+        "result":{
+            "inventory":{
+                "wood plank":4
+            }
+        },
+        "cost":1,
+        "function":"craftObject:wood plank"
+    },
+    "craftStick":{
+        "prereq":{
+            "inventory":{
+                "wood plank":2
+            }
+        },
+        "result":{
+            "inventory":{
+                "stick":4
+            }
+        },
+        "cost":1,
+        "function":"craftObject:stick"
+    },
+    "locateBench":{
+        "prereq":{},
+        "result":{
+            "lookedAt":"crafting bench"
+        },
+        "function":"alg1:crafting bench",
+        "cost":12
+    },
+    "craftWoodPickaxe":{
+        "prereq":{
+            "inventory":{
+                "stick":2,
+                "wood plank":3
+            },
+            "lookedAt":"crafting bench"
+        },
+        "result":{
+            "inventory":{
+                "wood pickaxe":20
+            }
+        },
+        "function":"craftObject:wood pickaxe",
+        "cost":1
+    },
+    "locateStone":{
+        "prereq":{},
+        "result":{
+            "lookedAt":"stone"
+        },
+        "function":"alg1:stone",
+        "cost":15
+    },
+    "harvestStone":{
+        "prereq":{
+            "lookedAt":"stone"
+        },
+        "result":{
+            "inventory":{
+                "stone":1
+            }
+        },
+        "function":"harvestObject:stone,wood pickaxe",
+        "cost":4
+    },
+    "craftStonePickaxe":{
+        "prereq":{
+            "inventory":{
+                "stone":3,
+                "stick":2
+            },
+            "lookedAt":"crafting bench"
+        },
+        "result":{
+            "inventory":{
+                "stone pickaxe":40
+            }
+        },
+        "function":"craftObject:stone pickaxe",
+        "cost":1
     }
 }

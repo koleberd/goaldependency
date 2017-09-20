@@ -175,8 +175,8 @@ rps = PlayerState(inventory={'wood':1})
 
 fact = ActionFactory()
 
-print(fact.actionMemory[0].ps_res.inventory)
+#print(fact.actionMemory[0].ps_res.inventory)
 acts = fact.getActions(tps)
 
 
-print(acts)
+print(acts[0].ps_res.inventory)

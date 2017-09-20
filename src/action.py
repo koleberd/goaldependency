@@ -2,7 +2,7 @@ from gameObject import *
 from playerState import PlayerState
 
 class Action:
-    def __init__(self,ps_res,ps_req,cost,executionFunction):
+    def __init__(self,ps_req,ps_res,cost,executionFunction):
         self.ps_res = ps_res
         self.ps_req = ps_req
         self.cost = cost

@@ -6,9 +6,12 @@ class PlayerState:
         self.buffs = buffs
         self.lookedAt = lookedAt
     def parsePlayerStateJSON(obj):#not complete
+
         inv = obj['inventory'] if 'inventory' in obj.keys() else {}
         buf = obj['buffs'] if 'buff' in obj.keys() else {}
         lok = obj['lookedAt'] if 'lookedAt' in obj.keys() else None
+        
+
         return PlayerState(inv,buf,lok)
     ## gets resource under cursor
     # return a GameObject
