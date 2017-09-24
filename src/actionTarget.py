@@ -35,3 +35,5 @@ class ActionTarget:
             if self.parent.parents[0].parent != None:
                 res |= self.parent.parents[0].parent.isCyclicRequirement(ps)
         return res
+    def __hash__(self):
+        return hash((self.act,id(self.child),id(self.parent)))

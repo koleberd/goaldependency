@@ -6,6 +6,8 @@ from playerStateSolution import *
 from actionTarget import *
 from playerStateFactory import *
 from actionFactory import *
+from playerStateTest import *
+from graphviz import *
 
 
 def decomposePS(ps, parentPSS, parentPST, parentAT):
@@ -48,6 +50,39 @@ def decomposePS(ps, parentPSS, parentPST, parentAT):
                         pssAct.attachChild(decomposePS(ps_req,pss,pst,pssAct))
     return pst
 
+def getName(obj):
+    if type(obj) == PlayerStateTarget:
+        return str(obj.ps) + ' - ' + str(id(obj))
+    if type(obj) == PlayerStateSolution:
+        return str(obj.ps) + ' - ' + str(id(obj))
+    if type(obj) == ActionTarget:
+        return str(obj.act.ps_res) + ' - ' + str(id(obj))
+    return 'Not identifiable'
+
+def graphTree(levelIndex):
+    return
+    g = Digraph('Tree',filename='trees/test_tree.gv',format='png')
+    for level in range(0,len(levelIndex)):
+        for item in levelIndex[level]:
+            if level % 3 == 0:
+                for attr in item.attributeList:
+                    for sol in item.attributeList[attr]:
+                        g.edge(getName(item),getName(sol))
+            if level % 3 == 1:
+                for act in item.children:
+                    g.edge(getName(item),getName(act))
+            if level % 3 == 2:
+                if item.child != None:
+                    g.edge(getName(item),getName(item.child))
+
+    g.view()
+
+def printTree(levelIndex):
+    for level in levelIndex:
+        for item in level:
+            print(item)
+        print('---')
+
 
 
 def decomposePS2(ps):
@@ -61,6 +96,8 @@ def decomposePS2(ps):
     #len % 3 == 1 -> PSS
     #len % 3 == 2 -> AT
 
+    printTree(levelIndex)
+    graphTree(levelIndex)
 
     while True:
         levelIndex.extend([[],[],[]])
@@ -95,6 +132,9 @@ def decomposePS2(ps):
 
         if(len(levelIndex[-1]) == 0):#if no new AT's were created, break
             break
+
+    printTree(levelIndex)
+    graphTree(levelIndex)
 
 
     #prune the tree
@@ -145,6 +185,7 @@ def decomposeAT(at,factory):
     at.addChild(pst)
     for attr in pst.attributeList:
         for act in factory.getActions(attr):
+            print("+")
             ps_req = act.ps_req
             prune = (ps_req.fulfills(attr) or at.isCyclicRequirement(ps_req)) and ps_req != PlayerState()
             if not prune:
@@ -167,15 +208,17 @@ def decomposeAT(at,factory):
 #toplvlpst = decomposePS(toplvlps,None,None,None)
 
 
+test()
+
 tps = PlayerState(inventory={'wood':1})
+tps2 = PlayerState(inventory={'wood':20})
 
 
 
-fact = ActionFactory()
 
 #print(fact.actionMemory[0].ps_res.inventory)
-acts = fact.getActions(tps)
 
 
-tps2 = PlayerState(inventory={'wood':1})
+
+
 decomposePS2(tps2)

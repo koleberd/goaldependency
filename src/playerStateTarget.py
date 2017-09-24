@@ -2,6 +2,7 @@ from playerState import *
 from actionTarget import *
 from playerStateSolution import *
 
+
 class PlayerStateTarget:
     def __init__(self,ps):
         self.ps = ps
@@ -18,3 +19,10 @@ class PlayerStateTarget:
         self.parent = parent
     def isFulfilled(self):
         return self.satisfied >= self.ps
+    def __hash__(self):
+        flatItems = []
+        for item in self.attributeList:
+            flatItems.append(item)
+            for sol in self.attributeList[item]:
+                flatItems.append(id(sol))
+        return hash((self.ps,self.satisfied,frozenset(flatItems)))#,self.parent,frozenset(flatItems)))

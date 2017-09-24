@@ -69,15 +69,18 @@ class PlayerState:
         return res
     def __ge__(self,other):
         return not self.__lt__(other)
-    def __hash__(self):#not complete
-        return 0
+    def __hash__(self):
+        return hash((frozenset(self.inventory.keys()),frozenset(self.inventory.items()),frozenset(self.buffs.keys()),frozenset(self.buffs.items()),self.lookedAt))
+    def __str__(self):
+        return '[' + str(self.inventory)[1:-1] + ' / ' + str(self.buffs)[1:-2] + ' / ' + str(self.lookedAt) + ']'
     def breakIntoAttrs(self):
         res = []
         for item in self.inventory:
             res.append(PlayerState(inventory={item:self.inventory[item]}))
         for buff in self.buffs:
             res.append(PlayerState(buffs={buff:self.buffs[buff]}))
-        res.append(PlayerState(lookedAt=self.lookedAt))
+        if self.lookedAt != None:
+            res.append(PlayerState(lookedAt=self.lookedAt))
         return res
     def isPoolable(self):
         return self.lookedAt == None and len(self.buffs) == 0
