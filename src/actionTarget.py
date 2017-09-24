@@ -31,7 +31,7 @@ class ActionTarget:
     def isCyclicRequirement(self,ps):
         res = False
         if self.parent != None and len(self.parent.parents) > 0:
-            res |= ps.fulfills(pst.attributeList[self.parent.ps])
+            res |= ps.fulfills(self.parent.ps)
             if self.parent.parents[0].parent != None:
                 res |= self.parent.parents[0].parent.isCyclicRequirement(ps)
         return res

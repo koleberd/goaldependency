@@ -48,7 +48,7 @@ class ActionFactory:
     def getActions(self,ps):#not complete
         ret = []
         for act in self.actionMemory:
-            
-            if act.ps_res.fulfills(ps):
+
+            if act.ps_res.isParallel(ps):
                 ret.append(act)
         return ret

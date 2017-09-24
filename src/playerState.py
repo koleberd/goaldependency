@@ -37,7 +37,21 @@ class PlayerState:
     def __ne__(self,other):
         return not self.__eq__(other)
     def __add__(self,other):
-        return PlayerState(self.inventory.append(other.inventory),self.buffs.append(other.buffs),self.lookedAt)
+        n_inv = self.inventory.copy()
+        for item in other.inventory:
+            if item in n_inv.keys():
+                n_inv[item] += other.inventory[item]
+            else:
+                n_inv[item] = other.inventory[item]
+
+        n_buf = self.buffs.copy()
+        for buff in other.buffs:
+            if buff in n_buf.keys():
+                n_buf[buff] += other.buffs[buff]
+            else:
+                n_buf[buff] = other.buffs[buff]
+
+        return PlayerState(n_inv,n_buf,self.lookedAt)
     def __sub__(self,other):
         res = self.clone()
         for item in res.inventory:
@@ -103,3 +117,14 @@ class PlayerState:
         return res
     def clone(self):#not complete
         return PlayerState()
+    #return if the PS has the same attributes as self, but not necessarily at the same magnitudes
+    def isParallel(self,other):
+        res = True
+        for key in other.inventory.keys():
+            if not key in self.inventory.keys():
+                res = False
+        for key in other.buffs:
+            if not key in self.buffs.keys():
+                res = False
+        res &= self.lookedAt == other.lookedAt
+        return res

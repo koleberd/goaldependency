@@ -16,7 +16,7 @@ class PlayerStateSolution:
             ids.append(id(parent))
         return hash((self.ps,frozenset(ids)))
     def addChild(self,at):
-        self.child.append(at)
+        self.children.append(at)
     def addParent(self,pst):
         self.parents.append(pst)
     def removeChild(self,at):
@@ -31,15 +31,15 @@ class PlayerStateSolution:
     def getTotal(self):
         total = PlayerState()
         for child in self.children:
-            total = total + child.getResult()
+            total = child.getResult() + total
         return total
     def getRequired(self):
-        total = self.ps.clone()#need to start with at least 1 stack so unaddable attributes tally up
+        total = self.ps + PlayerState()#need to start with at least 1 stack so unaddable attributes tally up
         for parent in self.parents[1:]:
-            total = total + self.ps
+            total = self.ps + total
         return total
     def isFulfilled(self):
-         return self.getTotal() > self.getRequired()
+         return self.getTotal().fulfills(self.getRequired())
     def getExcess(self):
         if not self.isFulfilled():
             return PlayerState()

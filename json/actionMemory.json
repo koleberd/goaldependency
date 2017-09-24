@@ -82,7 +82,10 @@
     },
     "harvestStone":{
         "prereq":{
-            "lookedAt":"stone"
+            "lookedAt":"stone",
+            "inventory":{
+                "wood pickaxe":1
+            }
         },
         "result":{
             "inventory":{
