@@ -59,7 +59,7 @@ def printTree(levelIndex):
 
 
 
-def decomposePS2(ps):
+def decomposePS(ps):
     proxyAT = ActionTarget(Action(ps,PlayerState(),0,None))
     actFactory = ActionFactory()
 
@@ -106,7 +106,7 @@ def decomposePS2(ps):
             break
 
     #printTree(levelIndex)
-    graphTree(levelIndex)
+
 
 
     #prune the tree
@@ -147,13 +147,14 @@ def decomposePS2(ps):
         if somethingRemoved:
             levelIndex[treeLevel] = newLevelList
 
+    graphTree(levelIndex)
     nodecount = 0
     for level in levelIndex:
         nodecount += len(level)
     print('Levels: ' + str(len(levelIndex)-3))
     print('Nodes: ' + str(nodecount))
     print('Pools: ' + str(pools))
-
+    return levelIndex
 
 def decomposeAT(at,factory):
     levels = [[],[],[]]
@@ -193,4 +194,4 @@ tps2 = PlayerState(inventory={'wood':40})
 #print(fact.actionMemory[0].ps_res.inventory)
 
 #decomposePS2(tps2)
-decomposePS2(PlayerState(inventory={'stone':2}))
+decomposePS(PlayerState(inventory={'stone':4}))
