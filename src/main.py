@@ -21,9 +21,9 @@ def getName(obj):
         return ('AT - ' + str(obj.act.ps_res) + ' - ' + str(id(obj))).replace(':',';')
     return 'Not identifiable'
 
-def graphTree(levelIndex):
+def graphTree(levelIndex,name):
 
-    g = Digraph('Tree',filename='trees/test_tree.gv',format='png')
+    g = Digraph('Tree',filename=('trees/' + name + '.gv'),format='png')
     for level in range(0,len(levelIndex)):
         for item in levelIndex[level]:
             if level % 3 == 0:
@@ -59,7 +59,7 @@ def printTree(levelIndex):
 
 
 
-def decomposePS(ps):
+def decomposePS(ps,name):
     proxyAT = ActionTarget(Action(ps,PlayerState(),0,None))
     actFactory = ActionFactory()
 
@@ -105,7 +105,6 @@ def decomposePS(ps):
 
             break
 
-    #printTree(levelIndex)
 
 
 
@@ -147,10 +146,11 @@ def decomposePS(ps):
         if somethingRemoved:
             levelIndex[treeLevel] = newLevelList
 
-    graphTree(levelIndex)
+    graphTree(levelIndex,name)
     nodecount = 0
     for level in levelIndex:
         nodecount += len(level)
+    print('Name: ' + name)
     print('Levels: ' + str(len(levelIndex)-3))
     print('Nodes: ' + str(nodecount))
     print('Pools: ' + str(pools))
@@ -181,17 +181,12 @@ def decomposeAT(at,factory):
     return levels
 
 
-#toplvlps = PlayerState()
-#add things to the top level ps
-#toplvlps.inventory['cobblestone'] = 200
-#toplvlpst = decomposePS(toplvlps,None,None,None)
-
 
 test()
 
-tps = PlayerState(inventory={'wood':1})
-tps2 = PlayerState(inventory={'wood':40})
-#print(fact.actionMemory[0].ps_res.inventory)
-
-#decomposePS2(tps2)
-decomposePS(PlayerState(inventory={'stone':4}))
+#decomposePS(PlayerState(inventory={'stone':4}),'4stone_tree.png')
+#decomposePS(PlayerState(inventory={'wood':10}),'10wood_tree.png')
+#decomposePS(PlayerState(inventory={'wood':10,'stone':4}),'10wood_4stone_tree.png')
+#decomposePS(PlayerState(inventory={'stone pickaxe':1}),'1stonepx_tree.png')
+#decomposePS(PlayerState(inventory={'iron pickaxe':1}),'1ironpx_tree.png')
+decomposePS(PlayerState(inventory={'wood':40}),'1stonepx_tree.png')

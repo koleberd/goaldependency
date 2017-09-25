@@ -52,3 +52,5 @@ class ActionFactory:
             if act.ps_res.isParallel(ps):
                 ret.append(act)
         return ret
+    def printCosts():
+        print()

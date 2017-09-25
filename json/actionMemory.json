@@ -8,7 +8,7 @@
         "function":"alg1:wood",
         "cost":15
     },
-    "harvestWood":{
+    "harvestWoodHand":{
         "prereq":{
             "lookedAt":"wood"
         },
@@ -110,5 +110,165 @@
         },
         "function":"craftObject:stone pickaxe",
         "cost":1
+    },
+    "locateCoal":{
+        "prereq":{},
+        "result":{
+            "lookedAt":"coal"
+        },
+        "function":"alg1:coal",
+        "cost":15
+    },
+    "locateIron":{
+        "prereq":{},
+        "result":{
+            "lookedAt":"iron"
+        },
+        "function":"alg1:iron",
+        "cost":15
+    },
+    "harvestCoalWoodPickaxe":{
+        "prereq":{
+            "lookedAt":"coal",
+            "inventory":{
+                "wood":1
+            }
+        },
+        "result":{
+            "inventory":{
+                "coal":1
+            }
+        },
+        "function":"harvestObject:coal,wood pickaxe",
+        "cost":1
+    },
+    "harvestIronOreStonePickaxe":{
+        "prereq":{
+            "lookedAt":"iron ore",
+            "inventory":{
+                "stone pickaxe":1
+            }
+        },
+        "result":{
+            "inventory":{
+                "iron ore":1
+            }
+        },
+        "function":"harvestObject:iron ore, stone pickaxe",
+        "cost":4
+    },
+    "locateFurnace":{
+        "prereq":{},
+        "result":{
+            "lookedAt":"furnace"
+        },
+        "function":"alg1:furnace",
+        "cost":15
+    },
+    "craftIron":{
+        "prereq":{
+            "inventory":{
+                "iron ore":1,
+                "coal":1
+            },
+            "lookedAt":"furnace"
+        },
+        "result":{
+            "inventory":{
+                "iron":1
+            }
+        },
+        "function":"craftObject:iron,furnace",
+        "cost":8
+    },
+    "craftIronPickaxe":{
+        "prereq":{
+            "inventory":{
+                "iron":3,
+                "stick":2
+            },
+            "lookedAt":"crafting bench"
+        },
+        "result":{
+            "inventory":{
+                "iron pickaxe":80
+            }
+        },
+        "function":"craftObject:iron pickaxe",
+        "cost":1
+    },
+
+    "craftWoodAxe":{
+        "prereq":{
+            "inventory":{
+                "wood plank":3,
+                "stick":2
+            },
+            "lookedAt":"crafting bench"
+        },
+        "result":{
+            "inventory":{
+                "wood axe":1
+            }
+        },
+        "function":"craftObject:wood axe",
+        "cost":1
+    },
+
+    "harvestWoodWoodAxe":{
+        "prereq":{
+            "lookedAt":"wood",
+            "inventory":{
+                "wood axe":1
+            }
+        },
+        "result":{
+            "inventory":{
+                "":1
+            }
+        },
+        "function":"harvestObject:wood,wood axe",
+        "cost":1
+    },
+
+    "locate":{
+        "prereq":{},
+        "result":{
+            "lookedAt":""
+        },
+        "function":"alg1:",
+        "cost":15
+    },
+    "harvest":{
+        "prereq":{
+            "lookedAt":"",
+            "inventory":{
+                "":1
+            }
+        },
+        "result":{
+            "inventory":{
+                "":1
+            }
+        },
+        "function":"harvestObject:",
+        "cost":1
+    },
+    "craft":{
+        "prereq":{
+            "inventory":{
+                "":1
+            },
+            "lookedAt":"crafting bench"
+        },
+        "result":{
+            "inventory":{
+                "":1
+            }
+        },
+        "function":"craftObject:",
+        "cost":1
     }
+
+
 }
