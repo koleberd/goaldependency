@@ -26,3 +26,6 @@ class PlayerStateTarget:
             for sol in self.attributeList[item]:
                 flatItems.append(id(sol))
         return hash((self.ps,self.satisfied,frozenset(flatItems)))#,self.parent,frozenset(flatItems)))
+    def __eq__(self,other):
+        res = other != None and self.ps == other.ps
+        return res

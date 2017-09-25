@@ -15,6 +15,8 @@ class PlayerStateSolution:
         for parent in self.parents:
             ids.append(id(parent))
         return hash((self.ps,frozenset(ids)))
+    def __eq__(self,other):
+        return other != None and self.ps == other.ps
     def addChild(self,at):
         self.children.append(at)
     def addParent(self,pst):
@@ -45,18 +47,23 @@ class PlayerStateSolution:
             return PlayerState()
         return self.getTotal() - self.getRequired()
     def isTwin(self,other):#not complete
-        res = True
-        s_c = self
-        o_c = other
-        while s_c != None and o_c != None and res:
-            res &= s_c == o_c
-            if len(s_c.parents) > 0 and len(o_c.parents) > 0 and s_c.parents[0] == o_c.parents[0] and s_c.parents[0].parent != None and o_c.parents[0].parent != None and s_c.parents[0].parent == o_c.parents[0].parent and s_c.parents[0].parent.parent != None and o_c.parents[0].parent.parent != None:
-                if s_cs_c.parents[0].parent.parent is o_c.parents[0].parent.parent:
-                    break; #they are twins
-                else:
-                    s_c = s_cs_c.parents[0].parent.parent
-                    o_c = o_c.parents[0].parent.parent
-            else:
-                res = False
-                break;#kinda useless braek since loop will terminate anyway
+        res = self == other
+
+        if 'wood pickaxe' in self.ps.inventory.keys() and not self is other and False:
+            print('----')
+            print(id(self))
+            #print(self.parents[0])
+            #print(other.parents[0])
+            #print(self.parents[0] == other.parents[0])
+            #print(self.parents[0].parent)
+            #print(other.parents[0].parent)
+            #print(self.parents[0].parent == other.parents[0].parent)
+            #print(self.parents[0].parent.parent)
+            print(other.parents[0].parent.parent)
+        if len(self.parents) > 0 and len(other.parents) > 0 and self.parents[0] == other.parents[0] and self.parents[0].parent != None and other.parents[0].parent != None and self.parents[0].parent == other.parents[0].parent and self.parents[0].parent.parent != None and other.parents[0].parent.parent != None and self.parents[0].parent.parent == other.parents[0].parent.parent:
+            
+
+            if not self.parents[0].parent.parent is other.parents[0].parent.parent:
+                res &= self.parents[0].parent.parent.isTwin(other.parents[0].parent.parent)
+
         return res

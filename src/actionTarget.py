@@ -37,3 +37,5 @@ class ActionTarget:
         return res
     def __hash__(self):
         return hash((self.act,id(self.child),id(self.parent)))
+    def __eq__(self,other):
+        return other != None and self.act == other.act

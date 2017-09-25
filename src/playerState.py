@@ -53,14 +53,27 @@ class PlayerState:
 
         return PlayerState(n_inv,n_buf,self.lookedAt)
     def __sub__(self,other):
-        res = self.clone()
-        for item in res.inventory:
-            if other.inventory[item] != None:
-                res.inventory[item] = res.inventory[item] - other.inventory[item]
-        for buff in res.buffs:
-            if other.buffs[buff] != None:
-                res.buffs[buff] = res.buffs[buff] - other.buffs[buff]
-        return res
+        n_inv = self.inventory.copy()
+        for item in other.inventory:
+            if item in n_inv.keys():
+                n_inv[item] -= other.inventory[item]
+            else:
+                n_inv[item] = other.inventory[item] * -1
+        nn_inv = {}
+        for item in n_inv:
+            if n_inv[item] != 0:
+                nn_inv[item] = n_inv[item]
+        n_buf = self.buffs.copy()
+        for buff in other.buffs:
+            if buff in n_buf.keys():
+                n_buf[buff] -= other.buffs[buff]
+            else:
+                n_buf[buff] = other.buffs[buff] * -1
+        nn_buf = {}
+        for buff in n_buf:
+            if n_buf[buff] != 0:
+                nn_buf[buff] = n_buf[buff]
+        return PlayerState(nn_inv,nn_buf,self.lookedAt)
     def __lt__(self,other):
         res = True
         for item in self.inventory:

@@ -11,7 +11,7 @@ class Action:
         self.executionFunction()
 
     def __eq__(self,other):
-        return self.ps_res == other.ps_res and self.ps_req == other.ps_req
+        return other != None and self.ps_res == other.ps_res and self.ps_req == other.ps_req
     def __ne___(self,other):
         return not (self == other)
     def __hash__(self):#not complete

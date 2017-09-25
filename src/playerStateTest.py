@@ -60,11 +60,14 @@ def testPS():
     tps4 = PlayerState(inventory={'wood':1,'stone':1})
     tps5 = PlayerState(inventory={'wood':3})
 
-    
+
     assert(tps1 + tps2 == tps5)
     assert(tps1 + tps3 == tps4)
 
-
+    assert(tps5 - tps2 == tps1)
+    assert(tps5 - tps1 == tps2)
+    assert(tps4 - tps1 == tps3)
+    assert(tps4 - tps3 == tps1)
 
 
 
