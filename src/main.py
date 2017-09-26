@@ -79,27 +79,27 @@ def decomposePS(ps,name):
                 levelIndex[-2].extend(layerInd[1])
                 levelIndex[-1].extend(layerInd[2])
 
-        if True:#skip pooling for now
-            #pool each level
-            for pss in levelIndex[-2]:
-                for twinPss in levelIndex[-2]:
 
-                    if (not pss is twinPss) and len(pss.parents) > 0 and len(twinPss.parents) > 0 and pss.isTwin(twinPss) and pss.getExcess().fulfills(twinPss.ps) and pss.ps.isPoolable():#pull off the reference to twinPss's last parent and give it to pss
-                        pss.addParent(twinPss.parents[-1])
-                        twinPss.parents[-1].attributeList[twinPss.ps].append(pss)
-                        remove(twinPss.parents[-1].attributeList[twinPss.ps],twinPss)
-                        del twinPss.parents[-1]
-                        pools += 1
+        for i in range(0,len(levelIndex[-2])):
+            for j in range(i,len(levelIndex[-2])):
+                pss = levelIndex[-2][i]
+                twinPss = levelIndex[-2][j]
+                if (not pss is twinPss) and len(pss.parents) > 0 and len(twinPss.parents) > 0 and pss.isTwin(twinPss) and pss.getExcess().fulfills(twinPss.ps) and pss.ps.isPoolable():#pull off the reference to twinPss's last parent and give it to pss
+                    pss.addParent(twinPss.parents[-1])
+                    twinPss.parents[-1].attributeList[twinPss.ps].append(pss)
+                    remove(twinPss.parents[-1].attributeList[twinPss.ps],twinPss)
+                    del twinPss.parents[-1]
+                    pools += 1
 
-            for pss in levelIndex[-2]:#clean up levelIndex[-3] from pooling
-                if len(pss.parents) == 0:
-                    for childAT in pss.children:
-                        remove(levelIndex[-1],childAT)
-            newPSSList = []
-            for pss in levelIndex[-2]:#clean up levelIndex[-2] from pooling
-                if len(pss.parents) != 0:
-                    newPSSList.append(pss)
-            levelIndex[-2] = newPSSList
+        for pss in levelIndex[-2]:#clean up levelIndex[-3] from pooling
+            if len(pss.parents) == 0:
+                for childAT in pss.children:
+                    remove(levelIndex[-1],childAT)
+        newPSSList = []
+        for pss in levelIndex[-2]:#clean up levelIndex[-2] from pooling
+            if len(pss.parents) != 0:
+                newPSSList.append(pss)
+        levelIndex[-2] = newPSSList
 
         if(len(levelIndex[-1]) == 0 and len(levelIndex[-2]) == 0 and len(levelIndex[-3]) == 0):#if no new AT's were created, remove the rows that werent' filled and break
             break
@@ -109,7 +109,7 @@ def decomposePS(ps,name):
     del levelIndex[-2]
     del levelIndex[-1]
 
-    printTree(levelIndex)
+
     #prune the tree
     #node pruned if nonzero requirements and zero children
     treeLevel = len(levelIndex)
@@ -154,7 +154,7 @@ def decomposePS(ps,name):
     print('Name: ' + name)
     print('Levels: ' + str(len(levelIndex)-3))
     print('Nodes: ' + str(nodecount))
-    print('Pools: ' + str(pools))
+    print('Branches eliminated through pooling: ' + str(pools))
     return levelIndex
 
 def decomposeAT(at,factory):
@@ -169,7 +169,7 @@ def decomposeAT(at,factory):
     levels[0].append(pst)
     at.addChild(pst)
     pst.addParent(at)
-    
+
     for attr in pst.attributeList:
         for act in factory.getActions(attr):
             ps_req = act.ps_req
@@ -195,4 +195,4 @@ test()
 #decomposePS(PlayerState(inventory={'wood':10,'stone':4}),'10wood_4stone_tree.png')
 #decomposePS(PlayerState(inventory={'stone pickaxe':1}),'1stonepx_tree.png')
 #decomposePS(PlayerState(inventory={'iron pickaxe':1}),'1ironpx_tree.png')
-decomposePS(PlayerState(inventory={'wood':10}),'1stonepx_tree.png')
+decomposePS(PlayerState(inventory={'wood':10}),'20woodWithChoices_tree.png')
