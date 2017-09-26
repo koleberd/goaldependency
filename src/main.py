@@ -27,6 +27,24 @@ def graphTree(levelIndex,name):
     for level in range(0,len(levelIndex)):
         for item in levelIndex[level]:
             if level % 3 == 0:
+                g.attr('node',color='red')
+                g.node(getName(item),label=('PST - ' + str(item.ps)))
+            if level % 3 == 1:
+                if len(item.parents) > 1:
+                    g.attr('node',style='filled')
+                g.attr('node',color='blue')
+                g.node(getName(item),label=('PSS - ' + str(item.ps)))
+                g.attr('node',style='unfilled')
+            if level % 3 == 2:
+                if item.child == None:
+                    g.attr('node',style='filled')
+                g.attr('node',color='green')
+                g.node(getName(item),label=('AT - ' + str(item.act.ps_res)))
+                g.attr('node',style='unfilled')
+
+    for level in range(0,len(levelIndex)):
+        for item in levelIndex[level]:
+            if level % 3 == 0:
                 for attr in item.attributeList:
                     for sol in item.attributeList[attr]:
                         #g.attr('node',fillcolor='blue:cyan')
@@ -41,7 +59,6 @@ def graphTree(levelIndex,name):
             if level % 3 == 2:
                 if item.child != None:
                     g.edge(getName(item),getName(item.child))
-
     g.view()
 
 def printTree(levelIndex):
@@ -119,7 +136,7 @@ def decomposePS(ps,name):
         newLevelList = []
         for levelItem in levelIndex[treeLevel]:
             if treeLevel % 3 == 2:#AT level
-                if levelItem.child == None and levelItem.getRequirement() != PlayerState():
+                if levelItem.child == None and levelItem.getRequirement() != PlayerState() and levelItem.getRequirement() != None:
                     remove(levelItem.parent.children,levelItem)
                     levelItem.parent = None
                     somethingRemoved = True
@@ -134,18 +151,61 @@ def decomposePS(ps,name):
                 else:
                     newLevelList.append(levelItem)
             if treeLevel % 3 == 0:#PST level
-                sols = 0
+                #print('---')
+                sols = True
+                #print(len(levelItem.attributeList))
                 for attr in levelItem.attributeList:
-                    sols += len(levelItem.attributeList[attr])
-                if sols == 0:
+                    #print(attr)
+                    #print(len(levelItem.attributeList[attr]))
+                    sols &= len(levelItem.attributeList[attr]) != 0
+                if not sols:
                     levelItem.parent.child = None
                     levelItem.parent = None
+                    for attr in levelItem.attributeList:
+                        for sol in levelItem.attributeList[attr]:
+                            remove(sol.parents,levelItem)
                     somethingRemoved = True
                 else:
                     newLevelList.append(levelItem)
-
         if somethingRemoved:
             levelIndex[treeLevel] = newLevelList
+
+    #graphTree(levelIndex,name+'_prereprune')
+    #printTree(levelIndex)
+
+    treeLevel = 0
+    while(treeLevel < len(levelIndex)-1):
+        somethingRemoved = False
+        treeLevel += 1
+        newLevelList = []
+        for levelItem in levelIndex[treeLevel]:
+            if treeLevel % 3 == 2:#AT level
+                if levelItem.parent == None:
+
+                    if levelItem.child != None:
+                        levelItem.child.parent = None
+                    somethingRemoved = True
+                else:
+                    newLevelList.append(levelItem)
+            if treeLevel % 3 == 1:#PSS level
+                if len(levelItem.parents) == 0:
+                    for child in levelItem.children:
+                        child.parent = None
+                    somethingRemoved = True
+                else:
+                    newLevelList.append(levelItem)
+            if treeLevel % 3 == 0:#PST level
+                if levelItem.parent == None:
+                    for attr in levelItem.attributeList:
+                        for sol in levelItem.attributeList[attr]:
+                            remove(sol.parents,levelItem)
+                    somethingRemoved = True
+                else:
+                    newLevelList.append(levelItem)
+        if somethingRemoved:
+            levelIndex[treeLevel] = newLevelList
+    #still need to remove any lingering nodes on last row
+
 
     graphTree(levelIndex,name)
     nodecount = 0
@@ -190,9 +250,12 @@ def decomposeAT(at,factory):
 
 test()
 
-#decomposePS(PlayerState(inventory={'stone':4}),'4stone_tree.png')
-#decomposePS(PlayerState(inventory={'wood':10}),'10wood_tree.png')
-#decomposePS(PlayerState(inventory={'wood':10,'stone':4}),'10wood_4stone_tree.png')
-#decomposePS(PlayerState(inventory={'stone pickaxe':1}),'1stonepx_tree.png')
-#decomposePS(PlayerState(inventory={'iron pickaxe':1}),'1ironpx_tree.png')
-decomposePS(PlayerState(inventory={'wood':10}),'20woodWithChoices_tree.png')
+#decomposePS(PlayerState(inventory={'stone':4}),'4stone_tree')
+#decomposePS(PlayerState(inventory={'wood':10}),'10wood_tree')
+#decomposePS(PlayerState(inventory={'wood':10,'stone':4}),'10wood_4stone_tree')
+#decomposePS(PlayerState(inventory={'stone pickaxe':1}),'1stonepx_tree')
+decomposePS(PlayerState(inventory={'iron pickaxe':1}),'1ironpx_tree')
+#decomposePS(PlayerState(inventory={'wood':10}),'20woodWithChoices_tree')
+
+
+#decomposePS(PlayerState(inventory={'wood axe':15}),'15woodaxe') #failing

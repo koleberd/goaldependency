@@ -1,0 +1,507 @@
+digraph Tree {
+	node [color=red]
+	"PST - ['iron pickaxe'; 1 /  / None] - 36541776" [label="PST - ['iron pickaxe': 1 /  / None]"]
+	node [color=blue]
+	"PSS - ['iron pickaxe'; 1 /  / None] - 45565824" [label="PSS - ['iron pickaxe': 1 /  / None]"]
+	node [style=unfilled]
+	node [color=green]
+	"AT - ['iron pickaxe'; 80 /  / None] - 45565040" [label="AT - ['iron pickaxe': 80 /  / None]"]
+	node [style=unfilled]
+	node [color=red]
+	"PST - ['iron'; 3, 'stick'; 2 /  / crafting bench] - 45564872" [label="PST - ['iron': 3, 'stick': 2 /  / crafting bench]"]
+	node [color=blue]
+	"PSS - [ /  / crafting bench] - 45557408" [label="PSS - [ /  / crafting bench]"]
+	node [style=unfilled]
+	node [color=blue]
+	"PSS - ['stick'; 2 /  / None] - 45557352" [label="PSS - ['stick': 2 /  / None]"]
+	node [style=unfilled]
+	node [color=blue]
+	"PSS - ['iron'; 3 /  / None] - 45557632" [label="PSS - ['iron': 3 /  / None]"]
+	node [style=unfilled]
+	node [style=filled]
+	node [color=green]
+	"AT - [ /  / crafting bench] - 45557464" [label="AT - [ /  / crafting bench]"]
+	node [style=unfilled]
+	node [color=green]
+	"AT - ['stick'; 4 /  / None] - 45557576" [label="AT - ['stick': 4 /  / None]"]
+	node [style=unfilled]
+	node [color=green]
+	"AT - ['iron'; 1 /  / None] - 45557688" [label="AT - ['iron': 1 /  / None]"]
+	node [style=unfilled]
+	node [color=green]
+	"AT - ['iron'; 1 /  / None] - 45557856" [label="AT - ['iron': 1 /  / None]"]
+	node [style=unfilled]
+	node [color=green]
+	"AT - ['iron'; 1 /  / None] - 45557800" [label="AT - ['iron': 1 /  / None]"]
+	node [style=unfilled]
+	node [color=red]
+	"PST - ['wood plank'; 2 /  / None] - 45557744" [label="PST - ['wood plank': 2 /  / None]"]
+	node [color=red]
+	"PST - ['iron ore'; 1, 'coal'; 1 /  / furnace] - 45564760" [label="PST - ['iron ore': 1, 'coal': 1 /  / furnace]"]
+	node [color=red]
+	"PST - ['iron ore'; 1, 'coal'; 1 /  / furnace] - 45558864" [label="PST - ['iron ore': 1, 'coal': 1 /  / furnace]"]
+	node [color=red]
+	"PST - ['iron ore'; 1, 'coal'; 1 /  / furnace] - 45559480" [label="PST - ['iron ore': 1, 'coal': 1 /  / furnace]"]
+	node [color=blue]
+	"PSS - ['wood plank'; 2 /  / None] - 45558024" [label="PSS - ['wood plank': 2 /  / None]"]
+	node [style=unfilled]
+	node [color=blue]
+	"PSS - [ /  / furnace] - 45558416" [label="PSS - [ /  / furnace]"]
+	node [style=unfilled]
+	node [color=blue]
+	"PSS - ['iron ore'; 1 /  / None] - 45558360" [label="PSS - ['iron ore': 1 /  / None]"]
+	node [style=unfilled]
+	node [color=blue]
+	"PSS - ['coal'; 1 /  / None] - 45558640" [label="PSS - ['coal': 1 /  / None]"]
+	node [style=unfilled]
+	node [color=blue]
+	"PSS - [ /  / furnace] - 45559032" [label="PSS - [ /  / furnace]"]
+	node [style=unfilled]
+	node [color=blue]
+	"PSS - ['iron ore'; 1 /  / None] - 45558976" [label="PSS - ['iron ore': 1 /  / None]"]
+	node [style=unfilled]
+	node [color=blue]
+	"PSS - ['coal'; 1 /  / None] - 45559256" [label="PSS - ['coal': 1 /  / None]"]
+	node [style=unfilled]
+	node [color=blue]
+	"PSS - [ /  / furnace] - 45559648" [label="PSS - [ /  / furnace]"]
+	node [style=unfilled]
+	node [color=blue]
+	"PSS - ['iron ore'; 1 /  / None] - 45559592" [label="PSS - ['iron ore': 1 /  / None]"]
+	node [style=unfilled]
+	node [color=blue]
+	"PSS - ['coal'; 1 /  / None] - 45559760" [label="PSS - ['coal': 1 /  / None]"]
+	node [style=unfilled]
+	node [color=green]
+	"AT - ['wood plank'; 4 /  / None] - 45558080" [label="AT - ['wood plank': 4 /  / None]"]
+	node [style=unfilled]
+	node [style=filled]
+	node [color=green]
+	"AT - [ /  / furnace] - 45558472" [label="AT - [ /  / furnace]"]
+	node [style=unfilled]
+	node [color=green]
+	"AT - ['iron ore'; 1 /  / None] - 45558584" [label="AT - ['iron ore': 1 /  / None]"]
+	node [style=unfilled]
+	node [color=green]
+	"AT - ['coal'; 1 /  / None] - 45558696" [label="AT - ['coal': 1 /  / None]"]
+	node [style=unfilled]
+	node [style=filled]
+	node [color=green]
+	"AT - [ /  / furnace] - 45559088" [label="AT - [ /  / furnace]"]
+	node [style=unfilled]
+	node [color=green]
+	"AT - ['iron ore'; 1 /  / None] - 45559200" [label="AT - ['iron ore': 1 /  / None]"]
+	node [style=unfilled]
+	node [color=green]
+	"AT - ['coal'; 1 /  / None] - 45559312" [label="AT - ['coal': 1 /  / None]"]
+	node [style=unfilled]
+	node [style=filled]
+	node [color=green]
+	"AT - [ /  / furnace] - 45559704" [label="AT - [ /  / furnace]"]
+	node [style=unfilled]
+	node [color=green]
+	"AT - ['iron ore'; 1 /  / None] - 45576320" [label="AT - ['iron ore': 1 /  / None]"]
+	node [style=unfilled]
+	node [color=green]
+	"AT - ['coal'; 1 /  / None] - 45576376" [label="AT - ['coal': 1 /  / None]"]
+	node [style=unfilled]
+	node [color=red]
+	"PST - ['wood'; 1 /  / None] - 36080048" [label="PST - ['wood': 1 /  / None]"]
+	node [color=red]
+	"PST - ['stone pickaxe'; 1 /  / iron ore] - 45558920" [label="PST - ['stone pickaxe': 1 /  / iron ore]"]
+	node [color=red]
+	"PST - ['wood pickaxe'; 1 /  / coal] - 45576712" [label="PST - ['wood pickaxe': 1 /  / coal]"]
+	node [color=red]
+	"PST - ['stone pickaxe'; 1 /  / iron ore] - 45577160" [label="PST - ['stone pickaxe': 1 /  / iron ore]"]
+	node [color=red]
+	"PST - ['wood pickaxe'; 1 /  / coal] - 45577608" [label="PST - ['wood pickaxe': 1 /  / coal]"]
+	node [color=red]
+	"PST - ['stone pickaxe'; 1 /  / iron ore] - 45578056" [label="PST - ['stone pickaxe': 1 /  / iron ore]"]
+	node [color=red]
+	"PST - ['wood pickaxe'; 1 /  / coal] - 45578504" [label="PST - ['wood pickaxe': 1 /  / coal]"]
+	node [color=blue]
+	"PSS - ['wood'; 1 /  / None] - 45576600" [label="PSS - ['wood': 1 /  / None]"]
+	node [style=unfilled]
+	node [color=blue]
+	"PSS - [ /  / iron ore] - 45577048" [label="PSS - [ /  / iron ore]"]
+	node [style=unfilled]
+	node [style=filled]
+	node [color=blue]
+	"PSS - ['stone pickaxe'; 1 /  / None] - 45576992" [label="PSS - ['stone pickaxe': 1 /  / None]"]
+	node [style=unfilled]
+	node [style=filled]
+	node [color=blue]
+	"PSS - ['wood pickaxe'; 1 /  / None] - 45577496" [label="PSS - ['wood pickaxe': 1 /  / None]"]
+	node [style=unfilled]
+	node [color=blue]
+	"PSS - [ /  / coal] - 45577440" [label="PSS - [ /  / coal]"]
+	node [style=unfilled]
+	node [color=blue]
+	"PSS - [ /  / iron ore] - 45577944" [label="PSS - [ /  / iron ore]"]
+	node [style=unfilled]
+	node [color=blue]
+	"PSS - [ /  / coal] - 45578336" [label="PSS - [ /  / coal]"]
+	node [style=unfilled]
+	node [color=blue]
+	"PSS - [ /  / iron ore] - 45578840" [label="PSS - [ /  / iron ore]"]
+	node [style=unfilled]
+	node [color=blue]
+	"PSS - [ /  / coal] - 45579232" [label="PSS - [ /  / coal]"]
+	node [style=unfilled]
+	node [color=green]
+	"AT - ['wood'; 1 /  / None] - 45576656" [label="AT - ['wood': 1 /  / None]"]
+	node [style=unfilled]
+	node [style=filled]
+	node [color=green]
+	"AT - [ /  / iron ore] - 45577104" [label="AT - [ /  / iron ore]"]
+	node [style=unfilled]
+	node [color=green]
+	"AT - ['stone pickaxe'; 40 /  / None] - 45577216" [label="AT - ['stone pickaxe': 40 /  / None]"]
+	node [style=unfilled]
+	node [color=green]
+	"AT - ['wood pickaxe'; 3 /  / None] - 45577552" [label="AT - ['wood pickaxe': 3 /  / None]"]
+	node [style=unfilled]
+	node [style=filled]
+	node [color=green]
+	"AT - [ /  / coal] - 45577664" [label="AT - [ /  / coal]"]
+	node [style=unfilled]
+	node [style=filled]
+	node [color=green]
+	"AT - [ /  / iron ore] - 45578000" [label="AT - [ /  / iron ore]"]
+	node [style=unfilled]
+	node [style=filled]
+	node [color=green]
+	"AT - [ /  / coal] - 45578560" [label="AT - [ /  / coal]"]
+	node [style=unfilled]
+	node [style=filled]
+	node [color=green]
+	"AT - [ /  / iron ore] - 45578896" [label="AT - [ /  / iron ore]"]
+	node [style=unfilled]
+	node [style=filled]
+	node [color=green]
+	"AT - [ /  / coal] - 45579456" [label="AT - [ /  / coal]"]
+	node [style=unfilled]
+	node [color=red]
+	"PST - [ /  / wood] - 45578952" [label="PST - [ /  / wood]"]
+	node [color=red]
+	"PST - ['stone'; 3, 'stick'; 2 /  / crafting bench] - 45580128" [label="PST - ['stone': 3, 'stick': 2 /  / crafting bench]"]
+	node [color=red]
+	"PST - ['wood plank'; 3, 'stick'; 2 /  / crafting bench] - 45579792" [label="PST - ['wood plank': 3, 'stick': 2 /  / crafting bench]"]
+	node [color=blue]
+	"PSS - [ /  / wood] - 45579680" [label="PSS - [ /  / wood]"]
+	node [style=unfilled]
+	node [color=blue]
+	"PSS - [ /  / crafting bench] - 45588776" [label="PSS - [ /  / crafting bench]"]
+	node [style=unfilled]
+	node [style=filled]
+	node [color=blue]
+	"PSS - ['stick'; 2 /  / None] - 45588720" [label="PSS - ['stick': 2 /  / None]"]
+	node [style=unfilled]
+	node [color=blue]
+	"PSS - ['stone'; 3 /  / None] - 45589000" [label="PSS - ['stone': 3 /  / None]"]
+	node [style=unfilled]
+	node [color=blue]
+	"PSS - [ /  / crafting bench] - 45589504" [label="PSS - [ /  / crafting bench]"]
+	node [style=unfilled]
+	node [color=blue]
+	"PSS - ['wood plank'; 3 /  / None] - 45589728" [label="PSS - ['wood plank': 3 /  / None]"]
+	node [style=unfilled]
+	node [style=filled]
+	node [color=green]
+	"AT - [ /  / wood] - 45579736" [label="AT - [ /  / wood]"]
+	node [style=unfilled]
+	node [style=filled]
+	node [color=green]
+	"AT - [ /  / crafting bench] - 45588832" [label="AT - [ /  / crafting bench]"]
+	node [style=unfilled]
+	node [color=green]
+	"AT - ['stick'; 4 /  / None] - 45588944" [label="AT - ['stick': 4 /  / None]"]
+	node [style=unfilled]
+	node [color=green]
+	"AT - ['stone'; 1 /  / None] - 45589056" [label="AT - ['stone': 1 /  / None]"]
+	node [style=unfilled]
+	node [color=green]
+	"AT - ['stone'; 1 /  / None] - 45589224" [label="AT - ['stone': 1 /  / None]"]
+	node [style=unfilled]
+	node [color=green]
+	"AT - ['stone'; 1 /  / None] - 45589168" [label="AT - ['stone': 1 /  / None]"]
+	node [style=unfilled]
+	node [style=filled]
+	node [color=green]
+	"AT - [ /  / crafting bench] - 45589560" [label="AT - [ /  / crafting bench]"]
+	node [style=unfilled]
+	node [color=green]
+	"AT - ['wood plank'; 4 /  / None] - 45589784" [label="AT - ['wood plank': 4 /  / None]"]
+	node [style=unfilled]
+	node [color=red]
+	"PST - ['wood plank'; 2 /  / None] - 45589952" [label="PST - ['wood plank': 2 /  / None]"]
+	node [color=red]
+	"PST - ['wood pickaxe'; 1 /  / stone] - 45589896" [label="PST - ['wood pickaxe': 1 /  / stone]"]
+	node [color=red]
+	"PST - ['wood pickaxe'; 1 /  / stone] - 45590120" [label="PST - ['wood pickaxe': 1 /  / stone]"]
+	node [color=red]
+	"PST - ['wood pickaxe'; 1 /  / stone] - 45590456" [label="PST - ['wood pickaxe': 1 /  / stone]"]
+	node [color=red]
+	"PST - ['wood'; 1 /  / None] - 45591464" [label="PST - ['wood': 1 /  / None]"]
+	node [color=blue]
+	"PSS - ['wood plank'; 2 /  / None] - 45590008" [label="PSS - ['wood plank': 2 /  / None]"]
+	node [style=unfilled]
+	node [style=filled]
+	node [color=blue]
+	"PSS - ['wood pickaxe'; 1 /  / None] - 45590344" [label="PSS - ['wood pickaxe': 1 /  / None]"]
+	node [style=unfilled]
+	node [color=blue]
+	"PSS - [ /  / stone] - 45590288" [label="PSS - [ /  / stone]"]
+	node [style=unfilled]
+	node [color=blue]
+	"PSS - [ /  / stone] - 45590736" [label="PSS - [ /  / stone]"]
+	node [style=unfilled]
+	node [color=blue]
+	"PSS - [ /  / stone] - 45591184" [label="PSS - [ /  / stone]"]
+	node [style=unfilled]
+	node [color=blue]
+	"PSS - ['wood'; 1 /  / None] - 45591632" [label="PSS - ['wood': 1 /  / None]"]
+	node [style=unfilled]
+	node [color=green]
+	"AT - ['wood plank'; 4 /  / None] - 45590064" [label="AT - ['wood plank': 4 /  / None]"]
+	node [style=unfilled]
+	node [color=green]
+	"AT - ['wood pickaxe'; 3 /  / None] - 45590400" [label="AT - ['wood pickaxe': 3 /  / None]"]
+	node [style=unfilled]
+	node [style=filled]
+	node [color=green]
+	"AT - [ /  / stone] - 45590512" [label="AT - [ /  / stone]"]
+	node [style=unfilled]
+	node [style=filled]
+	node [color=green]
+	"AT - [ /  / stone] - 45590960" [label="AT - [ /  / stone]"]
+	node [style=unfilled]
+	node [style=filled]
+	node [color=green]
+	"AT - [ /  / stone] - 45591408" [label="AT - [ /  / stone]"]
+	node [style=unfilled]
+	node [color=green]
+	"AT - ['wood'; 1 /  / None] - 45591688" [label="AT - ['wood': 1 /  / None]"]
+	node [style=unfilled]
+	node [color=red]
+	"PST - ['wood'; 1 /  / None] - 45591016" [label="PST - ['wood': 1 /  / None]"]
+	node [color=red]
+	"PST - ['wood plank'; 3, 'stick'; 2 /  / crafting bench] - 45592360" [label="PST - ['wood plank': 3, 'stick': 2 /  / crafting bench]"]
+	node [color=red]
+	"PST - [ /  / wood] - 45592416" [label="PST - [ /  / wood]"]
+	node [color=blue]
+	"PSS - ['wood'; 1 /  / None] - 45592024" [label="PSS - ['wood': 1 /  / None]"]
+	node [style=unfilled]
+	node [color=blue]
+	"PSS - [ /  / crafting bench] - 45592528" [label="PSS - [ /  / crafting bench]"]
+	node [style=unfilled]
+	node [color=blue]
+	"PSS - ['stick'; 2 /  / None] - 45592472" [label="PSS - ['stick': 2 /  / None]"]
+	node [style=unfilled]
+	node [color=blue]
+	"PSS - ['wood plank'; 3 /  / None] - 45605104" [label="PSS - ['wood plank': 3 /  / None]"]
+	node [style=unfilled]
+	node [color=blue]
+	"PSS - [ /  / wood] - 45605384" [label="PSS - [ /  / wood]"]
+	node [style=unfilled]
+	node [color=green]
+	"AT - ['wood'; 1 /  / None] - 45592080" [label="AT - ['wood': 1 /  / None]"]
+	node [style=unfilled]
+	node [style=filled]
+	node [color=green]
+	"AT - [ /  / crafting bench] - 45604936" [label="AT - [ /  / crafting bench]"]
+	node [style=unfilled]
+	node [color=green]
+	"AT - ['stick'; 4 /  / None] - 45605048" [label="AT - ['stick': 4 /  / None]"]
+	node [style=unfilled]
+	node [color=green]
+	"AT - ['wood plank'; 4 /  / None] - 45605160" [label="AT - ['wood plank': 4 /  / None]"]
+	node [style=unfilled]
+	node [style=filled]
+	node [color=green]
+	"AT - [ /  / wood] - 45605440" [label="AT - [ /  / wood]"]
+	node [style=unfilled]
+	node [color=red]
+	"PST - [ /  / wood] - 45605944" [label="PST - [ /  / wood]"]
+	node [color=red]
+	"PST - ['wood plank'; 2 /  / None] - 45606672" [label="PST - ['wood plank': 2 /  / None]"]
+	node [color=red]
+	"PST - ['wood'; 1 /  / None] - 45606560" [label="PST - ['wood': 1 /  / None]"]
+	node [color=blue]
+	"PSS - [ /  / wood] - 45606112" [label="PSS - [ /  / wood]"]
+	node [style=unfilled]
+	node [color=blue]
+	"PSS - ['wood plank'; 2 /  / None] - 45606840" [label="PSS - ['wood plank': 2 /  / None]"]
+	node [style=unfilled]
+	node [color=blue]
+	"PSS - ['wood'; 1 /  / None] - 45607120" [label="PSS - ['wood': 1 /  / None]"]
+	node [style=unfilled]
+	node [style=filled]
+	node [color=green]
+	"AT - [ /  / wood] - 45606168" [label="AT - [ /  / wood]"]
+	node [style=unfilled]
+	node [color=green]
+	"AT - ['wood plank'; 4 /  / None] - 45606896" [label="AT - ['wood plank': 4 /  / None]"]
+	node [style=unfilled]
+	node [color=green]
+	"AT - ['wood'; 1 /  / None] - 45607176" [label="AT - ['wood': 1 /  / None]"]
+	node [style=unfilled]
+	node [color=red]
+	"PST - ['wood'; 1 /  / None] - 45607344" [label="PST - ['wood': 1 /  / None]"]
+	node [color=red]
+	"PST - [ /  / wood] - 45607736" [label="PST - [ /  / wood]"]
+	node [color=blue]
+	"PSS - ['wood'; 1 /  / None] - 45607512" [label="PSS - ['wood': 1 /  / None]"]
+	node [style=unfilled]
+	node [color=blue]
+	"PSS - [ /  / wood] - 45607904" [label="PSS - [ /  / wood]"]
+	node [style=unfilled]
+	node [color=green]
+	"AT - ['wood'; 1 /  / None] - 45607568" [label="AT - ['wood': 1 /  / None]"]
+	node [style=unfilled]
+	node [style=filled]
+	node [color=green]
+	"AT - [ /  / wood] - 45607960" [label="AT - [ /  / wood]"]
+	node [style=unfilled]
+	node [color=red]
+	"PST - [ /  / wood] - 45608464" [label="PST - [ /  / wood]"]
+	node [color=blue]
+	"PSS - [ /  / wood] - 45608632" [label="PSS - [ /  / wood]"]
+	node [style=unfilled]
+	node [style=filled]
+	node [color=green]
+	"AT - [ /  / wood] - 45608688" [label="AT - [ /  / wood]"]
+	node [style=unfilled]
+	"PST - ['iron pickaxe'; 1 /  / None] - 36541776" -> "PSS - ['iron pickaxe'; 1 /  / None] - 45565824"
+	"PSS - ['iron pickaxe'; 1 /  / None] - 45565824" -> "AT - ['iron pickaxe'; 80 /  / None] - 45565040"
+	"AT - ['iron pickaxe'; 80 /  / None] - 45565040" -> "PST - ['iron'; 3, 'stick'; 2 /  / crafting bench] - 45564872"
+	"PST - ['iron'; 3, 'stick'; 2 /  / crafting bench] - 45564872" -> "PSS - [ /  / crafting bench] - 45557408"
+	"PST - ['iron'; 3, 'stick'; 2 /  / crafting bench] - 45564872" -> "PSS - ['stick'; 2 /  / None] - 45557352"
+	"PST - ['iron'; 3, 'stick'; 2 /  / crafting bench] - 45564872" -> "PSS - ['iron'; 3 /  / None] - 45557632"
+	"PSS - [ /  / crafting bench] - 45557408" -> "AT - [ /  / crafting bench] - 45557464"
+	"PSS - ['stick'; 2 /  / None] - 45557352" -> "AT - ['stick'; 4 /  / None] - 45557576"
+	"PSS - ['iron'; 3 /  / None] - 45557632" -> "AT - ['iron'; 1 /  / None] - 45557688"
+	"PSS - ['iron'; 3 /  / None] - 45557632" -> "AT - ['iron'; 1 /  / None] - 45557856"
+	"PSS - ['iron'; 3 /  / None] - 45557632" -> "AT - ['iron'; 1 /  / None] - 45557800"
+	"AT - ['stick'; 4 /  / None] - 45557576" -> "PST - ['wood plank'; 2 /  / None] - 45557744"
+	"AT - ['iron'; 1 /  / None] - 45557688" -> "PST - ['iron ore'; 1, 'coal'; 1 /  / furnace] - 45564760"
+	"AT - ['iron'; 1 /  / None] - 45557856" -> "PST - ['iron ore'; 1, 'coal'; 1 /  / furnace] - 45558864"
+	"AT - ['iron'; 1 /  / None] - 45557800" -> "PST - ['iron ore'; 1, 'coal'; 1 /  / furnace] - 45559480"
+	"PST - ['wood plank'; 2 /  / None] - 45557744" -> "PSS - ['wood plank'; 2 /  / None] - 45558024"
+	"PST - ['iron ore'; 1, 'coal'; 1 /  / furnace] - 45564760" -> "PSS - [ /  / furnace] - 45558416"
+	"PST - ['iron ore'; 1, 'coal'; 1 /  / furnace] - 45564760" -> "PSS - ['iron ore'; 1 /  / None] - 45558360"
+	"PST - ['iron ore'; 1, 'coal'; 1 /  / furnace] - 45564760" -> "PSS - ['coal'; 1 /  / None] - 45558640"
+	"PST - ['iron ore'; 1, 'coal'; 1 /  / furnace] - 45558864" -> "PSS - [ /  / furnace] - 45559032"
+	"PST - ['iron ore'; 1, 'coal'; 1 /  / furnace] - 45558864" -> "PSS - ['iron ore'; 1 /  / None] - 45558976"
+	"PST - ['iron ore'; 1, 'coal'; 1 /  / furnace] - 45558864" -> "PSS - ['coal'; 1 /  / None] - 45559256"
+	"PST - ['iron ore'; 1, 'coal'; 1 /  / furnace] - 45559480" -> "PSS - [ /  / furnace] - 45559648"
+	"PST - ['iron ore'; 1, 'coal'; 1 /  / furnace] - 45559480" -> "PSS - ['iron ore'; 1 /  / None] - 45559592"
+	"PST - ['iron ore'; 1, 'coal'; 1 /  / furnace] - 45559480" -> "PSS - ['coal'; 1 /  / None] - 45559760"
+	"PSS - ['wood plank'; 2 /  / None] - 45558024" -> "AT - ['wood plank'; 4 /  / None] - 45558080"
+	"PSS - [ /  / furnace] - 45558416" -> "AT - [ /  / furnace] - 45558472"
+	"PSS - ['iron ore'; 1 /  / None] - 45558360" -> "AT - ['iron ore'; 1 /  / None] - 45558584"
+	"PSS - ['coal'; 1 /  / None] - 45558640" -> "AT - ['coal'; 1 /  / None] - 45558696"
+	"PSS - [ /  / furnace] - 45559032" -> "AT - [ /  / furnace] - 45559088"
+	"PSS - ['iron ore'; 1 /  / None] - 45558976" -> "AT - ['iron ore'; 1 /  / None] - 45559200"
+	"PSS - ['coal'; 1 /  / None] - 45559256" -> "AT - ['coal'; 1 /  / None] - 45559312"
+	"PSS - [ /  / furnace] - 45559648" -> "AT - [ /  / furnace] - 45559704"
+	"PSS - ['iron ore'; 1 /  / None] - 45559592" -> "AT - ['iron ore'; 1 /  / None] - 45576320"
+	"PSS - ['coal'; 1 /  / None] - 45559760" -> "AT - ['coal'; 1 /  / None] - 45576376"
+	"AT - ['wood plank'; 4 /  / None] - 45558080" -> "PST - ['wood'; 1 /  / None] - 36080048"
+	"AT - ['iron ore'; 1 /  / None] - 45558584" -> "PST - ['stone pickaxe'; 1 /  / iron ore] - 45558920"
+	"AT - ['coal'; 1 /  / None] - 45558696" -> "PST - ['wood pickaxe'; 1 /  / coal] - 45576712"
+	"AT - ['iron ore'; 1 /  / None] - 45559200" -> "PST - ['stone pickaxe'; 1 /  / iron ore] - 45577160"
+	"AT - ['coal'; 1 /  / None] - 45559312" -> "PST - ['wood pickaxe'; 1 /  / coal] - 45577608"
+	"AT - ['iron ore'; 1 /  / None] - 45576320" -> "PST - ['stone pickaxe'; 1 /  / iron ore] - 45578056"
+	"AT - ['coal'; 1 /  / None] - 45576376" -> "PST - ['wood pickaxe'; 1 /  / coal] - 45578504"
+	"PST - ['wood'; 1 /  / None] - 36080048" -> "PSS - ['wood'; 1 /  / None] - 45576600"
+	"PST - ['stone pickaxe'; 1 /  / iron ore] - 45558920" -> "PSS - [ /  / iron ore] - 45577048"
+	"PST - ['stone pickaxe'; 1 /  / iron ore] - 45558920" -> "PSS - ['stone pickaxe'; 1 /  / None] - 45576992"
+	"PST - ['wood pickaxe'; 1 /  / coal] - 45576712" -> "PSS - ['wood pickaxe'; 1 /  / None] - 45577496"
+	"PST - ['wood pickaxe'; 1 /  / coal] - 45576712" -> "PSS - [ /  / coal] - 45577440"
+	"PST - ['stone pickaxe'; 1 /  / iron ore] - 45577160" -> "PSS - [ /  / iron ore] - 45577944"
+	"PST - ['stone pickaxe'; 1 /  / iron ore] - 45577160" -> "PSS - ['stone pickaxe'; 1 /  / None] - 45576992"
+	"PST - ['wood pickaxe'; 1 /  / coal] - 45577608" -> "PSS - ['wood pickaxe'; 1 /  / None] - 45577496"
+	"PST - ['wood pickaxe'; 1 /  / coal] - 45577608" -> "PSS - [ /  / coal] - 45578336"
+	"PST - ['stone pickaxe'; 1 /  / iron ore] - 45578056" -> "PSS - [ /  / iron ore] - 45578840"
+	"PST - ['stone pickaxe'; 1 /  / iron ore] - 45578056" -> "PSS - ['stone pickaxe'; 1 /  / None] - 45576992"
+	"PST - ['wood pickaxe'; 1 /  / coal] - 45578504" -> "PSS - ['wood pickaxe'; 1 /  / None] - 45577496"
+	"PST - ['wood pickaxe'; 1 /  / coal] - 45578504" -> "PSS - [ /  / coal] - 45579232"
+	"PSS - ['wood'; 1 /  / None] - 45576600" -> "AT - ['wood'; 1 /  / None] - 45576656"
+	"PSS - [ /  / iron ore] - 45577048" -> "AT - [ /  / iron ore] - 45577104"
+	"PSS - ['stone pickaxe'; 1 /  / None] - 45576992" -> "AT - ['stone pickaxe'; 40 /  / None] - 45577216"
+	"PSS - ['wood pickaxe'; 1 /  / None] - 45577496" -> "AT - ['wood pickaxe'; 3 /  / None] - 45577552"
+	"PSS - [ /  / coal] - 45577440" -> "AT - [ /  / coal] - 45577664"
+	"PSS - [ /  / iron ore] - 45577944" -> "AT - [ /  / iron ore] - 45578000"
+	"PSS - [ /  / coal] - 45578336" -> "AT - [ /  / coal] - 45578560"
+	"PSS - [ /  / iron ore] - 45578840" -> "AT - [ /  / iron ore] - 45578896"
+	"PSS - [ /  / coal] - 45579232" -> "AT - [ /  / coal] - 45579456"
+	"AT - ['wood'; 1 /  / None] - 45576656" -> "PST - [ /  / wood] - 45578952"
+	"AT - ['stone pickaxe'; 40 /  / None] - 45577216" -> "PST - ['stone'; 3, 'stick'; 2 /  / crafting bench] - 45580128"
+	"AT - ['wood pickaxe'; 3 /  / None] - 45577552" -> "PST - ['wood plank'; 3, 'stick'; 2 /  / crafting bench] - 45579792"
+	"PST - [ /  / wood] - 45578952" -> "PSS - [ /  / wood] - 45579680"
+	"PST - ['stone'; 3, 'stick'; 2 /  / crafting bench] - 45580128" -> "PSS - [ /  / crafting bench] - 45588776"
+	"PST - ['stone'; 3, 'stick'; 2 /  / crafting bench] - 45580128" -> "PSS - ['stick'; 2 /  / None] - 45588720"
+	"PST - ['stone'; 3, 'stick'; 2 /  / crafting bench] - 45580128" -> "PSS - ['stone'; 3 /  / None] - 45589000"
+	"PST - ['wood plank'; 3, 'stick'; 2 /  / crafting bench] - 45579792" -> "PSS - [ /  / crafting bench] - 45589504"
+	"PST - ['wood plank'; 3, 'stick'; 2 /  / crafting bench] - 45579792" -> "PSS - ['stick'; 2 /  / None] - 45588720"
+	"PST - ['wood plank'; 3, 'stick'; 2 /  / crafting bench] - 45579792" -> "PSS - ['wood plank'; 3 /  / None] - 45589728"
+	"PSS - [ /  / wood] - 45579680" -> "AT - [ /  / wood] - 45579736"
+	"PSS - [ /  / crafting bench] - 45588776" -> "AT - [ /  / crafting bench] - 45588832"
+	"PSS - ['stick'; 2 /  / None] - 45588720" -> "AT - ['stick'; 4 /  / None] - 45588944"
+	"PSS - ['stone'; 3 /  / None] - 45589000" -> "AT - ['stone'; 1 /  / None] - 45589056"
+	"PSS - ['stone'; 3 /  / None] - 45589000" -> "AT - ['stone'; 1 /  / None] - 45589224"
+	"PSS - ['stone'; 3 /  / None] - 45589000" -> "AT - ['stone'; 1 /  / None] - 45589168"
+	"PSS - [ /  / crafting bench] - 45589504" -> "AT - [ /  / crafting bench] - 45589560"
+	"PSS - ['wood plank'; 3 /  / None] - 45589728" -> "AT - ['wood plank'; 4 /  / None] - 45589784"
+	"AT - ['stick'; 4 /  / None] - 45588944" -> "PST - ['wood plank'; 2 /  / None] - 45589952"
+	"AT - ['stone'; 1 /  / None] - 45589056" -> "PST - ['wood pickaxe'; 1 /  / stone] - 45589896"
+	"AT - ['stone'; 1 /  / None] - 45589224" -> "PST - ['wood pickaxe'; 1 /  / stone] - 45590120"
+	"AT - ['stone'; 1 /  / None] - 45589168" -> "PST - ['wood pickaxe'; 1 /  / stone] - 45590456"
+	"AT - ['wood plank'; 4 /  / None] - 45589784" -> "PST - ['wood'; 1 /  / None] - 45591464"
+	"PST - ['wood plank'; 2 /  / None] - 45589952" -> "PSS - ['wood plank'; 2 /  / None] - 45590008"
+	"PST - ['wood pickaxe'; 1 /  / stone] - 45589896" -> "PSS - ['wood pickaxe'; 1 /  / None] - 45590344"
+	"PST - ['wood pickaxe'; 1 /  / stone] - 45589896" -> "PSS - [ /  / stone] - 45590288"
+	"PST - ['wood pickaxe'; 1 /  / stone] - 45590120" -> "PSS - ['wood pickaxe'; 1 /  / None] - 45590344"
+	"PST - ['wood pickaxe'; 1 /  / stone] - 45590120" -> "PSS - [ /  / stone] - 45590736"
+	"PST - ['wood pickaxe'; 1 /  / stone] - 45590456" -> "PSS - ['wood pickaxe'; 1 /  / None] - 45590344"
+	"PST - ['wood pickaxe'; 1 /  / stone] - 45590456" -> "PSS - [ /  / stone] - 45591184"
+	"PST - ['wood'; 1 /  / None] - 45591464" -> "PSS - ['wood'; 1 /  / None] - 45591632"
+	"PSS - ['wood plank'; 2 /  / None] - 45590008" -> "AT - ['wood plank'; 4 /  / None] - 45590064"
+	"PSS - ['wood pickaxe'; 1 /  / None] - 45590344" -> "AT - ['wood pickaxe'; 3 /  / None] - 45590400"
+	"PSS - [ /  / stone] - 45590288" -> "AT - [ /  / stone] - 45590512"
+	"PSS - [ /  / stone] - 45590736" -> "AT - [ /  / stone] - 45590960"
+	"PSS - [ /  / stone] - 45591184" -> "AT - [ /  / stone] - 45591408"
+	"PSS - ['wood'; 1 /  / None] - 45591632" -> "AT - ['wood'; 1 /  / None] - 45591688"
+	"AT - ['wood plank'; 4 /  / None] - 45590064" -> "PST - ['wood'; 1 /  / None] - 45591016"
+	"AT - ['wood pickaxe'; 3 /  / None] - 45590400" -> "PST - ['wood plank'; 3, 'stick'; 2 /  / crafting bench] - 45592360"
+	"AT - ['wood'; 1 /  / None] - 45591688" -> "PST - [ /  / wood] - 45592416"
+	"PST - ['wood'; 1 /  / None] - 45591016" -> "PSS - ['wood'; 1 /  / None] - 45592024"
+	"PST - ['wood plank'; 3, 'stick'; 2 /  / crafting bench] - 45592360" -> "PSS - [ /  / crafting bench] - 45592528"
+	"PST - ['wood plank'; 3, 'stick'; 2 /  / crafting bench] - 45592360" -> "PSS - ['stick'; 2 /  / None] - 45592472"
+	"PST - ['wood plank'; 3, 'stick'; 2 /  / crafting bench] - 45592360" -> "PSS - ['wood plank'; 3 /  / None] - 45605104"
+	"PST - [ /  / wood] - 45592416" -> "PSS - [ /  / wood] - 45605384"
+	"PSS - ['wood'; 1 /  / None] - 45592024" -> "AT - ['wood'; 1 /  / None] - 45592080"
+	"PSS - [ /  / crafting bench] - 45592528" -> "AT - [ /  / crafting bench] - 45604936"
+	"PSS - ['stick'; 2 /  / None] - 45592472" -> "AT - ['stick'; 4 /  / None] - 45605048"
+	"PSS - ['wood plank'; 3 /  / None] - 45605104" -> "AT - ['wood plank'; 4 /  / None] - 45605160"
+	"PSS - [ /  / wood] - 45605384" -> "AT - [ /  / wood] - 45605440"
+	"AT - ['wood'; 1 /  / None] - 45592080" -> "PST - [ /  / wood] - 45605944"
+	"AT - ['stick'; 4 /  / None] - 45605048" -> "PST - ['wood plank'; 2 /  / None] - 45606672"
+	"AT - ['wood plank'; 4 /  / None] - 45605160" -> "PST - ['wood'; 1 /  / None] - 45606560"
+	"PST - [ /  / wood] - 45605944" -> "PSS - [ /  / wood] - 45606112"
+	"PST - ['wood plank'; 2 /  / None] - 45606672" -> "PSS - ['wood plank'; 2 /  / None] - 45606840"
+	"PST - ['wood'; 1 /  / None] - 45606560" -> "PSS - ['wood'; 1 /  / None] - 45607120"
+	"PSS - [ /  / wood] - 45606112" -> "AT - [ /  / wood] - 45606168"
+	"PSS - ['wood plank'; 2 /  / None] - 45606840" -> "AT - ['wood plank'; 4 /  / None] - 45606896"
+	"PSS - ['wood'; 1 /  / None] - 45607120" -> "AT - ['wood'; 1 /  / None] - 45607176"
+	"AT - ['wood plank'; 4 /  / None] - 45606896" -> "PST - ['wood'; 1 /  / None] - 45607344"
+	"AT - ['wood'; 1 /  / None] - 45607176" -> "PST - [ /  / wood] - 45607736"
+	"PST - ['wood'; 1 /  / None] - 45607344" -> "PSS - ['wood'; 1 /  / None] - 45607512"
+	"PST - [ /  / wood] - 45607736" -> "PSS - [ /  / wood] - 45607904"
+	"PSS - ['wood'; 1 /  / None] - 45607512" -> "AT - ['wood'; 1 /  / None] - 45607568"
+	"PSS - [ /  / wood] - 45607904" -> "AT - [ /  / wood] - 45607960"
+	"AT - ['wood'; 1 /  / None] - 45607568" -> "PST - [ /  / wood] - 45608464"
+	"PST - [ /  / wood] - 45608464" -> "PSS - [ /  / wood] - 45608632"
+	"PSS - [ /  / wood] - 45608632" -> "AT - [ /  / wood] - 45608688"
+}

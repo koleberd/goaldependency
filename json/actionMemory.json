@@ -66,7 +66,7 @@
         },
         "result":{
             "inventory":{
-                "wood pickaxe":2
+                "wood pickaxe":3
             }
         },
         "function":"craftObject:wood pickaxe",
@@ -122,7 +122,7 @@
     "locateIron":{
         "prereq":{},
         "result":{
-            "lookedAt":"iron"
+            "lookedAt":"iron ore"
         },
         "function":"alg1:iron",
         "cost":15
@@ -131,7 +131,7 @@
         "prereq":{
             "lookedAt":"coal",
             "inventory":{
-                "wood":1
+                "wood pickaxe":1
             }
         },
         "result":{

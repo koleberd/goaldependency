@@ -69,6 +69,16 @@ def testPS():
     assert(tps4 - tps1 == tps3)
     assert(tps4 - tps3 == tps1)
 
+    ps1 = PlayerState(inventory={'wood':1,'stone':1},lookedAt='furnace')
+    psa1 = [PlayerState(inventory={'wood':1}),PlayerState(inventory={'stone':1}),PlayerState(lookedAt='furnace')]
+    psa2 = ps1.breakIntoAttrs()
+    for ps in psa1:
+        assert(ps in psa2)
+    for ps in psa2:
+        assert(ps in psa1)
+
+
+
 def testCyclicRequirement():
     tps1 = PlayerState(inventory={'wood':1})
     tps2 = PlayerState(inventory={'wood':1})
