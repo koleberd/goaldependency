@@ -8,7 +8,7 @@ class ActionTarget:
         self.act = act
         self.child = None
         self.parent = None
-    def getUseMeteric(self):
+    def getCost(self):
         return act.cost
     def addChild(self,child):
         self.child = child
@@ -39,3 +39,22 @@ class ActionTarget:
         return hash((self.act,id(self.child),id(self.parent)))
     def __eq__(self,other):
         return other != None and self.act == other.act
+    def calculateCost(self,scalars,table):
+        scalar = 1
+        if self.act in scalars.keys():
+            scalar = scalars[self.act]
+        res = self.getCost()*scalar
+        if self.child != None and self.getRequirement() != PlayerState():
+            res += child.calculateCost(scalars,table)
+        return res
+    def getCost(self,scalars,table):
+        scalar = 1
+        if self.act in scalars.keys():
+            scalar = scalars[self.act]
+        res = self.getCost()*scalar
+        if self.child != None and self.getRequirement() != PlayerState():
+            if not self.act in table.keys():
+                table[self.act] = res + child.getCost(scalars,table)
+            res = table[self.act]
+
+        return res

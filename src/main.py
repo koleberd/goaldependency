@@ -254,8 +254,16 @@ test()
 #decomposePS(PlayerState(inventory={'wood':10}),'10wood_tree')
 #decomposePS(PlayerState(inventory={'wood':10,'stone':4}),'10wood_4stone_tree')
 #decomposePS(PlayerState(inventory={'stone pickaxe':1}),'1stonepx_tree')
-decomposePS(PlayerState(inventory={'iron pickaxe':1}),'1ironpx_tree')
+#decomposePS(PlayerState(inventory={'iron pickaxe':1}),'1ironpx_tree')
 #decomposePS(PlayerState(inventory={'wood':10}),'20woodWithChoices_tree')
 
 
 #decomposePS(PlayerState(inventory={'wood axe':15}),'15woodaxe') #failing
+levelIndex = decomposePS(PlayerState(inventory={'stone':10}),'4stone_tree')#pool failing - across dissimilar solutions
+
+
+
+
+
+
+print(getCost)

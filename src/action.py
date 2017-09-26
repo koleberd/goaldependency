@@ -15,4 +15,4 @@ class Action:
     def __ne___(self,other):
         return not (self == other)
     def __hash__(self):#not complete
-        return hash((self.ps_res,self.ps_req,self.cost,self.executionFunction))
+        return hash((self.ps_res,self.ps_req,self.cost))#,self.executionFunction))

@@ -52,18 +52,28 @@ class PlayerStateSolution:
         if 'wood pickaxe' in self.ps.inventory.keys() and not self is other and False:
             print('----')
             print(id(self))
-            #print(self.parents[0])
-            #print(other.parents[0])
-            #print(self.parents[0] == other.parents[0])
-            #print(self.parents[0].parent)
-            #print(other.parents[0].parent)
-            #print(self.parents[0].parent == other.parents[0].parent)
-            #print(self.parents[0].parent.parent)
-            print(other.parents[0].parent.parent)
-        if len(self.parents) > 0 and len(other.parents) > 0 and self.parents[0] == other.parents[0] and self.parents[0].parent != None and other.parents[0].parent != None and self.parents[0].parent == other.parents[0].parent and self.parents[0].parent.parent != None and other.parents[0].parent.parent != None and self.parents[0].parent.parent == other.parents[0].parent.parent:
-            
-
-            if not self.parents[0].parent.parent is other.parents[0].parent.parent:
-                res &= self.parents[0].parent.parent.isTwin(other.parents[0].parent.parent)
-
+            #print(self.parents[-1])
+            #print(other.parents[-1])
+            #print(self.parents[-1] == other.parents[-1])
+            #print(self.parents[-1].parent)
+            #print(other.parents[-1].parent)
+            #print(self.parents[-1].parent == other.parents[-1].parent)
+            #print(self.parents[-1].parent.parent)
+            print(other.parents[-1].parent.parent)
+        if len(self.parents) > 0 and len(other.parents) > 0 and self.parents[-1] == other.parents[-1] and self.parents[-1].parent != None and other.parents[-1].parent != None and self.parents[-1].parent == other.parents[-1].parent and self.parents[-1].parent.parent != None and other.parents[-1].parent.parent != None and self.parents[-1].parent.parent == other.parents[-1].parent.parent:
+            if not self.parents[-1].parent.parent is other.parents[-1].parent.parent:
+                res &= self.parents[-1].parent.parent.isTwin(other.parents[-1].parent.parent)
+        else:
+            res = False
         return res
+    def getCost(self,scalars,table):
+        total = self.children[0].calculateCost(scalars,table)
+        if len(self.children) > 0:
+            for child in self.children[1:]:
+                total += child.getCost(scalars,table)
+        return total
+    def calculateCost(self,scalars,table):
+        total = 0
+        for child in self.children:
+            total += child.calculateCost(scalars,table)
+        return total

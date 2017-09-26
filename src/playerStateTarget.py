@@ -27,5 +27,18 @@ class PlayerStateTarget:
                 flatItems.append(id(sol))
         return hash((self.ps,self.satisfied,frozenset(flatItems)))#,self.parent,frozenset(flatItems)))
     def __eq__(self,other):
-        res = other != None and self.ps == other.ps
-        return res
+        return other != None and self.ps == other.ps
+    def getCost(self,scalars,table):
+        cheapest = None
+        for attr in self.attributeList:
+            for sol in self.attributeList[attr]:
+                if cheapest == None or sol.getCost(scalars,table) < cheapest:
+                    cheapest = sol.getCost(scalars,table)
+        return cheapest
+    def calculateCost(self,scalars,table):
+        cheapest = None
+        for attr in self.attributeList:
+            for sol in self.attributeList[attr]:
+                if cheapest == None or sol.calculateCost(scalars,table) < cheapest:
+                    cheapest = sol.calculateCost(scalars,table)
+        return cheapest
