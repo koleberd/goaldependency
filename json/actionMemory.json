@@ -208,7 +208,7 @@
         },
         "result":{
             "inventory":{
-                "wood axe":1
+                "wood axe":5
             }
         },
         "function":"craftObject:wood axe",
@@ -224,7 +224,7 @@
         },
         "result":{
             "inventory":{
-                "":1
+                "wood":1
             }
         },
         "function":"harvestObject:wood,wood axe",

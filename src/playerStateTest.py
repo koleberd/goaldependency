@@ -69,6 +69,46 @@ def testPS():
     assert(tps4 - tps1 == tps3)
     assert(tps4 - tps3 == tps1)
 
+def testCyclicRequirement():
+    tps1 = PlayerState(inventory={'wood':1})
+    tps2 = PlayerState(inventory={'wood':1})
+    tps4 = PlayerState(inventory={'wood axe':1})
+    tps5 = PlayerState(inventory={'wood axe':10})
+    tps6 = PlayerState(inventory={'wood plank':3})
+    tps7 = PlayerState(inventory={'wood plank':4})
+    tps8 = PlayerState(inventory={'wood':1})
+    tps9 = PlayerState(inventory={'wood':1})
+
+    tpst1 = PlayerStateTarget(tps1)                                       #wood
+    tpss1 = PlayerStateSolution(tps2)                                     #wood via axe
+    tat1 = ActionTarget(Action(tps4,tps2,1,'func1'))    #hit wood
+    tpst1.addSolution(tps2,tpss1)
+    tpss1.addParent(tpst1)
+    tpss1.addchild(tat1)
+    tat1.addParent(tpss1)
+
+    tpst2 = PlayerStateTarget(tps4)
+    tpss2 = PlayerStateSolution(tsp5)
+    tat2 = ActionTarget(Action(tps8,tps5,1,'func2'))
+    tpst2.addParent(tat1)
+    tpst2.addSolution(tps5,tpss2)
+    tpss2.addParent(tpst2)
+    tpss2.addChild(tat2)
+    tat2.addParent(tpss2)
+
+    tpst3 = PlayerStateTarget(tps8)
+    tpss2 = PlayerStateSolution(tps9)
+    tat3 = ActionTarget(Action(PlayerState(),tps9,1,'func3'))
+    tpst3.addParent(tat2)
+    tpst3.addSolution(tps9,tpss3)
+    tpss3.addParent(tpst3)
+    tpss3.addChild(tat3)
+    tat3.addParent(tpss3)
+
+    assert(tat3.isCyclicRequirement(tps9))
+    assert(tat2.isCyclicRequirement(tps9))
+
+
 
 
 

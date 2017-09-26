@@ -102,29 +102,30 @@ def decomposePS(ps,name):
             levelIndex[-2] = newPSSList
 
         if(len(levelIndex[-1]) == 0 and len(levelIndex[-2]) == 0 and len(levelIndex[-3]) == 0):#if no new AT's were created, remove the rows that werent' filled and break
-
             break
 
 
+    del levelIndex[-3]
+    del levelIndex[-2]
+    del levelIndex[-1]
 
-
+    printTree(levelIndex)
     #prune the tree
     #node pruned if nonzero requirements and zero children
-    somethingRemoved = True
     treeLevel = len(levelIndex)
-    while(somethingRemoved and treeLevel >= 0):
+    while(treeLevel >= 0):
         somethingRemoved = False
         treeLevel -= 1
         newLevelList = []
         for levelItem in levelIndex[treeLevel]:
-            if treeLevel % 3 == 2:
-                if len(levelItem.children) == 0 and levelItem.getRequirement() != PlayerState():    #AT level
+            if treeLevel % 3 == 2:#AT level
+                if levelItem.child == None and levelItem.getRequirement() != PlayerState():
                     remove(levelItem.parent.children,levelItem)
                     levelItem.parent = None
                     somethingRemoved = True
                 else:
                     newLevelList.append(levelItem)
-            if treeLevel % 3 == 1:                                                                  #PSS level
+            if treeLevel % 3 == 1:#PSS level
                 if len(levelItem.children) == 0:
                     for parent in levelItem.parents:
                         remove(parent.attributeList[levelItem.ps],levelItem)
@@ -132,7 +133,7 @@ def decomposePS(ps,name):
                     somethingRemoved = True
                 else:
                     newLevelList.append(levelItem)
-            if treeLevel % 3 == 0:                                                                  #PST level
+            if treeLevel % 3 == 0:#PST level
                 sols = 0
                 for attr in levelItem.attributeList:
                     sols += len(levelItem.attributeList[attr])
@@ -158,25 +159,30 @@ def decomposePS(ps,name):
 
 def decomposeAT(at,factory):
     levels = [[],[],[]]
+    prune = False
+    for psatr in at.getRequirement().breakIntoAttrs():
+        if at.isCyclicRequirement(psatr):
+            prune = True
+    if prune:
+        return levels
     pst = PlayerStateTarget(at.getRequirement())
     levels[0].append(pst)
     at.addChild(pst)
     pst.addParent(at)
+    
     for attr in pst.attributeList:
         for act in factory.getActions(attr):
             ps_req = act.ps_req
-            prune = (ps_req.fulfills(attr) or at.isCyclicRequirement(ps_req)) and ps_req != PlayerState()
-            if not prune:
-                at = ActionTarget(act)
-                pss = PlayerStateSolution(attr)
-                pss.addParent(pst)
-                levels[1].append(pss)
-                while not pss.isFulfilled():
-                    pss.addChild(at.clone())
-                for pssAct in pss.children:
-                    pssAct.addParent(pss)
-                    levels[2].append(pssAct)
-                pst.addSolution(attr,pss)
+            at = ActionTarget(act)
+            pss = PlayerStateSolution(attr)
+            pss.addParent(pst)
+            levels[1].append(pss)
+            while not pss.isFulfilled():
+                pss.addChild(at.clone())
+            for pssAct in pss.children:
+                pssAct.addParent(pss)
+                levels[2].append(pssAct)
+            pst.addSolution(attr,pss)
 
     return levels
 
@@ -189,4 +195,4 @@ test()
 #decomposePS(PlayerState(inventory={'wood':10,'stone':4}),'10wood_4stone_tree.png')
 #decomposePS(PlayerState(inventory={'stone pickaxe':1}),'1stonepx_tree.png')
 #decomposePS(PlayerState(inventory={'iron pickaxe':1}),'1ironpx_tree.png')
-decomposePS(PlayerState(inventory={'wood':40}),'1stonepx_tree.png')
+decomposePS(PlayerState(inventory={'wood':10}),'1stonepx_tree.png')
