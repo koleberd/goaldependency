@@ -38,7 +38,7 @@ class PlayerStateTarget:
                     cheapest = sol.getCost(scalars,table)/len(sol.parents)
             total += cheapest
         self.tempCost = total
-        return cheapest
+        return total
     def calculateCost(self,scalars,table):
         total = 0
         for attr in self.attributeList:
@@ -48,4 +48,4 @@ class PlayerStateTarget:
                     cheapest = sol.calculateCost(scalars,table)/len(sol.parents)
             total += cheapest
         self.tempCost = total
-        return cheapest
+        return total
