@@ -22,24 +22,24 @@ def getName(obj):
     return 'Not identifiable'
 
 def graphTree(levelIndex,name):
-
+    print('Rendering graph for ' + name)
     g = Digraph('Tree',filename=('trees/' + name + '.gv'),format='png')
     for level in range(0,len(levelIndex)):
         for item in levelIndex[level]:
             if level % 3 == 0:
                 g.attr('node',color='red')
-                g.node(getName(item),label=('PST - ' + str(item.ps)))
+                g.node(getName(item),label=('PST - ' + str(item.ps) + ' - ' + str(item.tempCost)[:5]))
             if level % 3 == 1:
                 if len(item.parents) > 1:
                     g.attr('node',style='filled')
                 g.attr('node',color='blue')
-                g.node(getName(item),label=('PSS - ' + str(item.ps)))
+                g.node(getName(item),label=('PSS - ' + str(item.ps) + ' - ' + str(item.tempCost)[:4]))
                 g.attr('node',style='unfilled')
             if level % 3 == 2:
                 if item.child == None:
                     g.attr('node',style='filled')
                 g.attr('node',color='green')
-                g.node(getName(item),label=('AT - ' + str(item.act.ps_res)))
+                g.node(getName(item),label=('AT - ' + str(item.act.ps_res) + ' - ' + str(item.tempCost)[:4]))
                 g.attr('node',style='unfilled')
 
     for level in range(0,len(levelIndex)):
@@ -75,58 +75,7 @@ def printTree(levelIndex):
     print("=/TREE=")
 
 
-
-def decomposePS(ps,name):
-    proxyAT = ActionTarget(Action(ps,PlayerState(),0,None))
-    actFactory = ActionFactory()
-
-    levelIndex = decomposeAT(proxyAT,actFactory)
-    #levelIndex in form of
-    #len % 3 == 0 -> PST
-    #len % 3 == 1 -> PSS
-    #len % 3 == 2 -> AT
-
-    pools = 0
-    while True:
-        levelIndex.extend([[],[],[]])
-        for leafAT in levelIndex[-4]:
-            if leafAT.getRequirement() != PlayerState():
-                layerInd = decomposeAT(leafAT,actFactory)
-                levelIndex[-3].extend(layerInd[0])
-                levelIndex[-2].extend(layerInd[1])
-                levelIndex[-1].extend(layerInd[2])
-
-
-        for i in range(0,len(levelIndex[-2])):
-            for j in range(i,len(levelIndex[-2])):
-                pss = levelIndex[-2][i]
-                twinPss = levelIndex[-2][j]
-                if (not pss is twinPss) and len(pss.parents) > 0 and len(twinPss.parents) > 0 and pss.isTwin(twinPss) and pss.getExcess().fulfills(twinPss.ps) and pss.ps.isPoolable():#pull off the reference to twinPss's last parent and give it to pss
-                    pss.addParent(twinPss.parents[-1])
-                    twinPss.parents[-1].attributeList[twinPss.ps].append(pss)
-                    remove(twinPss.parents[-1].attributeList[twinPss.ps],twinPss)
-                    del twinPss.parents[-1]
-                    pools += 1
-
-        for pss in levelIndex[-2]:#clean up levelIndex[-3] from pooling
-            if len(pss.parents) == 0:
-                for childAT in pss.children:
-                    remove(levelIndex[-1],childAT)
-        newPSSList = []
-        for pss in levelIndex[-2]:#clean up levelIndex[-2] from pooling
-            if len(pss.parents) != 0:
-                newPSSList.append(pss)
-        levelIndex[-2] = newPSSList
-
-        if(len(levelIndex[-1]) == 0 and len(levelIndex[-2]) == 0 and len(levelIndex[-3]) == 0):#if no new AT's were created, remove the rows that werent' filled and break
-            break
-
-
-    del levelIndex[-3]
-    del levelIndex[-2]
-    del levelIndex[-1]
-
-
+def pruneTree(levelIndex):
     #prune the tree
     #node pruned if nonzero requirements and zero children
     treeLevel = len(levelIndex)
@@ -204,16 +153,72 @@ def decomposePS(ps,name):
                     newLevelList.append(levelItem)
         if somethingRemoved:
             levelIndex[treeLevel] = newLevelList
-    #still need to remove any lingering nodes on last row
 
 
-    graphTree(levelIndex,name)
+def decomposePS(ps,name):
+    proxyAT = ActionTarget(Action(ps,PlayerState(),0,None))
+    actFactory = ActionFactory()
+
+    levelIndex = decomposeAT(proxyAT,actFactory)
+    #levelIndex in form of
+    #len % 3 == 0 -> PST
+    #len % 3 == 1 -> PSS
+    #len % 3 == 2 -> AT
+
+    pools = 0
+    while True:
+        levelIndex.extend([[],[],[]])
+        for leafAT in levelIndex[-4]:
+            if leafAT.getRequirement() != PlayerState():
+                layerInd = decomposeAT(leafAT,actFactory)
+                levelIndex[-3].extend(layerInd[0])
+                levelIndex[-2].extend(layerInd[1])
+                levelIndex[-1].extend(layerInd[2])
+
+
+        for i in range(0,len(levelIndex[-2])):
+            for j in range(i,len(levelIndex[-2])):
+                pss = levelIndex[-2][i]
+                twinPss = levelIndex[-2][j]
+                if (not pss is twinPss) and len(pss.parents) > 0 and len(twinPss.parents) > 0 and pss.isTwin(twinPss) and pss.getExcess().fulfills(twinPss.ps) and pss.ps.isPoolable():#pull off the reference to twinPss's last parent and give it to pss
+                    pss.addParent(twinPss.parents[-1])
+                    twinPss.parents[-1].attributeList[twinPss.ps].append(pss)
+                    remove(twinPss.parents[-1].attributeList[twinPss.ps],twinPss)
+                    del twinPss.parents[-1]
+                    pools += 1
+
+        for pss in levelIndex[-2]:#clean up levelIndex[-3] from pooling
+            if len(pss.parents) == 0:
+                for childAT in pss.children:
+                    remove(levelIndex[-1],childAT)
+        newPSSList = []
+        for pss in levelIndex[-2]:#clean up levelIndex[-2] from pooling
+            if len(pss.parents) != 0:
+                newPSSList.append(pss)
+        levelIndex[-2] = newPSSList
+
+        if(len(levelIndex[-1]) == 0 and len(levelIndex[-2]) == 0 and len(levelIndex[-3]) == 0):#if no new AT's were created, remove the rows that werent' filled and break
+            break
+
+
+    del levelIndex[-3]
+    del levelIndex[-2]
+    del levelIndex[-1]
+
+    pruneTree(levelIndex)
+    leafcount = 0
     nodecount = 0
-    for level in levelIndex:
-        nodecount += len(level)
+
+    for level in range(0,len(levelIndex)):
+        nodecount += len(levelIndex[level])
+        if level % 3 == 2:
+            for item in levelIndex[level]:
+                if item.child == None or item.getRequirement() == PlayerState():
+                    leafcount += 1
     print('Name: ' + name)
     print('Levels: ' + str(len(levelIndex)-3))
     print('Nodes: ' + str(nodecount))
+    print('Leaf nodes: ' + str(leafcount))
     print('Branches eliminated through pooling: ' + str(pools))
     return levelIndex
 
@@ -260,10 +265,18 @@ test()
 
 #decomposePS(PlayerState(inventory={'wood axe':15}),'15woodaxe') #failing
 levelIndex = decomposePS(PlayerState(inventory={'stone':10}),'4stone_tree')#pool failing - across dissimilar solutions
+#graphTree(levelIndex,'4stone_tree')
+
+scales={}
+table={}
 
 
 
+levelIndex[0][0].calculateCost(scales,table)
+print('===========')
+for item in table:
+    print(item.ps_res)
+    print(item.cost)
 
 
-
-print(getCost)
+graphTree(levelIndex,'4stone_tree_costs')

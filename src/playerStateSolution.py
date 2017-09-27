@@ -8,6 +8,7 @@ class PlayerStateSolution:
         self.ps = ps #doesn't change, and represents the attribute that this PSS targets in its parent PST(s)
         self.children = [] #actionTargets
         self.parents = []  #PST
+        self.tempCost = 0
     def __hash__(self):#may need editing
         ids = []
         for child in self.children:
@@ -68,12 +69,15 @@ class PlayerStateSolution:
         return res
     def getCost(self,scalars,table):
         total = self.children[0].calculateCost(scalars,table)
-        if len(self.children) > 0:
+        if len(self.children) > 1:
             for child in self.children[1:]:
+                print(self.ps)
                 total += child.getCost(scalars,table)
+        self.tempCost = total
         return total
     def calculateCost(self,scalars,table):
         total = 0
         for child in self.children:
             total += child.calculateCost(scalars,table)
+        self.tempCost = total
         return total

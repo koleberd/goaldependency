@@ -12,6 +12,7 @@ class PlayerStateTarget:
         attrs = self.ps.breakIntoAttrs()
         for ps in attrs:
             self.attributeList[ps] = []
+        self.tempCost = 0
 
     def addSolution(self,attrName,pss):
         self.attributeList[attrName].append(pss)
@@ -29,16 +30,22 @@ class PlayerStateTarget:
     def __eq__(self,other):
         return other != None and self.ps == other.ps
     def getCost(self,scalars,table):
-        cheapest = None
+        total = 0
         for attr in self.attributeList:
+            cheapest = None
             for sol in self.attributeList[attr]:
                 if cheapest == None or sol.getCost(scalars,table) < cheapest:
-                    cheapest = sol.getCost(scalars,table)
+                    cheapest = sol.getCost(scalars,table)/len(sol.parents)
+            total += cheapest
+        self.tempCost = total
         return cheapest
     def calculateCost(self,scalars,table):
-        cheapest = None
+        total = 0
         for attr in self.attributeList:
+            cheapest = None
             for sol in self.attributeList[attr]:
                 if cheapest == None or sol.calculateCost(scalars,table) < cheapest:
-                    cheapest = sol.calculateCost(scalars,table)
+                    cheapest = sol.calculateCost(scalars,table)/len(sol.parents)
+            total += cheapest
+        self.tempCost = total
         return cheapest

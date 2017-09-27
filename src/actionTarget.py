@@ -8,8 +8,7 @@ class ActionTarget:
         self.act = act
         self.child = None
         self.parent = None
-    def getCost(self):
-        return act.cost
+        self.tempCost = 0
     def addChild(self,child):
         self.child = child
     def addParent(self,parent):
@@ -43,18 +42,19 @@ class ActionTarget:
         scalar = 1
         if self.act in scalars.keys():
             scalar = scalars[self.act]
-        res = self.getCost()*scalar
+        res = self.act.cost*scalar
         if self.child != None and self.getRequirement() != PlayerState():
-            res += child.calculateCost(scalars,table)
+            res += self.child.calculateCost(scalars,table)
+        self.tempCost = res
         return res
     def getCost(self,scalars,table):
         scalar = 1
         if self.act in scalars.keys():
             scalar = scalars[self.act]
-        res = self.getCost()*scalar
+        res = self.act.cost*scalar
         if self.child != None and self.getRequirement() != PlayerState():
             if not self.act in table.keys():
-                table[self.act] = res + child.getCost(scalars,table)
+                table[self.act] = res + self.child.getCost(scalars,table)
             res = table[self.act]
-
+        self.tempCost = res
         return res
