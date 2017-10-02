@@ -6,7 +6,6 @@ from playerStateSolution import *
 from actionTarget import *
 from playerStateFactory import *
 from actionFactory import *
-from playerStateTest import *
 from graphviz import *
 
 
@@ -252,8 +251,6 @@ def decomposeAT(at,factory):
     return levels
 
 
-
-test()
 
 #decomposePS(PlayerState(inventory={'stone':4}),'4stone_tree')
 #decomposePS(PlayerState(inventory={'wood':10}),'10wood_tree')

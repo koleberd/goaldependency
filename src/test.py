@@ -6,12 +6,14 @@ from playerStateSolution import *
 from actionTarget import *
 from playerStateFactory import *
 from actionFactory import *
+from controller import *
 
 def test():
     testHash()
     testPS()
     testPST()
-    testActionFactory();
+    testActionFactory()
+    testController()
     print('------ tests concluded ------')
 
 def testFulfill():
@@ -122,8 +124,36 @@ def testCyclicRequirement():
 
 
 
+def testController():
+    #255 -> 255
+    # 224 v
+    #192 -> 192
+    #160 v
+    #128 -> 128
+    #96 v
+    #64  -> 64
+    #32 v
+    #0   -> 0
+    defaultColors = [
+        (0,0,0), #coal
+        (255,0,0), #crafting bench
+        (0,0,255), #diamond ore
+        (0,255,0), #stone
+        (128,128,128), #furnace
+        (255,128,0), #iron ore
+        (128,64,0), #wood
+        (255,255,255) #bedrock
+    ]
 
-
+    #print('---')
+    for x in range(0,4):
+        val = (x * 64) + 32
+        #print(str(val))
+        assert(normPix((val,0,0),64) == (x*64,0,0))
+        comp = (x+1)*64
+        if comp == 256:
+            comp = 255
+        assert(normPix((val+1,0,0),64) == (comp,0,0))
 
 
 
@@ -131,3 +161,5 @@ def testCyclicRequirement():
 
 def testSomething():
     do = 'nothing'
+
+test()

@@ -1,3 +1,17 @@
+___ uses AI to efficiently accomplish top level goals with strict dependency hierarchies.
+Before simulation, ___ breaks down the top level goal's dependencies into a recursive tree of sub-goals, called a dependency tree.
+During simulation, ___ uses ML algorithms to analyze world state and player state to select and execute the most efficient sub-goal from the top level goal's dependency tree.
+After simulation, ___ trains its ML model to improve its mappings of world/player states to their corresponding sub-goal choices.
+
+In depth:
+Before simulation, ___ breaks down the top level goal's dependencies into a recursive tree of sub-goals by matching known actions
+	(that have known world/player state requirements and results) to goals, and creating sub-goals to represent those action's dependencies, and so on.
+	Some actions are pooled to improve tree efficiency, and inefficient or recursive actions are pruned.
+During simulation, ___ uses ML algorithms to analyze world state and player state to select and execute the most efficient sub-goal from the top level goal's dependency tree.
+After simulation, ___ trains its ML model to improve its mappings of world/player states to their corresponding sub-goal choices,
+	and trains the known actions' costs to better match their real costs.
+
+
 
 how are multiple branches pursued if they're showing cumulative?
 	upwards/downwards propagation of required resources after action completion?
@@ -39,11 +53,11 @@ when applying scales, store predicted time in table for each unique action targe
 		the child PSS"s cost equals the sum of costs of child AT's plus the sum of all unique PST's
 			--how to differentiate between PSTs with common PSS's -> DON'T. POOL TIME = CHILDREN TIME /NUMBER OF PARENTS. THIS WILL BE ACCOUTNED FOR BY EACH PARENT TOUCHING IT AND GIVING THE REDUCED SUM TO ITS PARENT WHERE IT WILL BE EFFECTIVELY UNPOOLED.
 
-			
-			
-			
-			
-			
+
+
+
+
+
 pooling viable if pss are on same level of tree and the attribute that they satisify is poolable and ALL their parents have the same name and they have the same name
 1. full decomp, prune locations marked, no pooling
 2. prune

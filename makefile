@@ -1,7 +1,12 @@
-run_basic:
+run_basic: clean
+	@python src/test.py
+	@python src/main.py
+t:
+	@python src/test.py
+
+clean:
 	@rm -r -f src/__pycache__
 	@rm -f trees/*.gv
 	@rm -f trees/*.png
-	@python src/main.py
-t:
-	@python test/PlayerStateTest.py
+mv: clean
+	@python src/controller.py
