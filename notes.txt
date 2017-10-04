@@ -1,7 +1,20 @@
-___ uses AI to efficiently accomplish top level goals with strict dependency hierarchies.
+___ uses AI to efficiently accomplish top level goals in an environment with strict goal dependency hierarchies.
 Before simulation, ___ breaks down the top level goal's dependencies into a recursive tree of sub-goals, called a dependency tree.
 During simulation, ___ uses ML algorithms to analyze world state and player state to select and execute the most efficient sub-goal from the top level goal's dependency tree.
 After simulation, ___ trains its ML model to improve its mappings of world/player states to their corresponding sub-goal choices.
+
+--------
+
+learn relations of previously pursued actions on a given action in addition to scales
+
+-randomness of environment
+- training data vs simualtion data
+
+-picking choices to minimize other choices in terms of solutions/attributes for PST (can it be done, period)
+
+
+--------
+
 
 In depth:
 Before simulation, ___ breaks down the top level goal's dependencies into a recursive tree of sub-goals by matching known actions

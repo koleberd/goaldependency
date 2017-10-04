@@ -59,7 +59,3 @@ class ActionFactory:
             if ps.lookedAt in scalars.keys():
                 res[act] = scalars[ps.lookedAt]
         return res
-
-
-
-        return scalars
