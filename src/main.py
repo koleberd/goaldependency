@@ -7,7 +7,7 @@ from actionTarget import *
 from playerStateFactory import *
 from actionFactory import *
 from graphviz import *
-
+from controller import *
 
 
 
@@ -154,9 +154,8 @@ def pruneTree(levelIndex):
             levelIndex[treeLevel] = newLevelList
 
 
-def decomposePS(ps,name):
+def decomposePS(ps,name,actFactory):
     proxyAT = ActionTarget(Action(ps,PlayerState(),0,None))
-    actFactory = ActionFactory()
 
     levelIndex = decomposeAT(proxyAT,actFactory)
     #levelIndex in form of
@@ -252,28 +251,32 @@ def decomposeAT(at,factory):
 
 
 
-#decomposePS(PlayerState(inventory={'stone':4}),'4stone_tree')
-#decomposePS(PlayerState(inventory={'wood':10}),'10wood_tree')
-#decomposePS(PlayerState(inventory={'wood':10,'stone':4}),'10wood_4stone_tree')
-#decomposePS(PlayerState(inventory={'stone pickaxe':1}),'1stonepx_tree')
-#decomposePS(PlayerState(inventory={'iron pickaxe':1}),'1ironpx_tree')
-#decomposePS(PlayerState(inventory={'wood':10}),'20woodWithChoices_tree')
-
-
-#decomposePS(PlayerState(inventory={'wood axe':15}),'15woodaxe') #failing
-levelIndex = decomposePS(PlayerState(inventory={'stone':10}),'4stone_tree')#pool failing - across dissimilar solutions
-#graphTree(levelIndex,'4stone_tree')
-
-scales={}
-table={}
+def run(topPS,name):
+    actFactory = ActionFactory()
+    levelIndex = decomposePS(topPS,name,actFactory)
+    graphTree(levelIndex,name + '_init')
+    print('---- STARTING SIMUILATION  ----')
 
 
 
-levelIndex[0][0].calculateCost(scales,table)
-print('===========')
-for item in table:
-    print(item.ps_res)
-    print(item.cost)
+    STEPS = 10
+    gs = getCurrentGameState()
+    for step in range(0,STEPS):
+        scales = actFactory.scaleCosts(gs.fov)
+        #print(scales)
+        levelIndex[0][0].calculateCost(scales)
+        #time.sleep(1)#make 1 second movement
+        graphTree(levelIndex,name + '_' + str(step))
+        #selectedAT = levelIndex[0][0].select()
+        #print(selectedAT)
+        #selectedAT.execute()
+        gs = getCurrentGameState()
+        #selectedAT.update(gs,ngs)
+        #gs = ngs
 
 
-graphTree(levelIndex,'4stone_tree_costs')
+
+
+
+
+run(PlayerState(inventory={'stone pickaxe':1}),'t1')#pool failing - across dissimilar solutions

@@ -67,7 +67,7 @@ class PlayerStateSolution:
         else:
             res = False
         return res
-    def getCost(self,scalars,table):
+    def getCost(self,scalars,table={}):
         total = self.children[0].calculateCost(scalars,table)
         if len(self.children) > 1:
             for child in self.children[1:]:
@@ -75,9 +75,11 @@ class PlayerStateSolution:
                 total += child.getCost(scalars,table)
         self.tempCost = total
         return total
-    def calculateCost(self,scalars,table):
+    def calculateCost(self,scalars,table={}):
         total = 0
         for child in self.children:
             total += child.calculateCost(scalars,table)
         self.tempCost = total
         return total
+    def select(self):
+        return None

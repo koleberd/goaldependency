@@ -52,5 +52,14 @@ class ActionFactory:
             if act.ps_res.isParallel(ps):
                 ret.append(act)
         return ret
-    def printCosts():
-        print()
+    def scaleCosts(self,scalars):
+        res = {}
+        for act in self.actionMemory:
+            ps = act.ps_res
+            if ps.lookedAt in scalars.keys():
+                res[act] = scalars[ps.lookedAt]
+        return res
+
+
+
+        return scalars

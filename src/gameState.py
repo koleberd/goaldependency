@@ -1,7 +1,5 @@
+from playerState import *
 class GameState:
-    def __init__(self):
-        do = 'nothing'
-    def update(self):
-        do = 'nothing'
-    def getSomething():
-        do = 'nothing'
+    def __init__(self,ps=PlayerState(),fov={}):
+        self.ps = ps,
+        self.fov = fov

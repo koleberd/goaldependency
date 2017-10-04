@@ -29,7 +29,7 @@ class PlayerStateTarget:
         return hash((self.ps,self.satisfied,frozenset(flatItems)))#,self.parent,frozenset(flatItems)))
     def __eq__(self,other):
         return other != None and self.ps == other.ps
-    def getCost(self,scalars,table):
+    def getCost(self,scalars,table={}):
         total = 0
         for attr in self.attributeList:
             cheapest = None
@@ -39,7 +39,7 @@ class PlayerStateTarget:
             total += cheapest
         self.tempCost = total
         return total
-    def calculateCost(self,scalars,table):
+    def calculateCost(self,scalars,table={}):
         total = 0
         for attr in self.attributeList:
             cheapest = None
@@ -49,3 +49,10 @@ class PlayerStateTarget:
             total += cheapest
         self.tempCost = total
         return total
+    def select(self):
+        for attr in self.attributeList:
+            cheapest = self.attributeList[attr][0]
+            for sol in self.attrubuteList[attr]:
+                if sol.tempCost < cheapest.tempCost:
+                    cheapest = sol
+            

@@ -38,7 +38,7 @@ class ActionTarget:
         return hash((self.act,id(self.child),id(self.parent)))
     def __eq__(self,other):
         return other != None and self.act == other.act
-    def calculateCost(self,scalars,table):
+    def calculateCost(self,scalars,table={}):
         scalar = 1
         if self.act in scalars.keys():
             scalar = scalars[self.act]
@@ -47,7 +47,7 @@ class ActionTarget:
             res += self.child.calculateCost(scalars,table)
         self.tempCost = res
         return res
-    def getCost(self,scalars,table):
+    def getCost(self,scalars,table={}):
         scalar = 1
         if self.act in scalars.keys():
             scalar = scalars[self.act]
@@ -58,3 +58,7 @@ class ActionTarget:
             res = table[self.act]
         self.tempCost = res
         return res
+    def select(self):
+        if self.child == None:
+            return self
+        #return self.child.select()

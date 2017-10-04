@@ -2,7 +2,8 @@ import pyautogui
 import time
 from PIL import ImageGrab
 from PIL import Image
-
+from playerState import *
+from gameState import *
 
 defaultColors = [
     (0,0,0), #coal
@@ -26,10 +27,18 @@ resourcesWithColors = {
     'bedrock':(255,255,255) #bedrock
 }
 
+UNID = '?'
+
 def moveForward(dur):
     pyautogui.keyDown('w')
     time.sleep(dur)
     pyautogui.keyUp('w')
+
+def hitBlock(dur):
+    pyautogui.moveRel(0,100)
+    pyautogui.mouseDown()
+    time.sleep(dur)
+    pyautogui.mouseUp()
 
 def normPix(pixel,normalize):
 
@@ -63,15 +72,29 @@ def filt(pixel):
         b += adj
     return (pixel[0] + r, pixel[1] + g, pixel[2] + b)
 
+#the AI part, just returns a normalized sum for counts now.
+def scaleCounts(obj):
+    total = 0;
+    for x in obj:
+        if x != UNID:
+            total += obj[x]
+    res = {}
+    for x in obj:
+        if x != UNID:
+            res[x] = 1 - round(obj[x]/total,2)
+    return res
 
 def matchWithResource(pixel,table):
     normPixel = normPix(filt(pixel),64)
     #print(normPixel)
-    ret = '?'
+    ret = UNID
     for item in table:
         if normPixel == table[item]:
             ret = item
     return ret
+
+
+
 
 def getFOV():
     RESIZE_FACTOR = 16
@@ -93,19 +116,32 @@ def getFOV():
         for j in range(0,height):
             data[i].append(matchWithResource(frame.getpixel((startX+i,startY+j)),resourcesWithColors))
 
-    print('process frame: ' + str(time.time() - startT))
+    #print('process frame: ' + str(time.time() - startT))
     #print(width)
     #print(height)
-
-    print(data)
+    #print('--------------')
+    objTally = {}
+    for x in data:
+        for y in x:
+            if y not in objTally.keys():
+                objTally[y] = 1
+            else:
+                objTally[y] += 1
+    return scaleCounts(objTally)
     #print(frame.height)
     #print(frame.width)
     #print(frame.getpixel((5,5)))
 
+def getLookedAt():
+    return None
+def runSim():
+    time.sleep(3)
+    #moveForward(5)
+    #getFOV()
+    for x in range(0,10):
+        time.sleep(1)
+        getFOV()
 
-time.sleep(3)
-#moveForward(5)
-getFOV()
-
-
-#print(normPix((138,138,138),128))
+def getCurrentGameState():
+    ps = PlayerState(lookedAt=getLookedAt())
+    return GameState(ps=ps,fov=getFOV())
