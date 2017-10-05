@@ -94,9 +94,7 @@ def matchWithResource(pixel,table):
     return ret
 
 
-
-
-def getFOV():
+def getMatchedFrame():
     RESIZE_FACTOR = 16
     startT = time.time()
     frame = ImageGrab.grab()
@@ -115,25 +113,45 @@ def getFOV():
         data.append([])
         for j in range(0,height):
             data[i].append(matchWithResource(frame.getpixel((startX+i,startY+j)),resourcesWithColors))
+    return data
 
-    #print('process frame: ' + str(time.time() - startT))
-    #print(width)
-    #print(height)
-    #print('--------------')
+def getFOV(frame):
     objTally = {}
-    for x in data:
+    for x in frame:
         for y in x:
             if y not in objTally.keys():
                 objTally[y] = 1
             else:
                 objTally[y] += 1
     return scaleCounts(objTally)
-    #print(frame.height)
-    #print(frame.width)
-    #print(frame.getpixel((5,5)))
 
-def getLookedAt():
-    return None
+def getLookedAt(frame):
+    #downsize frame to center of FOV
+    adj = len(frame[0])/2
+    lookedAtPixels = []
+    for row in range(int(len(frame)/2-adj),int(len(frame)/2+adj)):
+        lookedAtPixels.append([])
+        for pixel in frame[row]:
+            lookedAtPixels[-1].append(pixel)
+
+    #tally items in center of screen
+    tally = {}
+    for row in lookedAtPixels:
+        for item in row:
+            if item not in tally.keys():
+                tally[item] = 1
+            else:
+                tally[item] += 1
+
+    #find most occuring item
+    maxKey = None
+    for item in tally:
+        if maxKey == None:
+            maxKey = item
+        elif tally[maxKey] < tally[item]:
+            maxKey = item
+    return maxKey
+
 def runSim():
     time.sleep(3)
     #moveForward(5)
@@ -143,5 +161,7 @@ def runSim():
         getFOV()
 
 def getCurrentGameState():
-    ps = PlayerState(lookedAt=getLookedAt())
-    return GameState(ps=ps,fov=getFOV())
+    frame = getMatchedFrame()
+    currentFOV = getFOV(frame)
+    ps = PlayerState(lookedAt=getLookedAt(frame))
+    return GameState(ps=ps,fov=currentFOV)

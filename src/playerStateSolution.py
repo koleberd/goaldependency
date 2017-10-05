@@ -3,12 +3,16 @@ from actionTarget import *
 from util import *
 #once instnatiated, will produce one self.ps for every parent
 #PSS is only supposed to satisfy one attribute of a PS, while a PST satisfies multiple attributes
+
+
+#pss.ps != pss.getTotal() initially. for example, the pss.ps for wood pickaxe = 1 but pss.getTotal() = 4 or however many units of pickaxe it returns
 class PlayerStateSolution:
     def __init__(self,ps):
         self.ps = ps #doesn't change, and represents the attribute that this PSS targets in its parent PST(s)
         self.children = [] #actionTargets
         self.parents = []  #PST
         self.tempCost = 0
+        self.adjustment = PlayerState()
     def __hash__(self):#may need editing
         ids = []
         for child in self.children:
@@ -18,6 +22,8 @@ class PlayerStateSolution:
         return hash((self.ps,frozenset(ids)))
     def __eq__(self,other):
         return other != None and self.ps == other.ps
+    def __str__(self):
+        return str(self.ps)
     def addChild(self,at):
         self.children.append(at)
     def addParent(self,pst):
@@ -43,6 +49,7 @@ class PlayerStateSolution:
         return total
     def isFulfilled(self):
          return self.getTotal().fulfills(self.getRequired())
+    #used for initilization, and projects the amount that will be produced.
     def getExcess(self):
         if not self.isFulfilled():
             return PlayerState()
@@ -67,6 +74,11 @@ class PlayerStateSolution:
         else:
             res = False
         return res
+
+    #-------------------------------------------
+    #RUN TIME METHODS
+    #-------------------------------------------
+
     def getCost(self,scalars,table={}):
         total = self.children[0].calculateCost(scalars,table)
         if len(self.children) > 1:
@@ -82,4 +94,20 @@ class PlayerStateSolution:
         self.tempCost = total
         return total
     def select(self):
-        return None
+        return self.children[0].select()
+
+    def isComplete(self):
+        return len(self.children) == 0
+    #removes the action target from children, adds its result to accumulation, and updates parents if necessary
+    def updateAT(self,at):
+        remove(self.children,at)
+        at.parent = None
+        self.parents[0].updatePSS(self,at.getResult())
+        if self.isComplete():
+            self.parents = []
+    def adjust(self,ps):
+        self.adjustment = self.adjustment + ps
+        if self.adjustment.fulfills(self.children[-1].getResult()):
+            self.adjustment = self.adjustment - self.children[-1].getResult()
+            self.children[-1].parent = None
+            del self.children[-1]

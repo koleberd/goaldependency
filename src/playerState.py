@@ -1,5 +1,8 @@
 from gameObject import *
 
+
+#PLEASE UNDERSTAND THAT MOST PLAYERSTATE METHODS ARE NOT COMMUTATIVE, INCLUDING ADDITION
+
 class PlayerState:
     def __init__(self,inventory={},buffs={},lookedAt=None):
         self.inventory = inventory

@@ -24,9 +24,8 @@ class ActionTarget:
         return self.act == other.act and self.child == other.child and self.parent == other.parent
     def __ne__(self,other):
         return not (self == other)
-    def execute(self):#not complete
-        self.act.execute()
-        #if it's complete, update parent pss with self.act.ps_res
+    def __str__(self):
+        return str(self.act.ps_res)
     def isCyclicRequirement(self,ps):
         res = False
         if self.parent != None and len(self.parent.parents) > 0:
@@ -38,6 +37,12 @@ class ActionTarget:
         return hash((self.act,id(self.child),id(self.parent)))
     def __eq__(self,other):
         return other != None and self.act == other.act
+
+
+    #-------------------------------------------
+    #RUN TIME METHODS
+    #-------------------------------------------
+
     def calculateCost(self,scalars,table={}):
         scalar = 1
         if self.act in scalars.keys():
@@ -61,4 +66,10 @@ class ActionTarget:
     def select(self):
         if self.child == None:
             return self
-        #return self.child.select()
+        return self.child.select()
+    def isComplete(self):
+        return True
+    def execute(self):
+        #self.act.execute()
+        if self.isComplete():
+            self.parent.updateAT(self)

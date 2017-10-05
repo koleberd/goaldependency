@@ -13,6 +13,7 @@ learn relations of previously pursued actions on a given action in addition to s
 -picking choices to minimize other choices in terms of solutions/attributes for PST (can it be done, period)
 
 
+
 --------
 
 

@@ -27,18 +27,18 @@ def graphTree(levelIndex,name):
         for item in levelIndex[level]:
             if level % 3 == 0:
                 g.attr('node',color='red')
-                g.node(getName(item),label=('PST - ' + str(item.ps) + ' - ' + str(item.tempCost)[:5]))
+                g.node(getName(item),label=('PST - ' + str(item) + ' - ' + str(item.tempCost)[:4]))
             if level % 3 == 1:
                 if len(item.parents) > 1:
                     g.attr('node',style='filled')
                 g.attr('node',color='blue')
-                g.node(getName(item),label=('PSS - ' + str(item.ps) + ' - ' + str(item.tempCost)[:4]))
+                g.node(getName(item),label=('PSS - ' + str(item) + ' - ' + str(item.tempCost)[:4]))
                 g.attr('node',style='unfilled')
             if level % 3 == 2:
                 if item.child == None:
                     g.attr('node',style='filled')
                 g.attr('node',color='green')
-                g.node(getName(item),label=('AT - ' + str(item.act.ps_res) + ' - ' + str(item.tempCost)[:4]))
+                g.node(getName(item),label=('AT - ' + str(item) + ' - ' + str(item.tempCost)[:4]))
                 g.attr('node',style='unfilled')
 
     for level in range(0,len(levelIndex)):
@@ -74,7 +74,7 @@ def printTree(levelIndex):
     print("=/TREE=")
 
 
-def pruneTree(levelIndex):
+def upwardPruneTree(levelIndex):
     #prune the tree
     #node pruned if nonzero requirements and zero children
     treeLevel = len(levelIndex)
@@ -121,6 +121,7 @@ def pruneTree(levelIndex):
     #graphTree(levelIndex,name+'_prereprune')
     #printTree(levelIndex)
 
+def downwardPruneTree(levelIndex):
     treeLevel = 0
     while(treeLevel < len(levelIndex)-1):
         somethingRemoved = False
@@ -203,7 +204,9 @@ def decomposePS(ps,name,actFactory):
     del levelIndex[-2]
     del levelIndex[-1]
 
-    pruneTree(levelIndex)
+    upwardPruneTree(levelIndex)
+    downwardPruneTree(levelIndex)
+
     leafcount = 0
     nodecount = 0
 
@@ -254,26 +257,30 @@ def decomposeAT(at,factory):
 def run(topPS,name):
     actFactory = ActionFactory()
     levelIndex = decomposePS(topPS,name,actFactory)
-    graphTree(levelIndex,name + '_init')
+    #graphTree(levelIndex,name + '_init')
     print('---- STARTING SIMUILATION  ----')
 
 
 
-    STEPS = 10
+    STEPS = 20
     gs = getCurrentGameState()
     for step in range(0,STEPS):
         scales = actFactory.scaleCosts(gs.fov)
         #print(scales)
         levelIndex[0][0].calculateCost(scales)
         #time.sleep(1)#make 1 second movement
-        graphTree(levelIndex,name + '_' + str(step))
-        #selectedAT = levelIndex[0][0].select()
-        #print(selectedAT)
-        #selectedAT.execute()
+        #graphTree(levelIndex,name + '_' + str(step))
+        selectedAT = levelIndex[0][0].select()
+
+        selectedAT.execute()
         gs = getCurrentGameState()
+        #upwardPruneTree(levelIndex)
+        downwardPruneTree(levelIndex)
+        graphTree(levelIndex,name + '_' + str(step)+'_prune')
         #selectedAT.update(gs,ngs)
         #gs = ngs
 
+        #sweep level index to remove completed tasks
 
 
 
