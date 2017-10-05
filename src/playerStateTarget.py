@@ -22,6 +22,8 @@ class PlayerStateTarget:
         self.parent = parent
     def isFulfilled(self):
         return self.satisfied >= self.ps
+    def isComplete(self):
+        return len(self.attributeList) == 0
     def __hash__(self):
         flatItems = []
         for item in self.attributeList:

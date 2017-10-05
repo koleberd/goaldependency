@@ -102,7 +102,14 @@ class PlayerStateSolution:
     def updateAT(self,at):
         remove(self.children,at)
         at.parent = None
-        self.parents[0].updatePSS(self,at.getResult())
+        accumulation = at.getResult()
+        for parent in self.parents:
+            if not accumulation.fulfills(self.ps): #case where multiple children and only one parent
+                self.parents[-1].updatePSS(self,at.getResult())
+                break
+            if not parent.attributeAccumulation[self.ps].fulfills(self.ps):#case where multiple parents but only one child
+                parent.updatePSS(self,self.ps)
+                accumulation = accumulation - self.ps
         if self.isComplete():
             self.parents = []
     def adjust(self,ps):

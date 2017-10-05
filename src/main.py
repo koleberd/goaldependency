@@ -20,7 +20,11 @@ def getName(obj):
         return ('AT - ' + str(obj.act.ps_res) + ' - ' + str(id(obj))).replace(':',';')
     return 'Not identifiable'
 
-def graphTree(levelIndex,name):
+#levelIndex in form of
+#len % 3 == 0 -> PST
+#len % 3 == 1 -> PSS
+#len % 3 == 2 -> AT
+def graphTree(levelIndex,name,selectedAT=None):
     print('Rendering graph for ' + name)
     g = Digraph('Tree',filename=('trees/' + name + '.gv'),format='png')
     for level in range(0,len(levelIndex)):
@@ -38,6 +42,8 @@ def graphTree(levelIndex,name):
                 if item.child == None:
                     g.attr('node',style='filled')
                 g.attr('node',color='green')
+                if hash(item) == hash(selectedAT):
+                    g.attr('node',color='purple')
                 g.node(getName(item),label=('AT - ' + str(item) + ' - ' + str(item.tempCost)[:4]))
                 g.attr('node',style='unfilled')
 
@@ -58,7 +64,7 @@ def graphTree(levelIndex,name):
             if level % 3 == 2:
                 if item.child != None:
                     g.edge(getName(item),getName(item.child))
-    g.view()
+    g.render()
 
 def printTree(levelIndex):
     print("=TREE=")
@@ -262,28 +268,39 @@ def run(topPS,name):
 
 
 
-    STEPS = 20
+    steps = []
+    times = {}
     gs = getCurrentGameState()
-    for step in range(0,STEPS):
+    while(not levelIndex[0][0].isComplete()):
         scales = actFactory.scaleCosts(gs.fov)
         #print(scales)
         levelIndex[0][0].calculateCost(scales)
         #time.sleep(1)#make 1 second movement
         #graphTree(levelIndex,name + '_' + str(step))
         selectedAT = levelIndex[0][0].select()
-
+        if len(steps) == 0 or steps[-1] is not selectedAT:
+            steps.append(selectedAT)
+        exT = time.time()
+        graphTree(levelIndex,name + '_' + str(len(steps)),selectedAT)
         selectedAT.execute()
+        exT = time.time() - exT
+        if selectedAT not in times.keys():
+            times[selectedAT] = 0
+        times[selectedAT] += exT
         gs = getCurrentGameState()
-        #upwardPruneTree(levelIndex)
+
         downwardPruneTree(levelIndex)
-        graphTree(levelIndex,name + '_' + str(step)+'_prune')
-        #selectedAT.update(gs,ngs)
-        #gs = ngs
+        #graphTree(levelIndex,name + '_' + str(len(steps))+'_prune',selectedAT)
+
 
         #sweep level index to remove completed tasks
+    #print('--Action execution order--')
+    #for step in steps:
+        #print(step)
+    #print('Total actions: ' + str(len(steps)))
+    #print('--Action execution time--')
+    #for t in times:
+        #print(str(t) + '\t-\t' + str(times[t]))
 
 
-
-
-
-run(PlayerState(inventory={'stone pickaxe':1}),'t1')#pool failing - across dissimilar solutions
+run(PlayerState(inventory={'stone':10}),'t1')#pool failing - across dissimilar solutions
