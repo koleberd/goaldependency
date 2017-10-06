@@ -58,9 +58,8 @@ def norm(num,amt):
         val = 255
     return val
 
-def filt(pixel):
+def lightenAll(pixel):
     adj = 32
-    pix = (0,0,0)
     r = 0
     g = 0
     b = 0
@@ -71,6 +70,24 @@ def filt(pixel):
     if pixel[2] != 0:
         b += adj
     return (pixel[0] + r, pixel[1] + g, pixel[2] + b)
+
+def lightenOne(pixel):
+    r = 0
+    g = 0
+    b = 0
+    if pixel[0] != 0:
+        r = 255
+    if pixel[1] != 0:
+        g = 255
+    if pixel[2] != 0:
+        b = 255
+    return (r,g,b)
+
+def filt(pixel):
+    if  (pixel[0] == 0 and pixel[1] == 0 and pixel[2] != 0) or (pixel[0] == 0 and pixel[1] != 0 and pixel[2] == 0) or (pixel[0] != 0 and pixel[1] == 0 and pixel[2] == 0):
+        return lightenOne(pixel)
+    else:
+        return lightenAll(pixel)
 
 #the AI part, just returns a normalized sum for counts now.
 def scaleCounts(obj):
@@ -108,11 +125,13 @@ def getMatchedFrame():
     width = int(frame.width * clipWidth)
     height = int(frame.height * clipHeight)
     #frame.show()
+    #print(frame.getpixel((frame.width/4,frame.height/4)))
     data = []
     for i in range(0,width):
         data.append([])
         for j in range(0,height):
             data[i].append(matchWithResource(frame.getpixel((startX+i,startY+j)),resourcesWithColors))
+
     return data
 
 def getFOV(frame):

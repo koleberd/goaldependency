@@ -7,9 +7,8 @@ class Action:
         self.ps_req = ps_req
         self.cost = cost
         self.executionFunction = executionFunction
-    def execute(self):#not complete
-        self.executionFunction()
-
+    def execute(self,gs):#not complete
+        return self.executionFunction(gs)
     def __eq__(self,other):
         return other != None and self.ps_res == other.ps_res and self.ps_req == other.ps_req
     def __ne___(self,other):

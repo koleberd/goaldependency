@@ -5,7 +5,7 @@
         "result":{
             "lookedAt":"wood"
         },
-        "function":"alg1:wood",
+        "function":"locateObject:wood",
         "cost":15
     },
     "harvestWoodHand":{
@@ -32,7 +32,7 @@
             }
         },
         "cost":1,
-        "function":"craftObject:wood plank"
+        "function":"invCraftObject:wood plank"
     },
     "craftStick":{
         "prereq":{
@@ -46,14 +46,14 @@
             }
         },
         "cost":1,
-        "function":"craftObject:stick"
+        "function":"invCraftObject:stick"
     },
     "locateBench":{
         "prereq":{},
         "result":{
             "lookedAt":"crafting bench"
         },
-        "function":"alg1:crafting bench",
+        "function":"locateObject:crafting bench",
         "cost":12
     },
     "craftWoodPickaxe":{
@@ -77,10 +77,10 @@
         "result":{
             "lookedAt":"stone"
         },
-        "function":"alg1:stone",
+        "function":"locateObject:stone",
         "cost":15
     },
-    "harvestStone":{
+    "harvestStoneWoodPickaxe":{
         "prereq":{
             "lookedAt":"stone",
             "inventory":{
@@ -93,7 +93,7 @@
             }
         },
         "function":"harvestObject:stone,wood pickaxe",
-        "cost":4
+        "cost":10
     },
     "craftStonePickaxe":{
         "prereq":{
@@ -116,7 +116,7 @@
         "result":{
             "lookedAt":"coal"
         },
-        "function":"alg1:coal",
+        "function":"locateObject:coal",
         "cost":15
     },
     "locateIron":{
@@ -124,7 +124,7 @@
         "result":{
             "lookedAt":"iron ore"
         },
-        "function":"alg1:iron",
+        "function":"locateObject:iron",
         "cost":15
     },
     "harvestCoalWoodPickaxe":{
@@ -162,7 +162,7 @@
         "result":{
             "lookedAt":"furnace"
         },
-        "function":"alg1:furnace",
+        "function":"locateObject:furnace",
         "cost":15
     },
     "craftIron":{
@@ -243,7 +243,7 @@
             }
         },
         "function":"harvestObject:stone, stone pickaxe",
-        "cost":1
+        "cost":6
     },
     "harvestStoneIronPickaxe":{
         "prereq":{
@@ -280,7 +280,7 @@
         "result":{
             "lookedAt":""
         },
-        "function":"alg1:",
+        "function":"locateObject:",
         "cost":15
     },
     "harvest":{

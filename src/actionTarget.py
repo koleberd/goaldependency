@@ -69,7 +69,7 @@ class ActionTarget:
         return self.child.select()
     def isComplete(self):
         return True
-    def execute(self):
-        #self.act.execute()
-        if self.isComplete():
+    def execute(self,gs):
+        complete = self.act.execute(gs)
+        if complete:
             self.parent.updateAT(self)

@@ -1,22 +1,12 @@
 from gameObject import *
 from action import *
 from playerState import *
+from executionFunctions import *
 
 import json
 
 class ActionFactory:
-    def pathfind1(obj):
-        do = 'nothing'
-    def pathfind2(obj):
-        do = 'nothing'
-    def pathfind3(obj):
-        do = 'nothing'
-        # return some lambda
-    pathfinders = {
-        'alg1':pathfind1,
-        'alg2':pathfind2,
-        'alg3':pathfind3
-    }
+
     def __init__(self):
         with open('json/resourceIndex.json') as jsfl:
             self.resourceIndex = json.load(jsfl)
@@ -29,17 +19,13 @@ class ActionFactory:
             self.actionMemory.append(self.parseActionJSON(actMemory[key]))
 
 
-    #returns an action that fulfills the PlayerState requirement, or None if an action couldn't be produced
-    #@classmethod
-    def getFunction(self,name,args):
-        return None
+
+
     def parseActionJSON(self,obj):
-
-
         psp = PlayerState.parsePlayerStateJSON(obj['prereq'])
         psr = PlayerState.parsePlayerStateJSON(obj['result'])
         cst = obj['cost']
-        func = self.getFunction(obj['function'].split(":")[0],obj['function'].split(":")[1])
+        func = lambda gs: executeFunction(obj['function'].split(":")[0],gs,obj['function'].split(":")[1].split(','))
 
         return Action(psp,psr,cst,func)
 

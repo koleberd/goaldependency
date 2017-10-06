@@ -281,8 +281,8 @@ def run(topPS,name):
         if len(steps) == 0 or steps[-1] is not selectedAT:
             steps.append(selectedAT)
         exT = time.time()
-        graphTree(levelIndex,name + '_' + str(len(steps)),selectedAT)
-        selectedAT.execute()
+        #graphTree(levelIndex,name + '_' + str(len(steps)),selectedAT)
+        selectedAT.execute(gs)
         exT = time.time() - exT
         if selectedAT not in times.keys():
             times[selectedAT] = 0
