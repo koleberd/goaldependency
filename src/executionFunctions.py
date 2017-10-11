@@ -1,5 +1,6 @@
 import pyautogui
 import time
+import json
 from gameState import *
 from playerState import *
 from gameObject import *
@@ -7,6 +8,10 @@ from gameObject import *
 TURN_TIME = .05
 SCREEN_WIDTH = 1920
 SCREEN_HEIGHT = 1080
+
+with open('json/craftingIndex.json') as cfjs:
+    craftingRecipes = json.load(cfjs)
+
 def craftObject(obj):
     print('crafting: ' + str(obj))
     return True

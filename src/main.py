@@ -265,9 +265,6 @@ def run(topPS,name):
     levelIndex = decomposePS(topPS,name,actFactory)
     #graphTree(levelIndex,name + '_init')
     print('---- STARTING SIMUILATION  ----')
-
-
-
     steps = []
     times = {}
     gs = getCurrentGameState()

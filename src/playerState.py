@@ -1,6 +1,5 @@
 from gameObject import *
 
-
 #PLEASE UNDERSTAND THAT MOST PLAYERSTATE METHODS ARE NOT COMMUTATIVE, INCLUDING ADDITION
 
 class PlayerState:
@@ -77,6 +76,7 @@ class PlayerState:
             if n_buf[buff] != 0:
                 nn_buf[buff] = n_buf[buff]
         return PlayerState(nn_inv,nn_buf,self.lookedAt)
+    '''
     def __lt__(self,other):
         res = True
         for item in self.inventory:
@@ -99,6 +99,7 @@ class PlayerState:
         return res
     def __ge__(self,other):
         return not self.__lt__(other)
+    '''
     def __hash__(self):
         return hash((frozenset(self.inventory.keys()),frozenset(self.inventory.items()),frozenset(self.buffs.keys()),frozenset(self.buffs.items()),self.lookedAt))
     def __str__(self):

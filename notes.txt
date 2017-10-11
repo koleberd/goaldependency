@@ -1,3 +1,16 @@
+keep track of sunken costs
+
+decreasing uncertainty as training increases
+
+making decision under uncertainty vs under risk
+
+full game integration - actions
+
+deeper test level
+
+
+
+
 ___ uses AI to efficiently accomplish top level goals in an environment with strict goal dependency hierarchies.
 Before simulation, ___ breaks down the top level goal's dependencies into a recursive tree of sub-goals, called a dependency tree.
 During simulation, ___ uses ML algorithms to analyze world state and player state to select and execute the most efficient sub-goal from the top level goal's dependency tree.
