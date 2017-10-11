@@ -17,14 +17,31 @@ def harvestObject(obj,tool=None):
     print('harvesting: ' + str(obj))
     return True
 def locateObject(obj,gs,alg=None):
+    if gs.ps.lookedAt == obj and len(gs.fov) == 1:
+        print('located: ' + str(obj))
+        return True
     print('locating: ' + str(obj))
     if alg == None or alg == 'alg1':
         pathfind1(obj,gs)
-    return gs.ps.lookedAt == obj
+    return False
 
 
 def pathfind1(obj,gs):
+    if gs.ps.lookedAt != obj:
+        searchFor1(obj,gs)
+    elif gs.ps.lookedAt == obj and len(gs.fov) != 1:
+        moveTo(obj,gs)
+
+def moveTo1(obj,gs):
+    pyautogui.keyDown('w')
+    time.sleep(TURN_TIME)
+    pyautogui.keyUp('w')
+
+def searchFor1(obj,gs):
     pyautogui.moveRel(SCREEN_WIDTH/32,0,TURN_TIME)
+
+
+
 
     # return some lambda
 def executeFunction(name,gs,params):

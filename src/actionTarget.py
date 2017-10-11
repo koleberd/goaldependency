@@ -9,6 +9,7 @@ class ActionTarget:
         self.child = None
         self.parent = None
         self.tempCost = 0
+        self.execMemory = {} #used by pathfinders etc to keep track of execution memory
     def addChild(self,child):
         self.child = child
     def addParent(self,parent):
