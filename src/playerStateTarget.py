@@ -35,6 +35,15 @@ class PlayerStateTarget:
         return other != None and self.ps == other.ps
     def __str__(self):
         return str(self.ps)
+
+
+
+
+    #-------------------------------------------
+    #RUN TIME METHODS
+    #-------------------------------------------
+
+    #calculates cost based on recursive getCost calls on children and on table lookups if available
     def getCost(self,scalars,table={}):
         total = 0
         for attr in self.attributeList:
@@ -45,6 +54,7 @@ class PlayerStateTarget:
             total += cheapest
         self.tempCost = total
         return total
+    #calculates cost based on recursive calculateCost on children; no table lookups
     def calculateCost(self,scalars,table={}):
         total = 0
         for attr in self.attributeList:
@@ -56,9 +66,6 @@ class PlayerStateTarget:
         self.tempCost = total
         return total
 
-    #-------------------------------------------
-    #RUN TIME METHODS
-    #-------------------------------------------
 
     def select(self):
         #cAttr = None

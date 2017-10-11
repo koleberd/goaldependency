@@ -1,13 +1,15 @@
 from gameObject import *
 from playerState import PlayerState
 
+
 class Action:
     def __init__(self,ps_req,ps_res,cost,executionFunction):
         self.ps_res = ps_res
         self.ps_req = ps_req
         self.cost = cost
         self.executionFunction = executionFunction
-    def execute(self,gs):#not complete
+    #returns if completed
+    def execute(self,gs):
         return self.executionFunction(gs)
     def __eq__(self,other):
         return other != None and self.ps_res == other.ps_res and self.ps_req == other.ps_req
