@@ -7,8 +7,9 @@ from actionTarget import *
 from playerStateFactory import *
 from actionFactory import *
 from graphviz import *
-from controller import *
-
+import viewer
+from inventoryManager import *
+import time
 
 
 def getName(obj):
@@ -78,7 +79,6 @@ def printTree(levelIndex):
             if level % 3 == 2:
                 print(str(item.getRequirement()) + " = " + str(item.getResult()))
     print("=/TREE=")
-
 
 def upwardPruneTree(levelIndex):
     #prune the tree
@@ -159,7 +159,6 @@ def downwardPruneTree(levelIndex):
                     newLevelList.append(levelItem)
         if somethingRemoved:
             levelIndex[treeLevel] = newLevelList
-
 
 def decomposePS(ps,name,actFactory):
     proxyAT = ActionTarget(Action(ps,PlayerState(),0,None))
@@ -258,8 +257,6 @@ def decomposeAT(at,factory):
 
     return levels
 
-
-
 def run(topPS,name):
     actFactory = ActionFactory()
     levelIndex = decomposePS(topPS,name,actFactory)
@@ -267,7 +264,9 @@ def run(topPS,name):
     print('---- STARTING SIMUILATION  ----')
     steps = []
     times = {}
-    gs = getCurrentGameState()
+    invM = InventoryManager()
+    invM.deposit('wood',2)
+    gs = viewer.getCurrentGameState(invM)
     while(not levelIndex[0][0].isComplete()):
         scales = actFactory.scaleCosts(gs.fov)
         #print(scales)
@@ -284,7 +283,7 @@ def run(topPS,name):
         if selectedAT not in times.keys():
             times[selectedAT] = 0
         times[selectedAT] += exT
-        gs = getCurrentGameState()
+        gs = viewer.getCurrentGameState(invM)
 
         downwardPruneTree(levelIndex)
         #graphTree(levelIndex,name + '_' + str(len(steps))+'_prune',selectedAT)
@@ -299,5 +298,6 @@ def run(topPS,name):
     #for t in times:
         #print(str(t) + '\t-\t' + str(times[t]))
 
-
-run(PlayerState(inventory={'stone':10}),'t1')#pool failing - across dissimilar solutions
+#run(PlayerState(inventory={'stone':10}),'t1')
+#run(PlayerState(inventory={'stick':4}),'t1')
+run(PlayerState(inventory={'wood pickaxe':1}),'t1')

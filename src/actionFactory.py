@@ -1,10 +1,9 @@
 from gameObject import *
 from action import *
 from playerState import *
-from executionFunctions import *
+import gameController
 
 import json
-
 class ActionFactory:
 
     def __init__(self):
@@ -13,19 +12,14 @@ class ActionFactory:
         with open('json/actionMemory.json') as jsfl:
             actMemory = json.load(jsfl)
         self.actionMemory = []
-
         for key in actMemory:
-
             self.actionMemory.append(self.parseActionJSON(actMemory[key]))
-
-
-
 
     def parseActionJSON(self,obj):
         psp = PlayerState.parsePlayerStateJSON(obj['prereq'])
         psr = PlayerState.parsePlayerStateJSON(obj['result'])
         cst = obj['cost']
-        func = lambda gs: executeFunction(obj['function'].split(":")[0],gs,obj['function'].split(":")[1].split(','))
+        func = lambda gs: gameController.executeFunction(obj['function'].split(":")[0],gs,obj['function'].split(":")[1].split(','))
 
         return Action(psp,psr,cst,func)
 

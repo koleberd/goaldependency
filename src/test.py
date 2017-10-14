@@ -6,7 +6,7 @@ from playerStateSolution import *
 from actionTarget import *
 from playerStateFactory import *
 from actionFactory import *
-from controller import *
+from viewer import *
 
 def test():
     testHash()

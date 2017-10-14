@@ -1,4 +1,3 @@
-import pyautogui
 import time
 from PIL import ImageGrab
 from PIL import Image
@@ -29,16 +28,7 @@ resourcesWithColors = {
 
 UNID = '?'
 
-def moveForward(dur):
-    pyautogui.keyDown('w')
-    time.sleep(dur)
-    pyautogui.keyUp('w')
 
-def hitBlock(dur):
-    pyautogui.moveRel(0,100)
-    pyautogui.mouseDown()
-    time.sleep(dur)
-    pyautogui.mouseUp()
 
 def normPix(pixel,normalize):
 
@@ -179,8 +169,8 @@ def runSim():
         time.sleep(1)
         getFOV()
 
-def getCurrentGameState():
+def getCurrentGameState(inventory):
     frame = getMatchedFrame()
     currentFOV = getFOV(frame)
     ps = PlayerState(lookedAt=getLookedAt(frame))
-    return GameState(ps=ps,fov=currentFOV)
+    return GameState(ps=ps,fov=currentFOV,inv=inventory)

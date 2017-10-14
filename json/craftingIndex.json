@@ -1,3 +1,25 @@
 {
-    "nothing":0
+    "wood pickaxe":{
+        "inputs":[
+            "wood plank:0,0",
+            "wood plank:1,0",
+            "wood plank:2,0",
+            "stick:1,1",
+            "stick:1,2"
+        ],
+        "output":1
+    },
+    "stick":{
+        "inputs":[
+            "wood plank:0,0",
+            "wood plank:0,1"
+        ],
+        "output":4
+    },
+    "wood plank":{
+        "inputs":[
+            "wood:0,0"
+        ],
+        "output":4
+    }
 }

@@ -1,0 +1,75 @@
+{
+    "wood pickaxe":{
+        "stackSize":1,
+        "tool":{
+            "type":"pickaxe",
+            "uses":60,
+            "level":1
+        }
+    },
+    "wood axe":{
+        "stackSize":1,
+        "tool":{
+            "type":"axe",
+            "uses":60,
+            "level":1
+        }
+    },
+    "stone pickaxe":{
+        "stackSize":1,
+        "tool":{
+            "type":"pickaxe",
+            "uses":132,
+            "level":2
+        }
+    },
+    "stone axe":{
+        "stackSize":1,
+        "tool":{
+            "type":"axe",
+            "uses":132,
+            "level":2
+        }
+    },
+    "wood":{
+        "placeable":"block",
+        "stackSize":64
+    },
+    "wood plank":{
+        "placeable":"block",
+        "stackSize":64,
+        "ingredient":true
+    },
+    "stone":{
+        "placeable":"block",
+        "stackSize":64
+    },
+    "cobblestone":{
+        "placeable":"block",
+            "stackSize":64
+    },
+    "iron ore":{
+        "placeable":"block",
+        "stackSize":64
+    },
+    "crafting bench":{
+        "placeable":"block",
+        "stackSize":64
+    },
+    "furnace":{
+        "placeable":"block",
+        "stackSize":64
+    },
+    "iron":{
+        "stackSize":64,
+        "ingredient":true
+    },
+    "stick":{
+        "stackSize":64,
+        "ingredient":true
+    },
+    "coal":{
+        "stackSize":64,
+        "ingredient":true
+    }
+}
