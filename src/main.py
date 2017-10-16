@@ -300,4 +300,4 @@ def run(topPS,name):
 
 #run(PlayerState(inventory={'stone':10}),'t1')
 #run(PlayerState(inventory={'stick':4}),'t1')
-run(PlayerState(inventory={'wood pickaxe':1}),'t1')
+run(PlayerState(inventory={'stone pickaxe':1}),'t1')

@@ -13,6 +13,12 @@ SCREEN_HEIGHT = 1080
 with open('json/craftingIndex.json') as cfjs:
     craftingRecipes = json.load(cfjs)
 
+with open('json/environmentIndex.json') as envjs:
+    environmentIndex = json.load(envjs)
+
+with open('json/toolIndex.json') as tooljs:
+    toolIndex = json.load(tooljs)
+
 def craftObject(obj,gs):
     print('crafting: ' + str(obj))
     if not obj in craftingRecipes.keys():
@@ -41,8 +47,6 @@ def craftObject(obj,gs):
         raise Exception('Could not complete script')
         return False
 
-
-
 def invCraftObject(obj,gs):
     print('inv crafting: ' + str(obj))
     if not obj in craftingRecipes.keys():
@@ -67,8 +71,29 @@ def invCraftObject(obj,gs):
     pyautogui.press('esc')
     return True
 
-def harvestObject(obj,gs,tool=None):
+def harvestObject(obj,gs,tool=None):#still needs to collect resource
     print('harvesting: ' + str(obj))
+    #toolType = environmentIndex['obj']['toolType']
+    toolLevel = 0
+    if tool != None:
+        toolLevel = toolIndex[tool]['type'][environmentIndex[obj]['toolType']]
+        #swap to tool
+        pyautogui.press('e')
+        eqCoord = gs.inv.coordSlot(0,0)
+        iCoord = gs.inv.coordOf(tool)
+        pyautogui.click(x=iCoord[0],y=iCoord[1])
+        pyautogui.click(x=eqCoord[0],y=eqCoord[1])
+        pyautogui.click(x=iCoord[0],y=iCoord[1])
+        pyautogui.press('esc')
+
+    toolTime = environmentIndex[obj]['breakTime'][toolLevel]
+    pyautogui.mouseDown()
+    time.sleep(toolTime + .25)
+    pyautogui.mouseUp()
+    pyautogui.keyDown('w')
+    time.sleep(.5)
+    pyautogui.keyUp('w')
+
     return True
 def locateObject(obj,gs,alg=None):
     if gs.ps.lookedAt == obj and len(gs.fov) == 1:
@@ -83,8 +108,11 @@ def locateObject(obj,gs,alg=None):
 def pathfind1(obj,gs):
     if gs.ps.lookedAt != obj:
         searchFor1(obj,gs)
+    elif gs.ps.lookedAt == obj and len(gs.fov) == 1:
+        turnToward1(obj,gs)
     elif gs.ps.lookedAt == obj and len(gs.fov) != 1:
         moveTo1(obj,gs)
+
 
 def moveTo1(obj,gs):
     pyautogui.keyDown('w')
@@ -94,8 +122,8 @@ def moveTo1(obj,gs):
 def searchFor1(obj,gs):
     pyautogui.moveRel(SCREEN_WIDTH/32,0,TURN_TIME)
 
-
-
+def turnToward1(obj,gs):
+    pyautogui.moveRel(SCREEN_WIDTH/32,0,TURN_TIME)
 
     # return some lambda
 def executeFunction(name,gs,params):

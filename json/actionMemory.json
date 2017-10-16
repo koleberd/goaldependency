@@ -8,7 +8,7 @@
         "function":"locateObject:wood",
         "cost":15
     },
-    "harvestWoodHand":{
+    "harvestWoodPlayerand":{
         "prereq":{
             "lookedAt":"wood"
         },
@@ -17,7 +17,7 @@
                 "wood":1
             }
         },
-        "function":"harvestObject:wood,hand",
+        "function":"harvestObject:wood",
         "cost":2
     },
     "craftPlank":{

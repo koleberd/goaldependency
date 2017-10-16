@@ -1,0 +1,34 @@
+{
+    "player hand":{
+        "type":{
+            "shovel":0,
+            "pickaxe":0,
+            "axe":0
+        },
+        "uses":9999999999999
+    },
+    "wood pickaxe":{
+        "type":{
+            "pickaxe":1
+        },
+        "uses":60
+    },
+    "wood axe":{
+        "type":{
+            "axe":1
+        },
+        "uses":60
+    },
+    "stone pickaxe":{
+        "type":{
+            "pickaxe":2
+        },
+        "uses":132
+    },
+    "stone axe":{
+        "type":{
+            "axe":2
+        },
+        "uses":132
+    }
+}

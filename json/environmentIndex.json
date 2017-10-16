@@ -1,0 +1,51 @@
+{
+    "crafting bench":{
+        "toolType":"axe",
+        "toolLevel":0,
+        "breakTime":[3.75,1.9,0.95,0.65,0.5,0.35]
+    },
+    "furnace":{
+        "toolType":"pickaxe",
+        "toolLevel":1,
+        "breakTime":[17.5,2.65,1.35,0.9,0.7,0.45]
+    },
+    "wood":{
+            "toolType":"axe",
+            "toolLevel":0,
+            "breakTime":[3,1.5,0.75,0.5,0.4,0.25]
+    },
+    "stone":{
+            "toolType":"pickaxe",
+            "toolLevel":1,
+            "breakTime":[10,1.5,0.75,0.5,0.4,0.25]
+
+    },
+    "cobblestone":{
+
+            "toolType":"pickaxe",
+            "toolLevel":1,
+            "breakTime":[10,1.5,0.75,0.5,0.4,0.25]
+
+    },
+    "iron ore":{
+
+            "toolType":"pickaxe",
+            "toolLevel":2,
+            "breakTime":[15,7.5,1.15,0.75,0.6,1.25]
+
+    },
+    "wood plank":{
+
+            "toolType":"axe",
+            "toolLevel":0,
+            "breakTime":[3,1.5,0.75,0.5,0.4,0.25]
+
+    },
+    "coal ore":{
+
+            "toolType":"pickaxe",
+            "toolLevel":1,
+            "breakTime":[15,2.25,1.15,0.75,0.6,0.4]
+        
+    }
+}
