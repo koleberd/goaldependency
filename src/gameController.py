@@ -1,14 +1,18 @@
 import pyautogui
 import time
 import json
+import random
 from gameState import *
 from playerState import *
 from gameObject import *
 from inventoryManager import *
 
-TURN_TIME = .05
+TURN_TIME = .25
 SCREEN_WIDTH = 1920
 SCREEN_HEIGHT = 1080
+rightTurn = 600
+
+
 
 with open('json/craftingIndex.json') as cfjs:
     craftingRecipes = json.load(cfjs)
@@ -120,7 +124,17 @@ def moveTo1(obj,gs):
     pyautogui.keyUp('w')
 
 def searchFor1(obj,gs):
-    pyautogui.moveRel(SCREEN_WIDTH/32,0,TURN_TIME)
+    pyautogui.moveRel(SCREEN_WIDTH/4,0,TURN_TIME)
+    '''
+    choice = random.randint(1,8)
+    if choice > 4:
+        pyautogui.moveRel(rightTurn*(choice%4),0,TURN_TIME)
+    else:
+        switch = ['w','a','s','d']
+        pyautogui.keyDown(switch[choice-1])
+        time.sleep(TURN_TIME)
+        pyautogui.keyUp(switch[choice-1])
+    '''
 
 def turnToward1(obj,gs):
     pyautogui.moveRel(SCREEN_WIDTH/32,0,TURN_TIME)
