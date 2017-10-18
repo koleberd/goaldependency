@@ -36,6 +36,18 @@ how to train weightNN?
 	since based on looking at resources, make scnearios for each resource, then time the time it takes for it to discover the resources
 		- lacks context of dtree
 
+2 weeks of october
+4 weeks of november
+showcase - dec 1st
+
+work to be done
+- locator
+- WNN
+- OBJNN
+- presentation
+
+
+
 
 
 
