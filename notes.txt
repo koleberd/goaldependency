@@ -2,6 +2,11 @@ action items:
 generate/mine training set for object detection
 inventory analyzer from frame
 
+- inventory management
+- obj detection
+- pathfinding
+
+
 
 OBJNN
 	input: frame
@@ -30,6 +35,7 @@ Cons:
 questions:
 detect trees or wood?
 	caves or ores?
+	feature detection vs item dectection
 is uncertainty decreasing during training or during
 output size for obj detection
 how to train weightNN?
