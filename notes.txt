@@ -1,3 +1,47 @@
+action items:
+generate/mine training set for object detection
+inventory analyzer from frame
+
+
+OBJNN
+	input: frame
+	output: 100x5 (100 objects detected max, x1,y1,x2,y2,classification)
+
+WNN
+	input: frame/100x5
+	output: NxF where N is the number of known game objects
+
+
+1S
+Pros: less developer hands on
+Cons:
+	hard to debug
+	may be not in line with OBJNN used for frame referencing
+	has to run in conjunction with OBJNN
+
+2S
+Pros:
+	Less overlap between weighting and pathfinding due to only one use of OBJNN
+	easier to train the first half
+Cons:
+	more rigid input
+
+
+questions:
+detect trees or wood?
+	caves or ores?
+is uncertainty decreasing during training or during
+output size for obj detection
+how to train weightNN?
+	since based on looking at resources, make scnearios for each resource, then time the time it takes for it to discover the resources
+		- lacks context of dtree
+
+
+
+
+
+cross-level pooling
+
 keep track of sunken costs
 
 decreasing uncertainty as training increases
@@ -10,6 +54,20 @@ deeper test level
 
 
 
+post-training functionality (enabled once training is finished)
+	sunken cost tracking
+	uncertainty vs risk tracking
+
+
+
+Semester 2 goals
+- action selection on learned causality relationships
+	2 actions are scaled to be 25 and 30, but if I pursue the 30 first, I predict that the previously 25 action will only be 5, making pursuing the 30 first more efficient
+- factoring in environmental hazards when weighing decisions
+	water might be in the way of a resource, making the seemingly cheap resource more expensive to get to
+- can you model a combat system off of this?
+	not really, because you'd have to initially spawn a FUCKTON of identical branches for 'kill enemy' or 'stay alive'
+		unless branches can be re-spawned dynamically
 
 ___ uses AI to efficiently accomplish top level goals in an environment with strict goal dependency hierarchies.
 Before simulation, ___ breaks down the top level goal's dependencies into a recursive tree of sub-goals, called a dependency tree.
@@ -40,22 +98,9 @@ After simulation, ___ trains its ML model to improve its mappings of world/playe
 
 
 
-how are multiple branches pursued if they're showing cumulative?
-	upwards/downwards propagation of required resources after action completion?
-		trim() function recalculates the required playerstate while maintaining overall tree structure
-	separation in PST's attributelist based on pools?
-	cost in terms of completion of one actionTarget in PSS?
+
 
 look at sims for scheduling processes
-
-cost with environmental factors in addition to just distance (related to time)
-cache use times for individual types so only have to evaluate one individual branch once
-	costs held by PSS
-branch pruning?
-	prune anything without any leaves
-how to make scales variable?
-which actions can be effectively scaled?
-	path finding algorithms
 
 
 cost learned by clocking action execution times
@@ -68,27 +113,7 @@ cost learned by clocking action execution times
 cost scalar learned by comparing anticipated time, estimated scaled time, and actual scaled time and adjusting in the direction of (actual scaled time - estimated scaled time)
 	learned after task completion
 
-when applying scales, store predicted time in table for each unique action target
 
-	each leaf action target calculates its estimated scaled time
-	this is totalled in its parent PSS
-	that parent PSS's parent PST's parent AT's parent PSS totals the total cost from all unique child child child PSS's, plus the sum cost from its child AT's
-
-	same as
-	select top level PST
-	its cost equals the sum of the cheapest child PSS for each attribute
-		the child PSS"s cost equals the sum of costs of child AT's plus the sum of all unique PST's
-			--how to differentiate between PSTs with common PSS's -> DON'T. POOL TIME = CHILDREN TIME /NUMBER OF PARENTS. THIS WILL BE ACCOUTNED FOR BY EACH PARENT TOUCHING IT AND GIVING THE REDUCED SUM TO ITS PARENT WHERE IT WILL BE EFFECTIVELY UNPOOLED.
-
-
-
-
-
-
-pooling viable if pss are on same level of tree and the attribute that they satisify is poolable and ALL their parents have the same name and they have the same name
-1. full decomp, prune locations marked, no pooling
-2. prune
-3. pool
 
 
 or decomp until actiontarget level, pool, then keep doing decomp until action layer, etc
