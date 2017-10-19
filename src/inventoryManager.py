@@ -1,4 +1,9 @@
 import json
+import nbt
+from os import listdir
+import time
+#from os.path import isfile,join
+
 
 CNTR_DST = 36
 C_ST = 824
@@ -22,7 +27,7 @@ class InventoryManager:
             self.inventory.append([])#rows
             for y in range(0,9):
                 self.inventory[x].append(('empty',0))
-    def deposit(self,obj,qnt):
+    def depositStack(self,obj,qnt):
         rem = qnt
         for row in range(0,4):
             if rem == 0:
@@ -35,9 +40,24 @@ class InventoryManager:
                     amt = self.resourceIndex[obj]['stackSize'] - slot[1]
                     if amt > rem:
                         amt = rem
-                    self.inventory[row][col] = (obj,amt)
+                    self.inventory[row][col] = (obj,amt+slot[1])
                     rem -= amt
                 elif slot[0] == 'empty':
+                    amt = self.resourceIndex[obj]['stackSize'] - slot[1]
+                    if amt > rem:
+                        amt = rem
+                    self.inventory[row][col] = (obj,amt)
+                    rem -= amt
+    def deposit(self,obj,qnt):
+        rem = qnt
+        for row in range(0,4):
+            if rem == 0:
+                break
+            for col in range(0,9):
+                if rem == 0:
+                    break
+                slot = self.inventory[row][col]
+                if slot[0] == 'empty':
                     amt = self.resourceIndex[obj]['stackSize'] - slot[1]
                     if amt > rem:
                         amt = rem
@@ -67,6 +87,12 @@ class InventoryManager:
         self.inventory[r1][c1] = self.inventory[r2][c2]
         self.inventory[r2][c2] = hold
 
+    def invCoordOf(self,obj):
+        for row in range(3,-1,-1):
+            for col in range(8,-1,-1):
+                if self.inventory[row][col][0] == obj:
+                    return (row,col)
+        return None
     def coordOf(self,obj):
         for row in range(3,-1,-1):
             for col in range(8,-1,-1):
@@ -102,3 +128,37 @@ class InventoryManager:
             for col in range(0,9):
                 if self.inventory[row][col][0] == 'empty':
                     return self.coordSlot(row,col)
+    def translate(self,obj):
+        name = obj.split(':')[1]
+        translate = {
+            'planks':'wood plank',
+            'log':'wood'
+        }
+        if name in translate.keys():
+            name = translate[name]
+        return name
+    def parseInventory(self):
+        #return False
+
+        parsedInv = [None]*36
+        pInv = InventoryManager()
+        folder = 'C:\\Users\\Kirevikyn\\AppData\\Roaming\\.minecraft\\saves\\TEST_ENV_1\\playerdata'
+        filename = folder + '\\' + listdir(folder)[0]
+        #print(filename)
+        playerfile = nbt.NBTFile(filename,'rb')
+        items = playerfile['Inventory'].tags
+        for item in items:
+            #parsedInv[item['Slot'].value]={self.translate(item['id'].value):item['Count'].value}
+            pInv.inventory[int(item['Slot'].value/9)][item['Slot'].value%9] = (self.translate(item['id'].value),item['Count'].value)
+        return pInv
+    def __eq__(self,other):
+        for row in range(0,4):
+            for col in range(0,9):
+                if self.inventory[row][col][0] != other.inventory[row][col][0] and self.inventory[row][col][1] != other.inventory[row][col][1]:
+                    return False
+        return True
+
+    def __ne__(self,other):
+        return not (self == other)
+#print()
+#print(InventoryManager().inventory)

@@ -10,6 +10,7 @@ from graphviz import *
 import viewer
 from inventoryManager import *
 import time
+import pyautogui
 
 
 def getName(obj):
@@ -265,7 +266,7 @@ def run(topPS,name):
     steps = []
     times = {}
     invM = InventoryManager()
-    invM.deposit('wood',2)
+    #invM.deposit('wood',2)
     gs = viewer.getCurrentGameState(invM)
     while(not levelIndex[0][0].isComplete()):
         scales = actFactory.scaleCosts(gs.fov)
@@ -283,7 +284,23 @@ def run(topPS,name):
         if selectedAT not in times.keys():
             times[selectedAT] = 0
         times[selectedAT] += exT
+
+
+
+        actualInv = InventoryManager().parseInventory()
+        if gs.inv != actualInv and False:
+            print('mismatch---')
+            print(gs.inv.inventory)
+            print(actualInv.inventory)
+            print(steps)
+            pyautogui.keyDown('esc')
+            pyautogui.keyUp('esc')
+            time.sleep(.1)
+            pyautogui.keyDown('esc')
+            pyautogui.keyUp('esc')
+
         gs = viewer.getCurrentGameState(invM)
+
 
         downwardPruneTree(levelIndex)
         #graphTree(levelIndex,name + '_' + str(len(steps))+'_prune',selectedAT)

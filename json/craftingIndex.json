@@ -21,5 +21,15 @@
             "wood:0,0"
         ],
         "output":4
+    },
+    "stone pickaxe":{
+        "inputs":[
+            "stone:0,0",
+            "stone:1,0",
+            "stone:2,0",
+            "stick:1,1",
+            "stick:1,2"
+        ],
+        "output":1
     }
 }

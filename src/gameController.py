@@ -75,6 +75,8 @@ def invCraftObject(obj,gs):
     pyautogui.press('esc')
     return True
 
+
+
 def harvestObject(obj,gs,tool=None):#still needs to collect resource
     print('harvesting: ' + str(obj))
     #toolType = environmentIndex['obj']['toolType']
@@ -89,16 +91,47 @@ def harvestObject(obj,gs,tool=None):#still needs to collect resource
         pyautogui.click(x=eqCoord[0],y=eqCoord[1])
         pyautogui.click(x=iCoord[0],y=iCoord[1])
         pyautogui.press('esc')
+        pyautogui.keyDown('1')
+        pyautogui.keyUp('1')
+
+        invc1 = gs.inv.invCoordOf(tool)
+        hold = gs.inv.inventory[invc1[0]][invc1[1]]
+        gs.inv.inventory[invc1[0]][invc1[1]] = gs.inv.inventory[0][0]
+        gs.inv.inventory[0][0] = hold
 
     toolTime = environmentIndex[obj]['breakTime'][toolLevel]
     pyautogui.mouseDown()
     time.sleep(toolTime + .25)
     pyautogui.mouseUp()
-    pyautogui.keyDown('w')
-    time.sleep(.5)
-    pyautogui.keyUp('w')
 
+
+    gs.inv.depositStack(obj,1)
+    time.sleep(.4)
+    pyautogui.keyDown('esc')
+    pyautogui.keyUp('esc')
+    time.sleep(.1)
+    pyautogui.keyDown('esc')
+    pyautogui.keyUp('esc')
+    actualInv = InventoryManager().parseInventory()
+    while gs.inv != actualInv:
+        print('resource missing!')
+        #print(gs.inv.inventory)
+        #print(actualInv.inventory)
+
+        pyautogui.keyDown('esc')
+        pyautogui.keyUp('esc')
+        time.sleep(.1)
+        pyautogui.keyDown('esc')
+        pyautogui.keyUp('esc')
+
+        pyautogui.keyDown('w')
+        time.sleep(.5)
+        pyautogui.keyUp('w')
+        actualInv = InventoryManager().parseInventory()
     return True
+
+
+
 def locateObject(obj,gs,alg=None):
     if gs.ps.lookedAt == obj and len(gs.fov) == 1:
         print('located: ' + str(obj))
@@ -119,12 +152,14 @@ def pathfind1(obj,gs):
 
 
 def moveTo1(obj,gs):
+    return
     pyautogui.keyDown('w')
     time.sleep(TURN_TIME)
     pyautogui.keyUp('w')
 
 def searchFor1(obj,gs):
-    pyautogui.moveRel(SCREEN_WIDTH/4,0,TURN_TIME)
+    return
+    pyautogui.moveRel(SCREEN_WIDTH/16,0,TURN_TIME)
     '''
     choice = random.randint(1,8)
     if choice > 4:
@@ -137,6 +172,7 @@ def searchFor1(obj,gs):
     '''
 
 def turnToward1(obj,gs):
+    return
     pyautogui.moveRel(SCREEN_WIDTH/32,0,TURN_TIME)
 
     # return some lambda

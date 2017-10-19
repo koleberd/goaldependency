@@ -72,9 +72,13 @@ class PlayerStateTarget:
         cSol = None
         for attr in self.attributeList:
             for sol in self.attributeList[attr]:
+                if (cSol == None or sol.tempCost < cSol.tempCost) and (sol.ps.lookedAt == None or len(self.attributeList) == 1):
+                    cSol = sol
+                '''
                 if cSol == None or ((sol.tempCost < cSol.tempCost and sol.ps.lookedAt == None) or (sol.ps.lookedAt != None and len(self.attributeList) == 1)):
                     cSol = sol
                     #cAttr = attr
+                '''
 
         return cSol.select()
     #adds ps to the attribute accumulation corresponding with pss.ps

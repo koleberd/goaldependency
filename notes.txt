@@ -137,3 +137,11 @@ cost scalar learned by comparing anticipated time, estimated scaled time, and ac
 or decomp until actiontarget level, pool, then keep doing decomp until action layer, etc
 
 if this AT's prereq  matches or exceeds this AT's PSS's PST attribute or any parent's, then it should be pruned.
+
+
+
+
+
+test work rules:
+/gamerule doDaylightCycle false
+/time set 6000
