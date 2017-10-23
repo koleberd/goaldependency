@@ -10,3 +10,6 @@ clean:
 	@rm -f trees/*.png
 mv: clean
 	@python src/controller.py
+
+train:
+	@python src/utils/trainingSetGenerator.py
