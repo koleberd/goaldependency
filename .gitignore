@@ -1,3 +1,4 @@
 *.lnk
 *.xlsx
 training
+MNIST_data

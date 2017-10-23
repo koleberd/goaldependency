@@ -18,7 +18,7 @@ U furnace
 '''
 
 
-training_dir = 'training/'
+training_dir = 'training/images'
 #outfileName = training_dir + 'lookedAtSet.json'
 keys_to_classes = {'i':'iron','t':'stone','q':'wood','c':'crafting bench','u':'furnace','n':'diamond','o':'gold','f':'coal','r':'none'}
 counter = len(os.listdir(training_dir))-1
