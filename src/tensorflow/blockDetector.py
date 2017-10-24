@@ -31,6 +31,9 @@ OUTPUT_CHANNELS = [8,8]
 FULLY_CONNECTED_SIZE = 64 #1024
 CLASSES = 16
 BATCH_SIZE = 20
+REPEAT_EPOCHS = 10 #times to reuse training batch
+NUM_EPOCHS = 20 #times to repeat training
+
 
 def deepnn(x):
   """deepnn builds the graph for a deep net for classifying digits.
@@ -157,8 +160,11 @@ def main():
     dataset = tf.contrib.data.Dataset.from_tensor_slices((filenames, labels))
     dataset = dataset.map(_parse_function)
     #print(dataset)
-    batchedSet = dataset.batch(BATCH_SIZE).make_one_shot_iterator()
-
+    dataset = dataset.shuffle(buffer_size=10000)
+    dataset = dataset.batch(BATCH_SIZE)
+    dataset = dataset.repeat(REPEAT_EPOCHS)
+    batchedSet = dataset.make_one_shot_iterator()
+    next_element = batchedSet.get_next()
 
     # Create the model
     x = tf.placeholder(tf.float32, [None, IMG_WIDTH, IMG_HEIGHT, COLOR_CHANNELS])    #IMG_WIDTH*IMG_HEIGHT*COLOR_CHANNELS])
@@ -181,21 +187,23 @@ def main():
 
     accuracy = tf.reduce_mean(correct_prediction)
 
-    graph_location = 'models/graphs' #tempfile.mkdtemp()
-    print('Saving graph to: %s' % graph_location)
-    train_writer = tf.summary.FileWriter(graph_location)
-    train_writer.add_graph(tf.get_default_graph())
+    #graph_location = 'models/graphs' #tempfile.mkdtemp()
+    #print('Saving graph to: %s' % graph_location)
+    #train_writer = tf.summary.FileWriter(graph_location)
+    #train_writer.add_graph(tf.get_default_graph())
 
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
-        for i in range(int(len(files)/BATCH_SIZE)):#prev. 20000
-            print('batch: ' + str(i))
-            batch = batchedSet.get_next()
+        #with tf.train.MonitoredTrainingSession() as sess:
+        #sess.run(tf.global_variables_initializer())
+        for i in range(int(len(files)*NUM_EPOCHS/BATCH_SIZE)): #for i in range(int(len(files)/BATCH_SIZE)):#prev. 20000
+            #print('batch: ' + str(i))
+            batch = sess.run(next_element)
             #print(batch)
-
-            train_accuracy = accuracy.eval(feed_dict={x: batch[0].eval() ,y_: batch[1].eval(), keep_prob: 1.0})
+            train_accuracy = accuracy.eval(feed_dict={x: batch[0] ,y_: batch[1], keep_prob: 1.0})
             print('step %d, training accuracy %g' % (i, train_accuracy))
-            train_step.run(feed_dict={x: batch[0].eval(), y_: batch[1].eval(), keep_prob: 0.5})
+            train_step.run(feed_dict={x: batch[0], y_: batch[1], keep_prob: 0.5})
+
 
     #print('test accuracy %g' % accuracy.eval(feed_dict={
         #x: mnist.test.images, y_: mnist.test.labels, keep_prob: 1.0}))
