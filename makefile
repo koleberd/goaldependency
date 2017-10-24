@@ -13,3 +13,6 @@ mv: clean
 
 train:
 	@python src/utils/trainingSetGenerator.py
+
+learn:
+	@python src/tensorflow/blockDetector.py

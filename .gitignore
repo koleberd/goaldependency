@@ -2,3 +2,4 @@
 *.xlsx
 training
 MNIST_data
+models
