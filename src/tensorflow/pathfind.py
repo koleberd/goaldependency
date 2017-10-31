@@ -19,47 +19,41 @@ import tensorflow as tf
 
 FLAGS = None
 
-classes_to_label = {
-    'none':0,
-    'wood':1,
-    'stone':2,
-    'iron':3,
-    'diamond':4,
-    'crafting bench':5,
-    'furnace':6,
-    'coal':7
+actions = {
+    'w':0,
+    'a':1,
+    's':2,
+    'd':3,
+    'space':4,
+    'panUp':5,
+    'panDown':6,
+    'panRight':7,
+    'panLeft':8
 }
 
-CLASSES = len(classes_to_label)*2-1
+NUM_ACTIONS = len(actions)
 
-IMG_WIDTH = 960 #1920
-IMG_HEIGHT = 540 #1080
+
 IMG_DIR = 'training/images/'
 SIZE_TENSOR = [1920,1080] #NOT USED
-RESIZE_FACTOR = 2 #NOT USED
-RESIZE_TENSOR = [960,540] #NOT USED
-
-
-
-COLOR_CHANNELS = 3
-KERNEL_RADII = [5,5]
-OUTPUT_CHANNELS = [8,8] #connectedness ebtween conv and pooling layers
-FULLY_CONNECTED_SIZE = 64 #1024
-#CLASSES = 16
-FINAL_LAYER_SIZE = int(IMG_HEIGHT / 4) * int(IMG_WIDTH / 4) * OUTPUT_CHANNELS[1]
-
-
-
-
-
+RESIZE_FACTOR = 4
 BATCH_SIZE = 20
 REPEAT_EPOCHS = 1 #10 #times to reuse training batch
 NUM_EPOCHS = 10 #20 #times to repeat training
+KERNEL_RADII = [9,9]
+OUTPUT_CHANNELS = [9,9] #connectedness ebtween conv and pooling layers
+FULLY_CONNECTED_SIZE = 64 #1024
+FINAL_LAYER_SIZE = int(IMG_SIZE[1] / 4) * int(IMG_SIZE[0] / 4) * OUTPUT_CHANNELS[1]
+
+
+COLOR_CHANNELS = 3
+IMG_SIZE = [SIZE_TENSOR[0]/RESIZE_FACTOR,SIZE_TENSOR[1]/RESIZE_FACTOR] #NOT USED
+
 
 def deepnn(x):
 
     with tf.name_scope('reshape'):
-        x_image = tf.reshape(x, [-1, IMG_WIDTH, IMG_HEIGHT, COLOR_CHANNELS])
+        x_image = tf.reshape(x, [-1, IMG_SIZE[0], IMG_SIZE[1], COLOR_CHANNELS])
 
     with tf.name_scope('conv1'):
         W_conv1 = weight_variable([KERNEL_RADII[0], KERNEL_RADII[0], COLOR_CHANNELS, OUTPUT_CHANNELS[0]])
@@ -119,7 +113,7 @@ def bias_variable(shape):
 def _parse_function(filename, label):
     image_string = tf.read_file(filename)
     image_decoded = tf.image.decode_png(image_string)
-    image_resized = tf.image.resize_images(image_decoded, [IMG_WIDTH, IMG_HEIGHT])
+    image_resized = tf.image.resize_images(image_decoded, [IMG_SIZE[0], IMG_SIZE[1]])
     return image_resized, label
 
 def parse_labels(filenames):
@@ -141,7 +135,7 @@ def main():
     files = os.listdir(IMG_DIR)
     filenames = tf.constant([IMG_DIR + f for f in files])
     labels = tf.constant(parse_labels(files))
-
+    
 
     dataset = tf.contrib.data.Dataset.from_tensor_slices((filenames, labels))
     dataset = dataset.map(_parse_function)
@@ -153,7 +147,7 @@ def main():
     next_element = batchedSet.get_next()
 
     # Create the model
-    x = tf.placeholder(tf.float32, [None, IMG_WIDTH, IMG_HEIGHT, COLOR_CHANNELS])    #IMG_WIDTH*IMG_HEIGHT*COLOR_CHANNELS])
+    x = tf.placeholder(tf.float32, [None, IMG_SIZE[0], IMG_SIZE[1], COLOR_CHANNELS])    #IMG_SIZE[0]*IMG_SIZE[1]*COLOR_CHANNELS])
     # Define loss and optimizer
     y_ = tf.placeholder(tf.float32, [None, CLASSES])
     y_conv, keep_prob = deepnn(x)
@@ -179,11 +173,8 @@ def main():
     #train_writer.add_graph(tf.get_default_graph())
     prev_accuracy = 0
 
-
-
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
-        saver = tf.train.Saver()
         #with tf.train.MonitoredTrainingSession() as sess:
         #sess.run(tf.global_variables_initializer())
         print(int(len(files)/BATCH_SIZE))
@@ -201,13 +192,6 @@ def main():
 
     #print('test accuracy %g' % accuracy.eval(feed_dict={
         #x: mnist.test.images, y_: mnist.test.labels, keep_prob: 1.0}))
-
-    modelsSaved = os.listdir('trainedModels')
-    detectorModels = 0
-    for model in modelsSaved:
-        if('blockDetector' in model):
-            detectorModels += 1
-    saver.save(sess,'trainedModels/blockDetector' + str(detectorModels))
 
 '''
 if __name__ == '__main__':

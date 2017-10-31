@@ -1,6 +1,7 @@
 *.lnk
 *.xlsx
-training
+training/images/*.png
+training/images/*.jpg
 MNIST_data
 models
 *.bat
