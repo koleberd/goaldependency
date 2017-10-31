@@ -4,7 +4,7 @@ from PIL import ImageGrab
 from PIL import Image
 import os
 import json
-
+import time
 '''
 T stone
 I iron
@@ -16,9 +16,11 @@ R none
 C crafting
 U furnace
 '''
+start_time = time.time()
+session_count = 0
 
 
-training_dir = 'training/images'
+training_dir = 'training/images/'
 #outfileName = training_dir + 'lookedAtSet.json'
 keys_to_classes = {'i':'iron','t':'stone','q':'wood','c':'crafting bench','u':'furnace','n':'diamond','o':'gold','f':'coal','r':'none'}
 counter = len(os.listdir(training_dir))-1
@@ -57,10 +59,12 @@ def on_release(key):
 
 def dumpLastImg():
     global counter
+    global session_count
     if prevImg != None:
         counter += 1
-        name = training_dir + prevImgN + '_' + str(counter) + '.png'
-        prevImg.save(name)
+        session_count += 1
+        name = prevImgN + '_' + str(counter) + '.png'
+        prevImg.save(training_dir + name)
         print('+ ' + name)
 
 def dumpJSON():
@@ -86,6 +90,11 @@ def printStats():
     for item in sorted(nameCount):
         print(str(nameCount[item]) + ' ( ' + str(int(100*nameCount[item]/len(names))) + '% )' + ' - ' + item)
     print(str(len(names)) + ' - total')
+    if session_count > 0:
+        print(str((time.time()-start_time)/session_count) + ' seconds/image for ' + str(session_count) + ' images')
+
+
+
 
 with keyboard.Listener(on_press=on_press,on_release=on_release) as listener:
     listener.join()

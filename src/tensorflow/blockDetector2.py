@@ -19,85 +19,81 @@ import tensorflow as tf
 
 FLAGS = None
 
+classes_to_label = {
+    'none':0,
+    'wood':1,
+    'stone':2,
+    'iron':3,
+    'diamond':4,
+    'crafting bench':5,
+    'furnace':6,
+    'coal':7
+}
+
+CLASSES = len(classes_to_label)*2-1
+
 IMG_WIDTH = 960 #1920
 IMG_HEIGHT = 540 #1080
-
-
+IMG_DIR = 'training/images/'
 SIZE_TENSOR = [1920,1080] #NOT USED
 RESIZE_FACTOR = 2 #NOT USED
 RESIZE_TENSOR = [960,540] #NOT USED
+
+
 
 COLOR_CHANNELS = 3
 KERNEL_RADII = [5,5]
 OUTPUT_CHANNELS = [8,8] #connectedness ebtween conv and pooling layers
 FULLY_CONNECTED_SIZE = 64 #1024
-CLASSES = 16
+#CLASSES = 16
+FINAL_LAYER_SIZE = int(IMG_HEIGHT / 4) * int(IMG_WIDTH / 4) * OUTPUT_CHANNELS[1]
+
+
+
+
+
 BATCH_SIZE = 20
 REPEAT_EPOCHS = 1 #10 #times to reuse training batch
 NUM_EPOCHS = 10 #20 #times to repeat training
 
-
-
 def deepnn(x):
-  """deepnn builds the graph for a deep net for classifying digits.
-  Args:
-    x: an input tensor with the dimensions (N_examples, 784), where 784 is the
-    number of pixels in a standard MNIST image.
-  Returns:
-    A tuple (y, keep_prob). y is a tensor of shape (N_examples, 10), with values
-    equal to the logits of classifying the digit into one of 10 classes (the
-    digits 0-9). keep_prob is a scalar placeholder for the probability of
-    dropout.
-  """
-  # Reshape to use within a convolutional neural net.
-  # Last dimension is for "features" - there is only one here, since images are
-  # grayscale -- it would be 3 for an RGB image, 4 for RGBA, etc.
-  with tf.name_scope('reshape'):
-    x_image = tf.reshape(x, [-1, IMG_WIDTH, IMG_HEIGHT, COLOR_CHANNELS])
 
-  # First convolutional layer - maps one grayscale image to 32 feature maps.
-  with tf.name_scope('conv1'):
-    W_conv1 = weight_variable([KERNEL_RADII[0], KERNEL_RADII[0], COLOR_CHANNELS, OUTPUT_CHANNELS[0]])
-    b_conv1 = bias_variable([OUTPUT_CHANNELS[0]])
-    h_conv1 = tf.nn.relu(conv2d(x_image, W_conv1) + b_conv1)
+    with tf.name_scope('reshape'):
+        x_image = tf.reshape(x, [-1, IMG_WIDTH, IMG_HEIGHT, COLOR_CHANNELS])
 
-  # Pooling layer - downsamples by 2X.
-  with tf.name_scope('pool1'):
-    h_pool1 = max_pool_2x2(h_conv1)
+    with tf.name_scope('conv1'):
+        W_conv1 = weight_variable([KERNEL_RADII[0], KERNEL_RADII[0], COLOR_CHANNELS, OUTPUT_CHANNELS[0]])
+        b_conv1 = bias_variable([OUTPUT_CHANNELS[0]])
+        h_conv1 = tf.nn.relu(conv2d(x_image, W_conv1) + b_conv1)
 
-  # Second convolutional layer -- maps 32 feature maps to 64.
-  with tf.name_scope('conv2'):
-    W_conv2 = weight_variable([KERNEL_RADII[1], KERNEL_RADII[1], OUTPUT_CHANNELS[0], OUTPUT_CHANNELS[1]])
-    b_conv2 = bias_variable([OUTPUT_CHANNELS[1]])
-    h_conv2 = tf.nn.relu(conv2d(h_pool1, W_conv2) + b_conv2)
+    with tf.name_scope('pool1'):
+        h_pool1 = max_pool_2x2(h_conv1)
 
-  # Second pooling layer.
-  with tf.name_scope('pool2'):
-    h_pool2 = max_pool_2x2(h_conv2)
+    with tf.name_scope('conv2'):
+        W_conv2 = weight_variable([KERNEL_RADII[1], KERNEL_RADII[1], OUTPUT_CHANNELS[0], OUTPUT_CHANNELS[1]])
+        b_conv2 = bias_variable([OUTPUT_CHANNELS[1]])
+        h_conv2 = tf.nn.relu(conv2d(h_pool1, W_conv2) + b_conv2)
 
-  # Fully connected layer 1 -- after 2 round of downsampling, our 28x28 image
-  # is down to 7x7x64 feature maps -- maps this to 1024 features.
-  FINAL_LAYER_SIZE = int(IMG_HEIGHT / 4) * int(IMG_WIDTH / 4) * OUTPUT_CHANNELS[1]
-  with tf.name_scope('fc1'):
-    W_fc1 = weight_variable([FINAL_LAYER_SIZE, FULLY_CONNECTED_SIZE])
-    b_fc1 = bias_variable([FULLY_CONNECTED_SIZE])
+    with tf.name_scope('pool2'):
+        h_pool2 = max_pool_2x2(h_conv2)
 
-    h_pool2_flat = tf.reshape(h_pool2, [-1, FINAL_LAYER_SIZE])
-    h_fc1 = tf.nn.relu(tf.matmul(h_pool2_flat, W_fc1) + b_fc1)
+    with tf.name_scope('fc1'):
+        W_fc1 = weight_variable([FINAL_LAYER_SIZE, FULLY_CONNECTED_SIZE])
+        b_fc1 = bias_variable([FULLY_CONNECTED_SIZE])
+        h_pool2_flat = tf.reshape(h_pool2, [-1, FINAL_LAYER_SIZE])
+        h_fc1 = tf.nn.relu(tf.matmul(h_pool2_flat, W_fc1) + b_fc1)
 
-  # Dropout - controls the complexity of the model, prevents co-adaptation of
-  # features.
-  with tf.name_scope('dropout'):
-    keep_prob = tf.placeholder(tf.float32)
-    h_fc1_drop = tf.nn.dropout(h_fc1, keep_prob)
+    # Dropout - controls the complexity of the model, prevents co-adaptation of features.
+    with tf.name_scope('dropout'):
+        keep_prob = tf.placeholder(tf.float32)
+        h_fc1_drop = tf.nn.dropout(h_fc1, keep_prob)
 
-  # Map the 1024 features to 10 classes, one for each digit
-  with tf.name_scope('fc2'):
-    W_fc2 = weight_variable([FULLY_CONNECTED_SIZE, CLASSES])
-    b_fc2 = bias_variable([CLASSES])
+    with tf.name_scope('fc2'):
+        W_fc2 = weight_variable([FULLY_CONNECTED_SIZE, CLASSES])
+        b_fc2 = bias_variable([CLASSES])
+        y_conv = tf.matmul(h_fc1_drop, W_fc2) + b_fc2
 
-    y_conv = tf.matmul(h_fc1_drop, W_fc2) + b_fc2
-  return y_conv, keep_prob
+    return y_conv, keep_prob
 
 
 def conv2d(x, W):
@@ -106,8 +102,7 @@ def conv2d(x, W):
 
 def max_pool_2x2(x):
   """max_pool_2x2 downsamples a feature map by 2X."""
-  return tf.nn.max_pool(x, ksize=[1, 2, 2, 1],
-                        strides=[1, 2, 2, 1], padding='SAME')
+  return tf.nn.max_pool(x, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
 
 def weight_variable(shape):
   """weight_variable generates a weight variable of a given shape."""
@@ -123,23 +118,11 @@ def bias_variable(shape):
 # to a fixed shape.
 def _parse_function(filename, label):
     image_string = tf.read_file(filename)
-    #print('--' + str(filename))
-    #print('--' + str(image_string))
     image_decoded = tf.image.decode_png(image_string)
-    #print('--' + str(image_decoded))
     image_resized = tf.image.resize_images(image_decoded, [IMG_WIDTH, IMG_HEIGHT])
     return image_resized, label
+
 def parse_labels(filenames):
-    classes_to_label = {
-        'none':0,
-        'wood':1,
-        'stone':2,
-        'iron':3,
-        'diamond':4,
-        'crafting bench':5,
-        'furnace':6,
-        'coal':7
-    }
     res = []
     for x in filenames:
         name = classes_to_label[x.split('_')[0]]*2
@@ -148,21 +131,21 @@ def parse_labels(filenames):
         o_h = [0 for y in range(0,len(classes_to_label)*2)]
         o_h[name] = 1
         res.append(o_h)
-        #res.append(name)
-    #print(res)
     return res
+
+
+
+
 def main():
-    # Import data
-    #mnist = input_data.read_data_sets(FLAGS.data_dir, one_hot=True)
-    files = os.listdir('training/images')
-    filenames = tf.constant(['training/images/' + f for f in files])
-    labels = tf.constant(parse_labels(files)) #parse_labels(files) #
-    #print(filenames)
-    #print(labels)
+
+    files = os.listdir(IMG_DIR)
+    filenames = tf.constant([IMG_DIR + f for f in files])
+    labels = tf.constant(parse_labels(files))
+
 
     dataset = tf.contrib.data.Dataset.from_tensor_slices((filenames, labels))
     dataset = dataset.map(_parse_function)
-    #print(dataset)
+
     dataset = dataset.shuffle(buffer_size=10000)
     dataset = dataset.batch(BATCH_SIZE)
     dataset = dataset.repeat(REPEAT_EPOCHS)
@@ -200,16 +183,16 @@ def main():
         sess.run(tf.global_variables_initializer())
         #with tf.train.MonitoredTrainingSession() as sess:
         #sess.run(tf.global_variables_initializer())
-        for i in range(int(len(files)*NUM_EPOCHS/BATCH_SIZE)): #for i in range(int(len(files)/BATCH_SIZE)):#prev. 20000
+        print(int(len(files)/BATCH_SIZE))
+        for i in range(0,int(len(files)/BATCH_SIZE)): #for i in range(int(len(files)/BATCH_SIZE)):#prev. 20000
+            print(i)
             #print('batch: ' + str(i))
             batch = sess.run(next_element)
-            #print(batch)
+            #print(batch[0])
             if i % 10 == 0:
                 train_accuracy = accuracy.eval(feed_dict={x: batch[0] ,y_: batch[1], keep_prob: 1.0})
-
                 print('batch %d, training accuracy %g, delta accuracy %g' % ((i+1), train_accuracy, train_accuracy-prev_accuracy))
                 prev_accuracy = train_accuracy
-
             train_step.run(feed_dict={x: batch[0], y_: batch[1], keep_prob: 0.5})
     #((i*BATCH_SIZE)/REPEAT_EPOCHS) % len(files) # number of times full set was used
 

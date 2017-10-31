@@ -3,3 +3,4 @@
 training
 MNIST_data
 models
+*.bat

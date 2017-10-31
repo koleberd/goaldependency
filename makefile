@@ -15,4 +15,4 @@ train:
 	@python src/utils/trainingSetGenerator.py
 
 learn:
-	@python src/tensorflow/blockDetector.py
+	@python src/tensorflow/blockDetector2.py
