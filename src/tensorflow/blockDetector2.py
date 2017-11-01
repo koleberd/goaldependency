@@ -29,37 +29,40 @@ classes_to_label = {
     'furnace':6,
     'coal':7
 }
-
-CLASSES = len(classes_to_label)*2-1
-
-IMG_WIDTH = 960 #1920
-IMG_HEIGHT = 540 #1080
 IMG_DIR = 'training/images/'
-SIZE_TENSOR = [1920,1080] #NOT USED
-RESIZE_FACTOR = 2 #NOT USED
-RESIZE_TENSOR = [960,540] #NOT USED
-
-
-
-COLOR_CHANNELS = 3
+SIZE_TENSOR = [1920,1080,3]
+RESIZE_FACTOR = 2
 KERNEL_RADII = [5,5]
 OUTPUT_CHANNELS = [8,8] #connectedness ebtween conv and pooling layers
 FULLY_CONNECTED_SIZE = 64 #1024
-#CLASSES = 16
-FINAL_LAYER_SIZE = int(IMG_HEIGHT / 4) * int(IMG_WIDTH / 4) * OUTPUT_CHANNELS[1]
-
-
-
-
-
 BATCH_SIZE = 20
 REPEAT_EPOCHS = 1 #10 #times to reuse training batch
 NUM_EPOCHS = 10 #20 #times to repeat training
 
+
+
+
+
+
+
+
+
+
+CLASSES = len(classes_to_label)*2
+IMG_SIZE = [int(SIZE_TENSOR[0]/RESIZE_FACTOR),int(SIZE_TENSOR[1]/RESIZE_FACTOR)]
+COLOR_CHANNELS = SIZE_TENSOR[2]
+FINAL_LAYER_SIZE = int(IMG_SIZE[1] / 4) * int(IMG_SIZE[0] / 4) * OUTPUT_CHANNELS[1]
+
+
+
+
+
+
+
 def deepnn(x):
 
     with tf.name_scope('reshape'):
-        x_image = tf.reshape(x, [-1, IMG_WIDTH, IMG_HEIGHT, COLOR_CHANNELS])
+        x_image = tf.reshape(x, [-1, IMG_SIZE[0], IMG_SIZE[1], COLOR_CHANNELS])
 
     with tf.name_scope('conv1'):
         W_conv1 = weight_variable([KERNEL_RADII[0], KERNEL_RADII[0], COLOR_CHANNELS, OUTPUT_CHANNELS[0]])
@@ -118,8 +121,8 @@ def bias_variable(shape):
 # to a fixed shape.
 def _parse_function(filename, label):
     image_string = tf.read_file(filename)
-    image_decoded = tf.image.decode_png(image_string)
-    image_resized = tf.image.resize_images(image_decoded, [IMG_WIDTH, IMG_HEIGHT])
+    image_decoded = tf.image.decode_png(image_string,channels=COLOR_CHANNELS)
+    image_resized = tf.image.resize_images(image_decoded, [IMG_SIZE[0], IMG_SIZE[1]])
     return image_resized, label
 
 def parse_labels(filenames):
@@ -132,9 +135,6 @@ def parse_labels(filenames):
         o_h[name] = 1
         res.append(o_h)
     return res
-
-
-
 
 def main():
 
@@ -154,7 +154,7 @@ def main():
     next_element = batchedSet.get_next()
 
     # Create the model
-    x = tf.placeholder(tf.float32, [None, IMG_WIDTH, IMG_HEIGHT, COLOR_CHANNELS])    #IMG_WIDTH*IMG_HEIGHT*COLOR_CHANNELS])
+    x = tf.placeholder(tf.float32, [None, IMG_SIZE[0], IMG_SIZE[1], COLOR_CHANNELS])    #IMG_SIZE[0]*IMG_SIZE[1]*COLOR_CHANNELS])
     # Define loss and optimizer
     y_ = tf.placeholder(tf.float32, [None, CLASSES])
     y_conv, keep_prob = deepnn(x)
@@ -192,22 +192,22 @@ def main():
         for i in range(0,int(len(files)/BATCH_SIZE)): #for i in range(int(len(files)/BATCH_SIZE)):#prev. 20000
             print('batch: ' + str(i))
             batch = sess.run(next_element)
-            if i % 10 == 0:
+            train_step.run(feed_dict={x: batch[0], y_: batch[1], keep_prob: 0.5})
+            if i % 10 == 9:
                 train_accuracy = accuracy.eval(feed_dict={x: batch[0] ,y_: batch[1], keep_prob: 1.0})
                 print('batch %d, training accuracy %g, delta accuracy %g' % ((i+1), train_accuracy, train_accuracy-prev_accuracy))
                 prev_accuracy = train_accuracy
-            train_step.run(feed_dict={x: batch[0], y_: batch[1], keep_prob: 0.5})
     #((i*BATCH_SIZE)/REPEAT_EPOCHS) % len(files) # number of times full set was used
 
     #print('test accuracy %g' % accuracy.eval(feed_dict={
         #x: mnist.test.images, y_: mnist.test.labels, keep_prob: 1.0}))
 
-    modelsSaved = os.listdir('trainedModels')
-    detectorModels = 0
-    for model in modelsSaved:
-        if('blockDetector' in model):
-            detectorModels += 1
-    saver.save(sess,'trainedModels/blockDetector' + str(detectorModels))
+        modelsSaved = os.listdir('trainedModels')
+        detectorModels = 0
+        for model in modelsSaved:
+            if('blockDetector' in model):
+                detectorModels += 1
+        saver.save(sess,'trainedModels/blockDetector' + str(detectorModels))
 
 '''
 if __name__ == '__main__':

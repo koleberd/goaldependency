@@ -132,11 +132,6 @@ def parse_labels(filenames):
 
 def main():
 
-    files = os.listdir(IMG_DIR)
-    filenames = tf.constant([IMG_DIR + f for f in files])
-    labels = tf.constant(parse_labels(files))
-    
-
     dataset = tf.contrib.data.Dataset.from_tensor_slices((filenames, labels))
     dataset = dataset.map(_parse_function)
 
@@ -172,23 +167,29 @@ def main():
     #train_writer = tf.summary.FileWriter(graph_location)
     #train_writer.add_graph(tf.get_default_graph())
     prev_accuracy = 0
-
+    print('Beginnning session')
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
-        #with tf.train.MonitoredTrainingSession() as sess:
-        #sess.run(tf.global_variables_initializer())
-        print(int(len(files)/BATCH_SIZE))
-        for i in range(0,int(len(files)/BATCH_SIZE)): #for i in range(int(len(files)/BATCH_SIZE)):#prev. 20000
-            print(i)
-            #print('batch: ' + str(i))
-            batch = sess.run(next_element)
-            #print(batch[0])
+
+        population = {} #of size BATCH_SIZE
+        print('Beginning training')
+        for i in range(0,1000):
+            print('batch: ' + str(i))
+
+            for item in population:
+                population[item]['fitness'] = simulateModel(population[item]['model'])
+
             if i % 10 == 0:
-                train_accuracy = accuracy.eval(feed_dict={x: batch[0] ,y_: batch[1], keep_prob: 1.0})
-                print('batch %d, training accuracy %g, delta accuracy %g' % ((i+1), train_accuracy, train_accuracy-prev_accuracy))
-                prev_accuracy = train_accuracy
-            train_step.run(feed_dict={x: batch[0], y_: batch[1], keep_prob: 0.5})
-    #((i*BATCH_SIZE)/REPEAT_EPOCHS) % len(files) # number of times full set was used
+                fitnesses = []
+
+                #maxFitness = population.keys()[0]
+                for item in population:
+                    fitnesses.push(population[item]['fitness'])
+                    #if population[item]['fitness'] > population[maxFitness]['fitness']:
+                        #maxFitness = item
+                print('Max fitness for population: ' + str(max(fitnesses)))
+            cross_over(population)
+            mutation(population)
 
     #print('test accuracy %g' % accuracy.eval(feed_dict={
         #x: mnist.test.images, y_: mnist.test.labels, keep_prob: 1.0}))
