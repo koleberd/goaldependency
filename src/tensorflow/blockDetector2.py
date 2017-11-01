@@ -139,6 +139,7 @@ def parse_labels(filenames):
 def main():
 
     files = os.listdir(IMG_DIR)
+    files = files[0:int(len(files)/BATCH_SIZE)*BATCH_SIZE]
     filenames = tf.constant([IMG_DIR + f for f in files])
     labels = tf.constant(parse_labels(files))
 
@@ -180,18 +181,17 @@ def main():
     prev_accuracy = 0
 
 
-
+    print('Beginnning session')
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
         saver = tf.train.Saver()
         #with tf.train.MonitoredTrainingSession() as sess:
         #sess.run(tf.global_variables_initializer())
-        print(int(len(files)/BATCH_SIZE))
+        #print(int(len(files)/BATCH_SIZE))
+        print('Beginning training')
         for i in range(0,int(len(files)/BATCH_SIZE)): #for i in range(int(len(files)/BATCH_SIZE)):#prev. 20000
-            print(i)
-            #print('batch: ' + str(i))
+            print('batch: ' + str(i))
             batch = sess.run(next_element)
-            #print(batch[0])
             if i % 10 == 0:
                 train_accuracy = accuracy.eval(feed_dict={x: batch[0] ,y_: batch[1], keep_prob: 1.0})
                 print('batch %d, training accuracy %g, delta accuracy %g' % ((i+1), train_accuracy, train_accuracy-prev_accuracy))
