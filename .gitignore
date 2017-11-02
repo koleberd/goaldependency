@@ -2,6 +2,9 @@
 *.xlsx
 training/images/*.png
 training/images/*.jpg
+training/proc_images/*.png
+training/proc_images/*.jpg
 MNIST_data
 models
 *.bat
+trainedModels/*

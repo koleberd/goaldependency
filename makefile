@@ -16,3 +16,6 @@ train:
 
 learn:
 	@python src/tensorflow/blockDetector2.py
+
+convert:
+	@python src/utils/trainingImageConverter.py

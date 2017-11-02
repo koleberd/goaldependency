@@ -16,7 +16,7 @@ import tempfile
 import os
 from tensorflow.examples.tutorials.mnist import input_data
 import tensorflow as tf
-
+import random
 FLAGS = None
 
 classes_to_label = {
@@ -29,15 +29,19 @@ classes_to_label = {
     'furnace':6,
     'coal':7
 }
-IMG_DIR = 'training/images/'
-SIZE_TENSOR = [1920,1080,3]
-RESIZE_FACTOR = 2
+
+
+objects = ['wood','stone','crafting bench']
+IMG_DIR = 'training/proc_images/'
+SIZE_TENSOR = [960,540,3]
+RESIZE_FACTOR = 1
 KERNEL_RADII = [5,5]
-OUTPUT_CHANNELS = [8,8] #connectedness ebtween conv and pooling layers
-FULLY_CONNECTED_SIZE = 64 #1024
+OUTPUT_CHANNELS = [16,16] #connectedness ebtween conv and pooling layers
+FULLY_CONNECTED_SIZE = 128 #1024
 BATCH_SIZE = 20
 REPEAT_EPOCHS = 1 #10 #times to reuse training batch
 NUM_EPOCHS = 10 #20 #times to repeat training
+SET_SIZE = 1000
 
 
 
@@ -46,15 +50,50 @@ NUM_EPOCHS = 10 #20 #times to repeat training
 
 
 
-
-
-CLASSES = len(classes_to_label)*2
+CLASSES2 = len(classes_to_label)*2
+CLASSES3 = len(objects) * 2 + 1
+CLASSES = 2
 IMG_SIZE = [int(SIZE_TENSOR[0]/RESIZE_FACTOR),int(SIZE_TENSOR[1]/RESIZE_FACTOR)]
 COLOR_CHANNELS = SIZE_TENSOR[2]
 FINAL_LAYER_SIZE = int(IMG_SIZE[1] / 4) * int(IMG_SIZE[0] / 4) * OUTPUT_CHANNELS[1]
 
+def parse_labels(filenames):
+    res = []
+    for x in filenames:
+        name = 0
+        if 'stone' not in x or 'OOR' in x:
+            name = 1
+        o_h = [0 for y in range(0,2)]
+        o_h[name] = 1
+        res.append(o_h)
+    return res
 
 
+def parse_labels3(filenames):
+    res = []
+    for x in filenames:
+        name = None
+        try:
+            name = objects.index(x.split('_')[0])*2
+            if 'OOR' in x:
+                name += 1
+        except:
+            name = len(objects)*2
+        o_h = [0 for y in range(0,len(objects)*2+1)]
+        o_h[name] = 1
+        res.append(o_h)
+    return res
+
+def parse_labels2(filenames):
+    res = []
+    for x in filenames:
+        name = classes_to_label[x.split('_')[0]]*2
+        if 'OOR' in x:
+            name += 1
+        o_h = [0 for y in range(0,len(classes_to_label)*2)]
+        o_h[name] = 1
+        res.append(o_h)
+    return res
 
 
 
@@ -125,33 +164,12 @@ def _parse_function(filename, label):
     image_resized = tf.image.resize_images(image_decoded, [IMG_SIZE[0], IMG_SIZE[1]])
     return image_resized, label
 
-def parse_labels(filenames):
-    res = []
-    for x in filenames:
-        name = classes_to_label[x.split('_')[0]]*2
-        if 'OOR' in x:
-            name += 1
-        o_h = [0 for y in range(0,len(classes_to_label)*2)]
-        o_h[name] = 1
-        res.append(o_h)
-    return res
+
 
 def main():
 
-    files = os.listdir(IMG_DIR)
-    files = files[0:int(len(files)/BATCH_SIZE)*BATCH_SIZE]
-    filenames = tf.constant([IMG_DIR + f for f in files])
-    labels = tf.constant(parse_labels(files))
 
 
-    dataset = tf.contrib.data.Dataset.from_tensor_slices((filenames, labels))
-    dataset = dataset.map(_parse_function)
-
-    dataset = dataset.shuffle(buffer_size=10000)
-    dataset = dataset.batch(BATCH_SIZE)
-    dataset = dataset.repeat(REPEAT_EPOCHS)
-    batchedSet = dataset.make_one_shot_iterator()
-    next_element = batchedSet.get_next()
 
     # Create the model
     x = tf.placeholder(tf.float32, [None, IMG_SIZE[0], IMG_SIZE[1], COLOR_CHANNELS])    #IMG_SIZE[0]*IMG_SIZE[1]*COLOR_CHANNELS])
@@ -181,6 +199,30 @@ def main():
     prev_accuracy = 0
 
 
+
+
+    all_files = os.listdir(IMG_DIR)
+    all_files = all_files[:int(len(all_files)/BATCH_SIZE)*BATCH_SIZE-1]
+    #files = all_files[train_set*SET_SIZE:(train_set+1)*SET_SIZE-1]
+    files = []
+    while len(all_files) > 0:
+        ind = random.randrange(0,len(all_files),1)
+        files.append(all_files[ind])
+        del all_files[ind]
+
+    #print(files)
+
+    filenames = tf.constant([IMG_DIR + f for f in files])
+    labels = tf.constant(parse_labels(files))
+    dataset = tf.contrib.data.Dataset.from_tensor_slices((filenames, labels))
+    dataset = dataset.map(_parse_function)
+    #dataset = dataset.shuffle(buffer_size=len(files))
+    dataset = dataset.batch(BATCH_SIZE)
+    #dataset = dataset.repeat(REPEAT_EPOCHS)
+    batchedSet = dataset.make_one_shot_iterator()
+    next_element = batchedSet.get_next()
+
+
     print('Beginnning session')
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
@@ -188,12 +230,11 @@ def main():
         #with tf.train.MonitoredTrainingSession() as sess:
         #sess.run(tf.global_variables_initializer())
         #print(int(len(files)/BATCH_SIZE))
-        print('Beginning training')
-        for i in range(0,int(len(files)/BATCH_SIZE)): #for i in range(int(len(files)/BATCH_SIZE)):#prev. 20000
-            print('batch: ' + str(i))
+        for i in range(0,int(len(files)/BATCH_SIZE)):
             batch = sess.run(next_element)
+            print('batch: ' + str(i))
             train_step.run(feed_dict={x: batch[0], y_: batch[1], keep_prob: 0.5})
-            if i % 10 == 9:
+            if i % 5 == 4:
                 train_accuracy = accuracy.eval(feed_dict={x: batch[0] ,y_: batch[1], keep_prob: 1.0})
                 print('batch %d, training accuracy %g, delta accuracy %g' % ((i+1), train_accuracy, train_accuracy-prev_accuracy))
                 prev_accuracy = train_accuracy
@@ -207,7 +248,7 @@ def main():
         for model in modelsSaved:
             if('blockDetector' in model):
                 detectorModels += 1
-        saver.save(sess,'trainedModels/blockDetector' + str(detectorModels))
+        #saver.save(sess,'trainedModels/blockDetector' + str(detectorModels))
 
 '''
 if __name__ == '__main__':
