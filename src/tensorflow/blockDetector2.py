@@ -31,7 +31,7 @@ classes_to_label = {
 }
 
 
-objects = ['wood','stone','crafting bench']
+#objects = ['wood','stone','crafting bench']
 IMG_DIR = 'training/proc_images/'
 SIZE_TENSOR = [960,540,3]
 RESIZE_FACTOR = 1
@@ -50,18 +50,18 @@ SET_SIZE = 1000
 
 
 
-CLASSES2 = len(classes_to_label)*2
-CLASSES3 = len(objects) * 2 + 1
+#CLASSES2 = len(classes_to_label)*2
+#CLASSES3 = len(objects) * 2 + 1
 CLASSES = 2
 IMG_SIZE = [int(SIZE_TENSOR[0]/RESIZE_FACTOR),int(SIZE_TENSOR[1]/RESIZE_FACTOR)]
 COLOR_CHANNELS = SIZE_TENSOR[2]
 FINAL_LAYER_SIZE = int(IMG_SIZE[1] / 4) * int(IMG_SIZE[0] / 4) * OUTPUT_CHANNELS[1]
 
-def parse_labels(filenames):
+def parse_labels(filenames,target):
     res = []
     for x in filenames:
         name = 0
-        if 'stone' not in x or 'OOR' in x:
+        if target not in x or 'OOR' in x:
             name = 1
         o_h = [0 for y in range(0,2)]
         o_h[name] = 1
@@ -164,9 +164,24 @@ def _parse_function(filename, label):
     image_resized = tf.image.resize_images(image_decoded, [IMG_SIZE[0], IMG_SIZE[1]])
     return image_resized, label
 
+def printDataStats(names):
+    nameCount = {}
+
+    for fl in names:
+        typ = fl.split('_')[0]
+        if 'OOR' in fl:
+            typ += ' (out of range)'
+        if typ in nameCount.keys():
+            nameCount[typ] += 1
+        else:
+            nameCount[typ] = 1
+
+    for item in sorted(nameCount):
+        print(str(nameCount[item]) + ' ( ' + str(int(100*nameCount[item]/len(names))) + '% )' + ' - ' + item)
+    print(str(len(names)) + ' - total')
 
 
-def main():
+def main(target):
 
 
 
@@ -202,7 +217,19 @@ def main():
 
 
     all_files = os.listdir(IMG_DIR)
-    all_files = all_files[:int(len(all_files)/BATCH_SIZE)*BATCH_SIZE-1]
+
+    f_2 = []
+    for f in all_files:
+        if target in f or 'none' in f:
+            f_2.append(f)
+    all_files = f_2
+    all_files = all_files[:int(len(all_files)/BATCH_SIZE)*BATCH_SIZE]
+
+    #print('Training on ' + str(len(all_files)) + ' files')
+    print('--Sample Breakdown--')
+    printDataStats(all_files)
+    print('(' + str(int(len(all_files)/BATCH_SIZE)) + ' batches)')
+    print('--------------------')
     #files = all_files[train_set*SET_SIZE:(train_set+1)*SET_SIZE-1]
     files = []
     while len(all_files) > 0:
@@ -213,14 +240,16 @@ def main():
     #print(files)
 
     filenames = tf.constant([IMG_DIR + f for f in files])
-    labels = tf.constant(parse_labels(files))
+    labels = tf.constant(parse_labels(files,target))
     dataset = tf.contrib.data.Dataset.from_tensor_slices((filenames, labels))
     dataset = dataset.map(_parse_function)
     #dataset = dataset.shuffle(buffer_size=len(files))
     dataset = dataset.batch(BATCH_SIZE)
     #dataset = dataset.repeat(REPEAT_EPOCHS)
-    batchedSet = dataset.make_one_shot_iterator()
-    next_element = batchedSet.get_next()
+    trainingSet = dataset.make_one_shot_iterator()
+    next_element = trainingSet.get_next()
+    validationSet = dataset.make_one_shot_iterator()
+    next_element_validation = validationSet.get_next()
 
 
     print('Beginnning session')
@@ -232,24 +261,34 @@ def main():
         #print(int(len(files)/BATCH_SIZE))
         for i in range(0,int(len(files)/BATCH_SIZE)):
             batch = sess.run(next_element)
-            print('batch: ' + str(i))
+            #print('batch: ' + str(i))
             train_step.run(feed_dict={x: batch[0], y_: batch[1], keep_prob: 0.5})
             if i % 5 == 4:
                 train_accuracy = accuracy.eval(feed_dict={x: batch[0] ,y_: batch[1], keep_prob: 1.0})
-                print('batch %d, training accuracy %g, delta accuracy %g' % ((i+1), train_accuracy, train_accuracy-prev_accuracy))
+                print('batch: %d, accuracy: %g, delta: %g' % ((i+1), train_accuracy, train_accuracy-prev_accuracy))
                 prev_accuracy = train_accuracy
-    #((i*BATCH_SIZE)/REPEAT_EPOCHS) % len(files) # number of times full set was used
 
-    #print('test accuracy %g' % accuracy.eval(feed_dict={
-        #x: mnist.test.images, y_: mnist.test.labels, keep_prob: 1.0}))
+        accuracy_sum = 0
+        print('Calculating overall accuracy')
+        for i in range(0,int(len(files)/BATCH_SIZE)):
+            batch = sess.run(next_element_validation)
+            accuracy_sum += accuracy.eval(feed_dict={x: batch[0] ,y_: batch[1], keep_prob: 1.0})
+            print('.',end='')
+            sys.stdout.flush()
 
+        print()
+        accuracy_sum /= int(len(files)/BATCH_SIZE)
+        print('Overall accuracy: ' + str(accuracy_sum))
+
+
+        '''
         modelsSaved = os.listdir('trainedModels')
         detectorModels = 0
         for model in modelsSaved:
             if('blockDetector' in model):
                 detectorModels += 1
         #saver.save(sess,'trainedModels/blockDetector' + str(detectorModels))
-
+        '''
 '''
 if __name__ == '__main__':
   parser = argparse.ArgumentParser()
@@ -259,4 +298,4 @@ if __name__ == '__main__':
   FLAGS, unparsed = parser.parse_known_args()
   tf.app.run(main=main, argv=[sys.argv[0]] + unparsed)
 '''
-main()
+main('wood')

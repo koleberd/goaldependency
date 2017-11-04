@@ -1,8 +1,13 @@
-action items:
-generate/mine training set for object detection
-inventory analyzer from frame
+issues:
+can't load shuffled dataset into memory
+	manually shuffle
+low accuracy on multi class set
+	dual class set
+		98.6% accuracy on wood in range
 
-- inventory management
+
+
+action items:
 - obj detection
 - pathfinding
 
