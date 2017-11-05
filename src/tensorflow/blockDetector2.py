@@ -42,7 +42,7 @@ BATCH_SIZE = 20
 REPEAT_EPOCHS = 1 #10 #times to reuse training batch
 NUM_EPOCHS = 10 #20 #times to repeat training
 SET_SIZE = 1000
-
+VALIDATION_SIZE = 1000
 
 
 
@@ -57,46 +57,16 @@ IMG_SIZE = [int(SIZE_TENSOR[0]/RESIZE_FACTOR),int(SIZE_TENSOR[1]/RESIZE_FACTOR)]
 COLOR_CHANNELS = SIZE_TENSOR[2]
 FINAL_LAYER_SIZE = int(IMG_SIZE[1] / 4) * int(IMG_SIZE[0] / 4) * OUTPUT_CHANNELS[1]
 
-def parse_labels(filenames,target):
+def parse_labels(filenames,target,oor):
     res = []
     for x in filenames:
         name = 0
-        if target not in x or 'OOR' in x:
+        if target not in x or ('OOR' in x and not oor) or ('OOR' not in x and oor):
             name = 1
         o_h = [0 for y in range(0,2)]
         o_h[name] = 1
         res.append(o_h)
     return res
-
-
-def parse_labels3(filenames):
-    res = []
-    for x in filenames:
-        name = None
-        try:
-            name = objects.index(x.split('_')[0])*2
-            if 'OOR' in x:
-                name += 1
-        except:
-            name = len(objects)*2
-        o_h = [0 for y in range(0,len(objects)*2+1)]
-        o_h[name] = 1
-        res.append(o_h)
-    return res
-
-def parse_labels2(filenames):
-    res = []
-    for x in filenames:
-        name = classes_to_label[x.split('_')[0]]*2
-        if 'OOR' in x:
-            name += 1
-        o_h = [0 for y in range(0,len(classes_to_label)*2)]
-        o_h[name] = 1
-        res.append(o_h)
-    return res
-
-
-
 
 def deepnn(x):
 
@@ -166,6 +136,7 @@ def _parse_function(filename, label):
 
 def printDataStats(names):
     nameCount = {}
+    print('--Sample Breakdown--')
 
     for fl in names:
         typ = fl.split('_')[0]
@@ -179,68 +150,49 @@ def printDataStats(names):
     for item in sorted(nameCount):
         print(str(nameCount[item]) + ' ( ' + str(int(100*nameCount[item]/len(names))) + '% )' + ' - ' + item)
     print(str(len(names)) + ' - total')
+    print('(' + str(int(len(names)/BATCH_SIZE)) + ' batches)')
+    print('--------------------')
 
-
-def main(target):
-
-
-
-
-    # Create the model
-    x = tf.placeholder(tf.float32, [None, IMG_SIZE[0], IMG_SIZE[1], COLOR_CHANNELS])    #IMG_SIZE[0]*IMG_SIZE[1]*COLOR_CHANNELS])
-    # Define loss and optimizer
-    y_ = tf.placeholder(tf.float32, [None, CLASSES])
-    y_conv, keep_prob = deepnn(x)
-
-
-    with tf.name_scope('loss'):
-        cross_entropy = tf.nn.softmax_cross_entropy_with_logits(labels=y_,logits=y_conv)
-
-    cross_entropy = tf.reduce_mean(cross_entropy)
-
-    with tf.name_scope('adam_optimizer'):
-        train_step = tf.train.AdamOptimizer(1e-4).minimize(cross_entropy)
-
-    with tf.name_scope('accuracy'):
-        correct_prediction = tf.equal(tf.argmax(y_conv, 1), tf.argmax(y_, 1))
-        correct_prediction = tf.cast(correct_prediction, tf.float32)
-
-    accuracy = tf.reduce_mean(correct_prediction)
-
-    #graph_location = 'models/graphs' #tempfile.mkdtemp()
-    #print('Saving graph to: %s' % graph_location)
-    #train_writer = tf.summary.FileWriter(graph_location)
-    #train_writer.add_graph(tf.get_default_graph())
-    prev_accuracy = 0
-
-
-
-
+#returns shuffled file list
+def getFileList(target):
     all_files = os.listdir(IMG_DIR)
-
     f_2 = []
     for f in all_files:
         if target in f or 'none' in f:
             f_2.append(f)
     all_files = f_2
     all_files = all_files[:int(len(all_files)/BATCH_SIZE)*BATCH_SIZE]
-
-    #print('Training on ' + str(len(all_files)) + ' files')
-    print('--Sample Breakdown--')
-    printDataStats(all_files)
-    print('(' + str(int(len(all_files)/BATCH_SIZE)) + ' batches)')
-    print('--------------------')
-    #files = all_files[train_set*SET_SIZE:(train_set+1)*SET_SIZE-1]
     files = []
     while len(all_files) > 0:
         ind = random.randrange(0,len(all_files),1)
         files.append(all_files[ind])
         del all_files[ind]
+    return files
 
-    #print(files)
 
+def main(target,oor=False):
+    x = tf.placeholder(tf.float32, [None, IMG_SIZE[0], IMG_SIZE[1], COLOR_CHANNELS])
+    y_ = tf.placeholder(tf.float32, [None, CLASSES])
+    y_conv, keep_prob = deepnn(x)
+
+
+    with tf.name_scope('loss'):
+        cross_entropy = tf.nn.softmax_cross_entropy_with_logits(labels=y_,logits=y_conv)
+    cross_entropy = tf.reduce_mean(cross_entropy)
+    with tf.name_scope('adam_optimizer'):
+        train_step = tf.train.AdamOptimizer(1e-4).minimize(cross_entropy)
+    with tf.name_scope('accuracy'):
+        correct_prediction = tf.equal(tf.argmax(y_conv, 1), tf.argmax(y_, 1))
+        correct_prediction = tf.cast(correct_prediction, tf.float32)
+    accuracy = tf.reduce_mean(correct_prediction)
+
+    prev_accuracy = 0
+
+
+    files = getFileList(target)
+    printDataStats(files)
     filenames = tf.constant([IMG_DIR + f for f in files])
-    labels = tf.constant(parse_labels(files,target))
+    labels = tf.constant(parse_labels(files,target,oor))
     dataset = tf.contrib.data.Dataset.from_tensor_slices((filenames, labels))
     dataset = dataset.map(_parse_function)
     #dataset = dataset.shuffle(buffer_size=len(files))
@@ -248,8 +200,13 @@ def main(target):
     #dataset = dataset.repeat(REPEAT_EPOCHS)
     trainingSet = dataset.make_one_shot_iterator()
     next_element = trainingSet.get_next()
-    validationSet = dataset.make_one_shot_iterator()
-    next_element_validation = validationSet.get_next()
+
+    validationSet = tf.contrib.data.Dataset.from_tensor_slices((filenames[:VALIDATION_SIZE], labels[:VALIDATION_SIZE]))
+    validationSet = validationSet.map(_parse_function)
+    validationSet = validationSet.batch(BATCH_SIZE)
+    #validationSetIter = dataset.make_one_shot_iterator()
+    validationSetIter = validationSet.make_one_shot_iterator()
+    next_element_validation = validationSetIter.get_next()
 
 
     print('Beginnning session')
@@ -259,25 +216,30 @@ def main(target):
         #with tf.train.MonitoredTrainingSession() as sess:
         #sess.run(tf.global_variables_initializer())
         #print(int(len(files)/BATCH_SIZE))
+        print('Training model')
         for i in range(0,int(len(files)/BATCH_SIZE)):
             batch = sess.run(next_element)
             #print('batch: ' + str(i))
             train_step.run(feed_dict={x: batch[0], y_: batch[1], keep_prob: 0.5})
-            if i % 5 == 4:
+            print('.',end='')
+            sys.stdout.flush()
+            if i % 5 == 4 and False:
                 train_accuracy = accuracy.eval(feed_dict={x: batch[0] ,y_: batch[1], keep_prob: 1.0})
                 print('batch: %d, accuracy: %g, delta: %g' % ((i+1), train_accuracy, train_accuracy-prev_accuracy))
                 prev_accuracy = train_accuracy
+        print()
+
 
         accuracy_sum = 0
-        print('Calculating overall accuracy')
-        for i in range(0,int(len(files)/BATCH_SIZE)):
+        print('Calculating model accuracy')
+        for i in range(0,int(VALIDATION_SIZE/BATCH_SIZE)):
             batch = sess.run(next_element_validation)
             accuracy_sum += accuracy.eval(feed_dict={x: batch[0] ,y_: batch[1], keep_prob: 1.0})
             print('.',end='')
             sys.stdout.flush()
 
         print()
-        accuracy_sum /= int(len(files)/BATCH_SIZE)
+        accuracy_sum /= int(VALIDATION_SIZE/BATCH_SIZE)
         print('Overall accuracy: ' + str(accuracy_sum))
 
 
@@ -298,4 +260,9 @@ if __name__ == '__main__':
   FLAGS, unparsed = parser.parse_known_args()
   tf.app.run(main=main, argv=[sys.argv[0]] + unparsed)
 '''
-main('wood')
+#main('wood')
+#main('wood',True)
+#main('crafting bench')
+#main('crafting bench',True)
+#main('stone')
+#main('stone',True)
