@@ -188,7 +188,7 @@ def main(target,oor=False):
 
     prev_accuracy = 0
 
-
+    '''
     files = getFileList(target)
     printDataStats(files)
     filenames = tf.constant([IMG_DIR + f for f in files])
@@ -207,40 +207,63 @@ def main(target,oor=False):
     #validationSetIter = dataset.make_one_shot_iterator()
     validationSetIter = validationSet.make_one_shot_iterator()
     next_element_validation = validationSetIter.get_next()
-
+    '''
 
     print('Beginnning session')
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
-        saver = tf.train.Saver()
-        #with tf.train.MonitoredTrainingSession() as sess:
-        #sess.run(tf.global_variables_initializer())
-        #print(int(len(files)/BATCH_SIZE))
-        print('Training model')
-        for i in range(0,int(len(files)/BATCH_SIZE)):
-            batch = sess.run(next_element)
-            #print('batch: ' + str(i))
-            train_step.run(feed_dict={x: batch[0], y_: batch[1], keep_prob: 0.5})
-            print('.',end='')
-            sys.stdout.flush()
-            if i % 5 == 4 and False:
-                train_accuracy = accuracy.eval(feed_dict={x: batch[0] ,y_: batch[1], keep_prob: 1.0})
-                print('batch: %d, accuracy: %g, delta: %g' % ((i+1), train_accuracy, train_accuracy-prev_accuracy))
-                prev_accuracy = train_accuracy
-        print()
+        #saver = tf.train.Saver()
 
 
-        accuracy_sum = 0
-        print('Calculating model accuracy')
-        for i in range(0,int(VALIDATION_SIZE/BATCH_SIZE)):
-            batch = sess.run(next_element_validation)
-            accuracy_sum += accuracy.eval(feed_dict={x: batch[0] ,y_: batch[1], keep_prob: 1.0})
-            print('.',end='')
-            sys.stdout.flush()
+        prev_model_accuracy = 0
+        training_round = 0
+        while(prev_model_accuracy < .95):
+            files = getFileList(target)
+            printDataStats(files)
+            filenames = tf.constant([IMG_DIR + f for f in files])
+            labels = tf.constant(parse_labels(files,target,oor))
+            dataset = tf.contrib.data.Dataset.from_tensor_slices((filenames, labels))
+            dataset = dataset.map(_parse_function)
+            #dataset = dataset.shuffle(buffer_size=len(files))
+            dataset = dataset.batch(BATCH_SIZE)
+            #dataset = dataset.repeat(REPEAT_EPOCHS)
+            trainingSet = dataset.make_one_shot_iterator()
+            next_element = trainingSet.get_next()
 
-        print()
-        accuracy_sum /= int(VALIDATION_SIZE/BATCH_SIZE)
-        print('Overall accuracy: ' + str(accuracy_sum))
+            validationSet = tf.contrib.data.Dataset.from_tensor_slices((filenames[:VALIDATION_SIZE], labels[:VALIDATION_SIZE]))
+            validationSet = validationSet.map(_parse_function)
+            validationSet = validationSet.batch(BATCH_SIZE)
+            #validationSetIter = dataset.make_one_shot_iterator()
+            validationSetIter = validationSet.make_one_shot_iterator()
+            next_element_validation = validationSetIter.get_next()
+
+            print('Training (' + str(training_round) + ')')
+
+            for i in range(0,int(len(files)/BATCH_SIZE)):
+                batch = sess.run(next_element)
+                #print('batch: ' + str(i))
+                train_step.run(feed_dict={x: batch[0], y_: batch[1], keep_prob: 0.5})
+                print('.',end='')
+                sys.stdout.flush()
+                if i % 5 == 4 and False:
+                    train_accuracy = accuracy.eval(feed_dict={x: batch[0] ,y_: batch[1], keep_prob: 1.0})
+                    print('batch: %d, accuracy: %g, delta: %g' % ((i+1), train_accuracy, train_accuracy-prev_accuracy))
+                    prev_accuracy = train_accuracy
+            print()
+
+            accuracy_sum = 0
+            print('Validating')
+            for i in range(0,int(VALIDATION_SIZE/BATCH_SIZE)):
+                batch = sess.run(next_element_validation)
+                accuracy_sum += accuracy.eval(feed_dict={x: batch[0] ,y_: batch[1], keep_prob: 1.0})
+                print('.',end='')
+                sys.stdout.flush()
+            print()
+            accuracy_sum /= int(VALIDATION_SIZE/BATCH_SIZE)
+            print('Accuracy: ' + str(accuracy_sum))
+            prev_model_accuracy = accuracy_sum
+            training_round += 1
+        print('Finished training with ' + str(prev_model_accuracy) + '%' + ' accuracy')
 
 
         '''
@@ -264,5 +287,5 @@ if __name__ == '__main__':
 #main('wood',True)
 #main('crafting bench')
 #main('crafting bench',True)
-#main('stone')
+main('stone')
 #main('stone',True)
