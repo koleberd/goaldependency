@@ -3,7 +3,12 @@ can't load shuffled dataset into memory
 	manually shuffle
 low accuracy on multi class set
 	dual class set
-		98.6% accuracy on wood in range
+		97% accuracy on wood in range
+		70% wood oor
+		96% cb
+		70% cb oor
+		95% stone
+		65% stone oor
 
 
 

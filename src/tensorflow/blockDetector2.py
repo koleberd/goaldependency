@@ -209,7 +209,7 @@ def main(target,oor=False):
     next_element_validation = validationSetIter.get_next()
     '''
 
-    print('Beginnning session')
+    print('Beginnning session for ' + target + '(oor = ' + str(oor) + ')')
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
         #saver = tf.train.Saver()
@@ -217,9 +217,9 @@ def main(target,oor=False):
 
         prev_model_accuracy = 0
         training_round = 0
-        while(prev_model_accuracy < .95):
+        while(prev_model_accuracy < .95 and training_round < 2):
             files = getFileList(target)
-            printDataStats(files)
+            #printDataStats(files)
             filenames = tf.constant([IMG_DIR + f for f in files])
             labels = tf.constant(parse_labels(files,target,oor))
             dataset = tf.contrib.data.Dataset.from_tensor_slices((filenames, labels))
@@ -263,7 +263,7 @@ def main(target,oor=False):
             print('Accuracy: ' + str(accuracy_sum))
             prev_model_accuracy = accuracy_sum
             training_round += 1
-        print('Finished training with ' + str(prev_model_accuracy) + '%' + ' accuracy')
+        print('Finished training with ' + str(prev_model_accuracy) + ' accuracy')
 
 
         '''
@@ -287,5 +287,5 @@ if __name__ == '__main__':
 #main('wood',True)
 #main('crafting bench')
 #main('crafting bench',True)
-main('stone')
-#main('stone',True)
+#main('stone')
+main('stone',True)
