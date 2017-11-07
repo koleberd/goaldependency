@@ -5,7 +5,6 @@ import argparse
 import sys
 import tempfile
 import os
-import io
 from tensorflow.examples.tutorials.mnist import input_data
 import tensorflow as tf
 import numpy as np
@@ -25,6 +24,17 @@ h_adj = int(HEIGHT/4)
 def main():
     MODEL_DIR = 'trainedModels/'
     MODEL_NAME = 'blockDetector6_stone_False'
+
+    models = os.listdir(MODEL_DIR)
+    maxN = models[0]
+    maxV = 0
+    for m in models:
+        if 'meta' in m and float(m.split('.')[1].split('_')[0]) > maxV:
+            maxV = float(m.split('.')[1].split('_')[0])
+            maxN = m
+
+    MODEL_NAME = maxN[:-5]
+    print(MODEL_NAME)
 
     TEST_DIR = 'training/model_test/'
 

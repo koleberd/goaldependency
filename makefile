@@ -15,7 +15,7 @@ train:
 	@python src/utils/trainingSetGenerator.py
 
 learn:
-	@python src/tensorflow/blockDetector2.py
+	@python src/tensorflow/blockDetector3.py
 
 convert:
 	@python src/utils/trainingImageConverter.py

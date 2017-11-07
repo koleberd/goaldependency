@@ -218,7 +218,7 @@ def main(target,oor=False):
         tf.add_to_collection('n_dropout',keep_prob)
         prev_model_accuracy = 0
         training_round = 0
-        while(prev_model_accuracy < .95 and training_round < 2):
+        while(prev_model_accuracy < .95 and training_round < 1):
 
 
             # CREATE TRAINING SET
@@ -251,9 +251,9 @@ def main(target,oor=False):
                 print('.',end='')
                 sys.stdout.flush()
                 #print(batch[0])
-                print(y_conv.eval(feed_dict={x: batch[0] ,y_: batch[1], keep_prob: 1.0}))
-                print('---')
-                print(batch[1])
+                #print(y_conv.eval(feed_dict={x: batch[0] ,y_: batch[1], keep_prob: 1.0}))
+                #print('---')
+                #print(batch[1])
                 if i % 5 == 4 and False:
                     train_accuracy = accuracy.eval(feed_dict={x: batch[0] ,y_: batch[1], keep_prob: 1.0})
                     print('batch: %d, accuracy: %g, delta: %g' % ((i+1), train_accuracy, train_accuracy-prev_accuracy))
@@ -280,7 +280,7 @@ def main(target,oor=False):
         for model in modelsSaved:
             if('blockDetector' in model):
                 detectorModels += 1
-        m_name = 'blockDetector' + str(detectorModels) + '_' + target + '_' + str(oor)
+        m_name = 'blockDetector' + str(detectorModels) + '_' + target + '_' + str(oor) + '_' + str(prev_model_accuracy)[0:5]
         print('Saving model "' + m_name + '"')
         saver.save(sess,'trainedModels/' + m_name)
 
@@ -297,5 +297,7 @@ if __name__ == '__main__':
 #main('wood',True)
 #main('crafting bench')
 #main('crafting bench',True)
+main('stone')
+main('stone')
 main('stone')
 #main('stone',True)
