@@ -32,6 +32,8 @@ SAMPLE_SIZE = 6000
 
 RNGESUS_ENABLED = False
 
+SUPPORTED_BLOCKS = ['none','wood','stone','crafting bench']
+
 CLASSES = 2
 IMG_SIZE = [int(SIZE_TENSOR[0]/RESIZE_FACTOR),int(SIZE_TENSOR[1]/RESIZE_FACTOR)]
 COLOR_CHANNELS = SIZE_TENSOR[2]
@@ -160,7 +162,7 @@ def createBalancedFileLabelSet(target,oor):
     for f in all_files:
         if isPositiveExample(f,target,oor):
             positive.append(f)
-        else:
+        elif f.split('_')[0] in SUPPORTED_BLOCKS:
             negative.append(f)
 
     #make the sets equal sizes
