@@ -19,3 +19,6 @@ learn:
 
 convert:
 	@python src/utils/trainingImageConverter.py
+
+eval:
+	@python src/tensorflow/runBlockDetector.py

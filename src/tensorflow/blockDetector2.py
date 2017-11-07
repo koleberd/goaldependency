@@ -212,12 +212,16 @@ def main(target,oor=False):
     print('Beginnning session for ' + target + '(oor = ' + str(oor) + ')')
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
-        #saver = tf.train.Saver()
-
-
+        saver = tf.train.Saver()
+        tf.add_to_collection('n_input',x)
+        tf.add_to_collection('n_output',y_conv)
+        tf.add_to_collection('n_dropout',keep_prob)
         prev_model_accuracy = 0
         training_round = 0
         while(prev_model_accuracy < .95 and training_round < 2):
+
+
+            # CREATE TRAINING SET
             files = getFileList(target)
             #printDataStats(files)
             filenames = tf.constant([IMG_DIR + f for f in files])
@@ -229,13 +233,14 @@ def main(target,oor=False):
             #dataset = dataset.repeat(REPEAT_EPOCHS)
             trainingSet = dataset.make_one_shot_iterator()
             next_element = trainingSet.get_next()
-
+            # CREATE VALIDATION SET
             validationSet = tf.contrib.data.Dataset.from_tensor_slices((filenames[:VALIDATION_SIZE], labels[:VALIDATION_SIZE]))
             validationSet = validationSet.map(_parse_function)
             validationSet = validationSet.batch(BATCH_SIZE)
-            #validationSetIter = dataset.make_one_shot_iterator()
             validationSetIter = validationSet.make_one_shot_iterator()
             next_element_validation = validationSetIter.get_next()
+
+
 
             print('Training (' + str(training_round) + ')')
 
@@ -245,6 +250,10 @@ def main(target,oor=False):
                 train_step.run(feed_dict={x: batch[0], y_: batch[1], keep_prob: 0.5})
                 print('.',end='')
                 sys.stdout.flush()
+                #print(batch[0])
+                print(y_conv.eval(feed_dict={x: batch[0] ,y_: batch[1], keep_prob: 1.0}))
+                print('---')
+                print(batch[1])
                 if i % 5 == 4 and False:
                     train_accuracy = accuracy.eval(feed_dict={x: batch[0] ,y_: batch[1], keep_prob: 1.0})
                     print('batch: %d, accuracy: %g, delta: %g' % ((i+1), train_accuracy, train_accuracy-prev_accuracy))
@@ -266,14 +275,15 @@ def main(target,oor=False):
         print('Finished training with ' + str(prev_model_accuracy) + ' accuracy')
 
 
-        '''
         modelsSaved = os.listdir('trainedModels')
         detectorModels = 0
         for model in modelsSaved:
             if('blockDetector' in model):
                 detectorModels += 1
-        #saver.save(sess,'trainedModels/blockDetector' + str(detectorModels))
-        '''
+        m_name = 'blockDetector' + str(detectorModels) + '_' + target + '_' + str(oor)
+        print('Saving model "' + m_name + '"')
+        saver.save(sess,'trainedModels/' + m_name)
+
 '''
 if __name__ == '__main__':
   parser = argparse.ArgumentParser()
@@ -287,5 +297,5 @@ if __name__ == '__main__':
 #main('wood',True)
 #main('crafting bench')
 #main('crafting bench',True)
-#main('stone')
-main('stone',True)
+main('stone')
+#main('stone',True)

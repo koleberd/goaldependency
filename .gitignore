@@ -4,6 +4,7 @@ training/images/*.png
 training/images/*.jpg
 training/proc_images/*.png
 training/proc_images/*.jpg
+training/
 MNIST_data
 models
 *.bat
