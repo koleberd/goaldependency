@@ -10,6 +10,7 @@ low accuracy on multi class set
 		95% stone
 		65% stone oor
 
+non-overlap for training/test set
 
 
 action items:
