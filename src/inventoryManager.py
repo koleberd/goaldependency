@@ -1,5 +1,5 @@
 import json
-import nbt
+import thirdparty.nbt as nbt
 from os import listdir
 import time
 #from os.path import isfile,join
