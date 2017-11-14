@@ -36,7 +36,28 @@ class GameWorld2d:
     convertToBlocks()
     self.pos = spawn_pos
 
+    def findClosest(self,obj,number):
+        '''
+        returns the nearest >number< of >obj<
+        how to select nearest instance of target object?
+            1) closest euclidian
+
+            2) for each n closest euclidian, calculate distance with A* then pick actual shortest path
+        '''
+        locs = []
+        for col in range(0,len(self.grid)):
+            for row in range(0,len(self.grid[col])):
+                item = self.grid[col][row]
+                if item == obj:
+                    locs.append((col,row))
+                    if len(locs) == number:
+                        return locs
+        return locs
+
     def convertToBlocks(self):
+        '''
+        coverts to blocks
+        '''
         return False
     def makeMovement(self,pos):
         if not validMovement(pos):
