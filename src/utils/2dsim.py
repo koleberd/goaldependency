@@ -38,7 +38,7 @@ class GameWorld2d:
 
     def findClosest(self,obj,number):
         '''
-        returns the nearest >number< of >obj<
+        returns the nearest >number< occurances of >obj<
         how to select nearest instance of target object?
             1) closest euclidian
 
