@@ -8,6 +8,25 @@ BLOCKS_WITH_COLORS = {
     'crafting bench':(3,240,28)
 }
 
+BLOCK_IND = {
+    (0,31,0,255):None,
+    (18,0,0,255):'wood',
+    (59,4,0,255):'crafting bench',
+    (45,12,0,255):'iron ore',
+    (25,0,0,255):'iron ore',
+    (0,41,50,255):'diamond ore',
+    (15,15,15,255):'stone',
+    (0,0,0,255):'stone'
+}
+
+COLOR_IND = {
+    'wood': (0,0,255),
+    'crafting bench':(0,255,0),
+    'iron ore':(255,150,100),
+    'stone':(30,30,30)
+}
+
+
 class GameWorld2d:
     def __init__(self,image_dir,name,c1,c2,spawn_pos=(0,0)):
         '''
@@ -35,7 +54,7 @@ class GameWorld2d:
             #self.layers.append(np.reshape(np.array(list(img.getdata())),(width,height,4)))
             for col in range(width):
                 for row in range(height):
-                    layer[col][row] = self.parseBlock(img.getpixel((col,row)))
+                    layer[col][row] = parseBlock(img.getpixel((col,row)))
             self.layers.append(layer)
 
         self.grid = [ [None for y in range(height)] for x in range(width)]
@@ -49,17 +68,20 @@ class GameWorld2d:
 
         self.pos = spawn_pos
 
-        path = self.astar((8,90),(130,50))
+        #path = self.astar((8,90),(130,50))
+        #self.printWorld(path)
 
 
-        self.printWorld(path)
+
+        self.pos = (8,90)
 
 
-    def parseBlock(self,pixel):
-        #print(type(pixel))
-        if tuple(pixel) == BLOCKS_WITH_COLORS['dirt']:
-            return None
-        return 'OCCUPIED'
+        for target in self.findClosest('iron ore', 10):
+            path = self.astar(self.pos,target)
+            if path != None:
+                self.printWorld(path)
+
+
 
     def findClosest(self,obj,number):
         '''
@@ -84,9 +106,13 @@ class GameWorld2d:
         for col in range(0,len(self.grid)):
             for row in range(0,len(self.grid[0])):
                 if self.grid[col][row] != None:
-                    render.putpixel((col,row),(255,0,0))
+                    block =  self.grid[col][row]
+                    if block in COLOR_IND.keys():
+                        render.putpixel((col,row),COLOR_IND[block])
+                    else:
+                        render.putpixel((col,row),(255,0,0))
         for pos in path:
-            render.putpixel(pos,(0,0,0))
+            render.putpixel(pos,(193,28,181))
 
         render.show()
 
@@ -105,6 +131,9 @@ class GameWorld2d:
         fromStartToGoalThroughNode[start] = estimate_cost(start,goal)
 
         while len(discoveredNodes) != 0:
+            if time.time() - start_time > 10.0:
+                print('A* timeout')
+                return None
             #print(len(evaluatedNodes))
             current = getNodeWithLowestCost(discoveredNodes,fromStartToGoalThroughNode)
             if current == goal:
@@ -113,7 +142,11 @@ class GameWorld2d:
             #print(current)
             discoveredNodes = deleteNodeFromList(discoveredNodes,current)
             evaluatedNodes.append(current)
-            for neighbor in self.getNeighbors(current):
+            neighbor_set = self.getNeighbors(current)
+            if isAdjacentTo(current,goal):
+                print('ayyy')
+                neighbor_set.append(goal)
+            for neighbor in neighbor_set:
                 if neighbor in evaluatedNodes:
                     continue
                 if neighbor not in discoveredNodes:
@@ -138,8 +171,19 @@ class GameWorld2d:
             neighbors.append((pos[0],pos[1]+1))
         return neighbors
 
-    def isValidMovement(self,pos):
-        return self.grid[pos[0]][pos[1]] == None
+    def isValidMovement(self,pos,exception='not none'):
+        return self.grid[pos[0]][pos[1]] == None or self.grid[pos[0]][pos[1]] == exception
+
+def parseBlock(pixel):
+    #print(type(pixel))
+    for match in BLOCK_IND:
+        if match == pixel:
+            return BLOCK_IND[match]
+    return 'OCCUPIED'
+
+def isAdjacentTo(p1,p2):
+    #print(p1,p2,abs(p2[0]-p1[0]) == 1 != abs(p2[1]-p1[1]) == 1)
+    return (np.abs(p2[0]-p1[0]) == 1 and np.abs(p2[1]-p1[1]) == 0 ) or (np.abs(p2[0]-p1[0]) == 0 and np.abs(p2[1]-p1[1]) == 1)
 
 def distance_between(n1,n2):
     return np.sqrt(np.abs(n2[0]-n1[0])**2 + np.abs(n2[1]-n1[1])**2)
@@ -169,6 +213,5 @@ def deleteNodeFromList(vals,node):
         if vals[x] == node:
             del vals[x]
             return vals
-
 
 GameWorld2d('resources/2D/','train1',(1230,410),(1370,520))
