@@ -2,11 +2,13 @@ from gameObject import *
 from action import *
 from playerState import *
 import gameController
+import gameController2D
 
 import json
 class ActionFactory:
 
-    def __init__(self):
+    def __init__(self,mode='3D'):
+        self.mode = mode
         with open('json/resourceIndex.json') as jsfl:
             self.resourceIndex = json.load(jsfl)
         with open('json/actionMemory.json') as jsfl:
@@ -19,7 +21,11 @@ class ActionFactory:
         psp = PlayerState.parsePlayerStateJSON(obj['prereq'])
         psr = PlayerState.parsePlayerStateJSON(obj['result'])
         cst = obj['cost']
-        func = lambda gs: gameController.executeFunction(obj['function'].split(":")[0],gs,obj['function'].split(":")[1].split(','))
+        func = None
+        if self.mode == '3D':
+            func = lambda gs: gameController.executeFunction(obj['function'].split(":")[0],gs,obj['function'].split(":")[1].split(','))
+        else:
+            func = lambda gs: gameController2D.executeFunction(obj['function'].split(":")[0],gs,obj['function'].split(":")[1].split(','))
 
         return Action(psp,psr,cst,func)
 
@@ -36,6 +42,6 @@ class ActionFactory:
         res = {}
         for act in self.actionMemory:
             ps = act.ps_res
-            if ps.lookedAt in scalars.keys():
+            if self.mode == '3D' and ps.lookedAt in scalars.keys():
                 res[act] = scalars[ps.lookedAt]
         return res

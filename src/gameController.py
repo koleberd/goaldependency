@@ -75,8 +75,6 @@ def invCraftObject(obj,gs):
     pyautogui.press('esc')
     return True
 
-
-
 def harvestObject(obj,gs,tool=None):#still needs to collect resource
     print('harvesting: ' + str(obj))
     #toolType = environmentIndex['obj']['toolType']
@@ -130,8 +128,6 @@ def harvestObject(obj,gs,tool=None):#still needs to collect resource
         actualInv = InventoryManager().parseInventory()
     return True
 
-
-
 def locateObject(obj,gs,alg=None):
     if gs.ps.lookedAt == obj and len(gs.fov) == 1:
         print('located: ' + str(obj))
@@ -140,7 +136,6 @@ def locateObject(obj,gs,alg=None):
     if alg == None or alg == 'alg1':
         pathfind1(obj,gs)
     return False
-
 
 def pathfind1(obj,gs):
     if gs.ps.lookedAt != obj:

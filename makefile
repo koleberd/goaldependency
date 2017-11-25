@@ -24,4 +24,4 @@ eval:
 	@python src/tensorflow/runBlockDetector.py
 
 world:
-	@python src/utils/2dsim.py
+	@python src/flatsim.py

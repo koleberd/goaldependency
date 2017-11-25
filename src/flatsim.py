@@ -10,7 +10,8 @@ BLOCKS_WITH_COLORS = {
 
 BLOCK_IND = {
     (0,31,0,255):None,
-    (18,0,0,255):'wood',
+    (29,8,0,255):'wood',
+    (43,0,0,255):'wood',
     (59,4,0,255):'crafting bench',
     (45,12,0,255):'iron ore',
     (25,0,0,255):'iron ore',
@@ -57,6 +58,8 @@ class GameWorld2d:
                     layer[col][row] = parseBlock(img.getpixel((col,row)))
             self.layers.append(layer)
 
+
+        #flatten
         self.grid = [ [None for y in range(height)] for x in range(width)]
         for layer in self.layers:
             for col in range(width):
@@ -66,21 +69,27 @@ class GameWorld2d:
                     if block != None:
                         self.grid[col][row] = block
 
+
+
         self.pos = spawn_pos
+
+        '''
 
         #path = self.astar((8,90),(130,50))
         #self.printWorld(path)
 
+        #self.pos = (8,90)
 
 
-        self.pos = (8,90)
 
 
-        for target in self.findClosest('iron ore', 10):
+        self.printWorld()
+        self.pos = (3,3)
+        for target in self.findClosest('wood', 1):
             path = self.astar(self.pos,target)
             if path != None:
                 self.printWorld(path)
-
+        '''
 
 
     def findClosest(self,obj,number):
@@ -131,7 +140,7 @@ class GameWorld2d:
         fromStartToGoalThroughNode[start] = estimate_cost(start,goal)
 
         while len(discoveredNodes) != 0:
-            if time.time() - start_time > 10.0:
+            if time.time() - start_time > 5.0:
                 print('A* timeout')
                 return None
             #print(len(evaluatedNodes))
@@ -144,8 +153,9 @@ class GameWorld2d:
             evaluatedNodes.append(current)
             neighbor_set = self.getNeighbors(current)
             if isAdjacentTo(current,goal):
-                print('ayyy')
-                neighbor_set.append(goal)
+                #neighbor_set.append(goal)
+                print('A* finished in ' + str(time.time()-start_time) + ' seconds.')
+                return reconstruct_path(bestReachedFrom,current)
             for neighbor in neighbor_set:
                 if neighbor in evaluatedNodes:
                     continue
@@ -173,6 +183,8 @@ class GameWorld2d:
 
     def isValidMovement(self,pos,exception='not none'):
         return self.grid[pos[0]][pos[1]] == None or self.grid[pos[0]][pos[1]] == exception
+    def updateLoc(self,pos,newVal):
+        self.grid[pos[0]][pos[1]] = newVal
 
 def parseBlock(pixel):
     #print(type(pixel))
@@ -214,4 +226,5 @@ def deleteNodeFromList(vals,node):
             del vals[x]
             return vals
 
-GameWorld2d('resources/2D/','train1',(1230,410),(1370,520))
+#GameWorld2d('resources/2D/','train1',(1230,410),(1370,520))
+#GameWorld2d('resources/2D/','train2',(528,454),(528+46,454+46))

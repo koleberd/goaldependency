@@ -1,22 +1,22 @@
 import json
-import thirdparty.nbt as nbt
+import nbt
 from os import listdir
 import time
 #from os.path import isfile,join
 
 
-CNTR_DST = 36
-C_ST = 824
-R_ST = 553
-IC_C_ST = 1004
-IC_R_ST = 422
-ICR_C = 1116
-ICR_R = 441
-CB_C_ST = 868
-CB_R_ST = 420
-CBR_C = 1056
-CBR_R = 457
-HOTBAR_JUMP = 44
+CNTR_DST = 36 #distance between centers of slots
+C_ST = 824 #column start
+R_ST = 553 #row
+IC_C_ST = 1004  #inventory crafting column start
+IC_R_ST = 422   #                   row
+ICR_C = 1116 #inventory crafting output position column
+ICR_R = 441 #                                    row
+CB_C_ST = 868 #crafting bench column start
+CB_R_ST = 420 #               row
+CBR_C = 1056  #crafting bench output column
+CBR_R = 457   #                      row
+HOTBAR_JUMP = 44  #extra distance between bottom row of inv and hotbar (y distance)
 
 class InventoryManager:
     def __init__(self):
