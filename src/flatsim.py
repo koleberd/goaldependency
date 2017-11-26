@@ -106,9 +106,23 @@ class GameWorld2d:
                 item = self.grid[col][row]
                 if item == obj:
                     locs.append((col,row))
-                    if len(locs) == number:
-                        return locs
-        return locs
+        orgLen = len(locs)
+        dists = {}
+        for loc in locs:
+            dists[loc] = distance_between(self.pos,loc)
+        ranked = []
+        while len(ranked) < number and len(ranked) < orgLen:
+            minP = 0
+            minV = dists[locs[0]]
+            for i in range(len(locs)):
+                loc = locs[i]
+                if dists[loc] < minV:
+                    minV = dists[loc]
+                    minK = loc
+                    minP = i
+            ranked.append(locs[minP])
+            del locs[i]
+        return ranked
 
     def printWorld(self,path=[]):
         render = Image.new('RGB',(len(self.grid),len(self.grid[0])),color=(255,255,255))
@@ -146,15 +160,14 @@ class GameWorld2d:
             #print(len(evaluatedNodes))
             current = getNodeWithLowestCost(discoveredNodes,fromStartToGoalThroughNode)
             if current == goal:
-                print('A* finished in ' + str(time.time()-start_time) + ' seconds.')
+                #print('A* finished in ' + str(time.time()-start_time) + ' seconds.')
                 return reconstruct_path(bestReachedFrom,current)
-            #print(current)
             discoveredNodes = deleteNodeFromList(discoveredNodes,current)
             evaluatedNodes.append(current)
             neighbor_set = self.getNeighbors(current)
             if isAdjacentTo(current,goal):
                 #neighbor_set.append(goal)
-                print('A* finished in ' + str(time.time()-start_time) + ' seconds.')
+                #print('A* finished in ' + str(time.time()-start_time) + ' seconds.')
                 return reconstruct_path(bestReachedFrom,current)
             for neighbor in neighbor_set:
                 if neighbor in evaluatedNodes:

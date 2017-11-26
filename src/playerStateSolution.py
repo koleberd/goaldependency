@@ -57,17 +57,7 @@ class PlayerStateSolution:
     def isTwin(self,other):#not complete
         res = self == other
 
-        if 'wood pickaxe' in self.ps.inventory.keys() and not self is other and False:
-            print('----')
-            print(id(self))
-            #print(self.parents[-1])
-            #print(other.parents[-1])
-            #print(self.parents[-1] == other.parents[-1])
-            #print(self.parents[-1].parent)
-            #print(other.parents[-1].parent)
-            #print(self.parents[-1].parent == other.parents[-1].parent)
-            #print(self.parents[-1].parent.parent)
-            print(other.parents[-1].parent.parent)
+
         if len(self.parents) > 0 and len(other.parents) > 0 and self.parents[-1] == other.parents[-1] and self.parents[-1].parent != None and other.parents[-1].parent != None and self.parents[-1].parent == other.parents[-1].parent and self.parents[-1].parent.parent != None and other.parents[-1].parent.parent != None and self.parents[-1].parent.parent == other.parents[-1].parent.parent:
             if not self.parents[-1].parent.parent is other.parents[-1].parent.parent:
                 res &= self.parents[-1].parent.parent.isTwin(other.parents[-1].parent.parent)
@@ -83,7 +73,6 @@ class PlayerStateSolution:
         total = self.children[0].calculateCost(scalars,table)
         if len(self.children) > 1:
             for child in self.children[1:]:
-                print(self.ps)
                 total += child.getCost(scalars,table)
         self.tempCost = total
         return total

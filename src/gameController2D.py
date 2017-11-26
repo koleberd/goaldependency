@@ -24,7 +24,7 @@ with open('json/toolIndex.json') as tooljs:
     toolIndex = json.load(tooljs)
 
 def craftObject(obj,gs):
-    print('crafting: ' + str(obj))
+    #print('crafting: ' + str(obj))
     if not obj in craftingRecipes.keys():
         return True
     try:
@@ -41,7 +41,7 @@ def craftObject(obj,gs):
         return False
 
 def invCraftObject(obj,gs):
-    print('inv crafting: ' + str(obj))
+    #print('inv crafting: ' + str(obj))
     if not obj in craftingRecipes.keys():
         return True
     for item in craftingRecipes[obj]['inputs']:
@@ -51,7 +51,7 @@ def invCraftObject(obj,gs):
     return True
 
 def harvestObject(obj,gs,tool=None):
-    print('harvesting: ' + str(obj))
+    #print('harvesting: ' + str(obj))
     #toolType = environmentIndex['obj']['toolType']
     toolLevel = 0
     if tool != None:
@@ -66,19 +66,19 @@ def harvestObject(obj,gs,tool=None):
     return True
 
 def locateObject(obj,gs,alg=None):
-    print('locating: ' + str(obj))
+    #print('locating: ' + str(obj))
     targetLoc = gs.flatworld.findClosest(obj,1)
     if len(targetLoc) != 0:
         path = gs.flatworld.astar(gs.flatworld.pos, targetLoc[0])
         gs.flatworld.pos = path[0]
         gs.flatworld.printWorld(path)
-        
+
         return True
     return False
 
 
 def executeFunction(name,gs,params):
-    print(name)
+    print(name + ': ' + str(params))
     if name == 'craftObject':
         return craftObject(params[0],gs)
     if name == 'invCraftObject':
