@@ -33,7 +33,7 @@ COLOR_IND = {
 }
 
 
-class GameWorld2d:
+class GameWorld2D:
     def __init__(self,image_dir,name,c1,c2,spawn_pos=(0,0)):
         '''
         c1 and c2 are coordinates of the top left and bottom right corners respectively

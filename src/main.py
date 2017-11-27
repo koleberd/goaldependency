@@ -11,7 +11,7 @@ import viewer
 from inventoryManager import *
 import time
 import pyautogui
-from flatsim import *
+from gameWorld2d import *
 
 def getName(obj):
     if type(obj) == PlayerStateTarget:
@@ -315,7 +315,7 @@ def run(topPS,name):
     #for t in times:
         #print(str(t) + '\t-\t' + str(times[t]))
 
-def run2d(topPS,name):
+def run2d(topPS,name,world):
     actFactory = ActionFactory('2D')
     levelIndex = decomposePS(topPS,name,actFactory)
     #graphTree(levelIndex,name + '_init')
@@ -323,7 +323,7 @@ def run2d(topPS,name):
     steps = []
     times = {}
     invM = InventoryManager()
-    w2d = GameWorld2d('resources/2D/','train2',(528,454),(528+46,454+46))
+    w2d = world
     gs = GameState(ps=None,fov=None,inv=invM,flatworld=w2d)
     while(not levelIndex[0][0].isComplete()):
         scales = actFactory.scaleCosts(gs.fov)
@@ -335,7 +335,7 @@ def run2d(topPS,name):
         if len(steps) == 0 or steps[-1] is not selectedAT:
             steps.append(selectedAT)
         exT = time.time()
-        #graphTree(levelIndex,name + '_' + str(len(steps)),selectedAT)
+        graphTree(levelIndex,name + '_' + str(len(steps)),selectedAT)
         selectedAT.execute(gs)
         exT = time.time() - exT
         if selectedAT not in times.keys():
@@ -347,4 +347,5 @@ def run2d(topPS,name):
 
 #run(PlayerState(inventory={'stone':10}),'t1')
 #run(PlayerState(inventory={'stick':4}),'t1')
-run2d(PlayerState(inventory={'stone pickaxe':10}),'t1')
+wrld = GameWorld2D('resources/2D/','train2',(528,454),(528+46,454+46))
+run2d(PlayerState(inventory={'stone pickaxe':10}),'t1',wrld)

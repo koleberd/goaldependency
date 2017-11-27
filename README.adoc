@@ -1,0 +1,79 @@
+= Goal Dependency Thesis Project
+
+This project uses AI to efficiently accomplish top level goals in an environment with strict goal dependency hierarchies.
+
+
+== Requirements
+
+- Python 3
+    If you plan on using Tensorflow with GPU support, this must be Python 3.5
+
+- Graphviz
+    Graphviz has two components. There's a pip package that's noted below,
+    but also has an https://www.graphviz.org/Download.php[executable] that you must have in your path in order for some components of this project to work.
+
+- Tensorflow (with GPU support)
+    For now, this is optional since no part of the main system uses Tensorflow
+
+- Minecraft
+    Optional. The current system doesn't interface with Minecraft but will in the near future
+
+- Minutor
+    Optional. This allows you to capture layers of a Minecraft world. There are sample layers in `resources/2D` so you can use those if you don't want to capture your own
+
+=== pip Requirements
+
+`$pip install pillow pyautogui graphviz`
+
+== Terminology and Functionality
+
+Here are a few terms that will probably be used at some point in this README
+
+- PS: PlayerState. This is a state of the player in terms of its inventory, the object that's in its crosshairs, etc
+- Action. An action that has a PS requirement and PS result
+Actions have a cost associated with them that is the time estimate for its completion once selected.
+- AT: ActionTarget. This holds an Action object, but also has a reference to its parent PSS and child PST (if it has one).
+- PST: PlayerStateTarget: This represents a PlayerState that is a goal but doesn't have a definite solution for getting to that goal.
+It has a reference to a parent AT and at least one child PSS.
+ Since a PST's desired PS might have multiple different, say, items in its inventory, the PST breaks down its desired PS into multiple attribute PS's which hold references to PSS's who solve those attributes specifically.
+- PSS: PlayerStateSolution: This represents a possible solution for a PST's attribute.
+Since a PSS might provide more than a singular PST might be asking for, for that attribute, multiple PST's can share the same PSS.
+This is called pooling.
+
+During execution, the root PST selects the cheapest leaf node overall, given the current game state.
+To do this, it asks each child to recursively calculate its cost, then picks the overall cheapest AT.
+After completion, the AT is removed from the tree, and resources trickle through its parent PSS to the next PST.
+Since PST's might have multiple PSS for each attribute, after one PSS has delivered some resource to solve that attribute, the other PSS's downscale according to the now reduced attribute requirement.
+This allows branches to have costs that aren't stuck at the initial value before resources started to trickle upward. ]
+After a PST has no children (because they have been completed), the PST disappears, exposing its parent AT as selectable.
+This process continues until the root PST has been completed.
+
+
+== Usage
+
+The project has a makefile that can be used for convenience rather than calling the scripts directly.
+At this point in the project, none of the scripts are set up to handle CLI calls, so you'll have to edit the last line of the script that actually executes functions.
+Primarily, you'll need to edit the last line of `src/main.py` to handle what you want it to do.
+
+Off the bat, you can run
+
+`$make `
+
+which will run a simulation in 2D space to create 10 units of 'stone pickaxe'.
+This will display a sequence of images which show the paths to take to complete the task.
+
+Path image color code:
+- purple: the path
+- black: stone
+- green: crafting bench
+- blue: tree
+- red: unknown
+
+If you're interested in the dependency trees along the way, uncomment line 338 of `main.py`.
+Then, run the simulation and look in `trees/`, which will have the dependency tree after every decision.
+Tree rendering takes a lot of time so this will slow down the simulation considerably.
+
+Tree color code:
+- purple: selected AT node
+- green: leaf AT node
+- blue: pooled PSS node
