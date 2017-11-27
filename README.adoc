@@ -42,9 +42,12 @@ This is called pooling.
 
 During execution, the root PST selects the cheapest leaf node overall, given the current game state.
 To do this, it asks each child to recursively calculate its cost, then picks the overall cheapest AT.
+
 After completion, the AT is removed from the tree, and resources trickle through its parent PSS to the next PST.
+
 Since PST's might have multiple PSS for each attribute, after one PSS has delivered some resource to solve that attribute, the other PSS's downscale according to the now reduced attribute requirement.
-This allows branches to have costs that aren't stuck at the initial value before resources started to trickle upward. ]
+This allows branches to have costs that aren't stuck at the initial value before resources started to trickle upward.
+
 After a PST has no children (because they have been completed), the PST disappears, exposing its parent AT as selectable.
 This process continues until the root PST has been completed.
 
@@ -57,12 +60,13 @@ Primarily, you'll need to edit the last line of `src/main.py` to handle what you
 
 Off the bat, you can run
 
-`$make `
+`$make`
 
 which will run a simulation in 2D space to create 10 units of 'stone pickaxe'.
 This will display a sequence of images which show the paths to take to complete the task.
 
 Path image color code:
+
 - purple: the path
 - black: stone
 - green: crafting bench
@@ -74,6 +78,7 @@ Then, run the simulation and look in `trees/`, which will have the dependency tr
 Tree rendering takes a lot of time so this will slow down the simulation considerably.
 
 Tree color code:
+
 - purple: selected AT node
 - green: leaf AT node
 - blue: pooled PSS node
