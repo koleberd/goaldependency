@@ -71,6 +71,19 @@ class ActionTarget:
     def isComplete(self):
         return True
     def execute(self,gs):
+        '''
+        execute(gs) is a pretty round-a-bout method so here's how it works
+            1. call the action's <execute> method
+            2. the action's execute method is a lambda which references a method in either gameController or gameController2d.
+            3. This method parses the action's method string which looks something like 'harvestResource:wood,iron axe'
+            4. Based on the method string, the parser method calls another method such as <harvestResource> in gameController(2d)
+            5. This method actually executes keystrokes and manipulates the gamestate passed to it. this might mean manipulating the InventoryManager,
+                checking to ensure the actual game inventory matches the inventoryManager (to ensure a block is picked up for example), or moving the
+                position of the avatar in the 2d world (in the case of gameController2d)
+        '''
+
+
+
         complete = self.act.execute(gs)
         if complete:
             self.parent.updateAT(self)

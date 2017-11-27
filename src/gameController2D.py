@@ -76,7 +76,6 @@ def locateObject(obj,gs,alg=None):
         return True
     return False
 
-
 def executeFunction(name,gs,params):
     print(name + ': ' + str(params))
     if name == 'craftObject':

@@ -1,91 +1,20 @@
-issues:
-can't load shuffled dataset into memory
-	manually shuffle
-low accuracy on multi class set
-	dual class set
-		97% accuracy on wood in range
-		70% wood oor
-		96% cb
-		70% cb oor
-		95% stone
-		65% stone oor
+TODO:
+	- determine how CV will be incorporated into 2d world
+	- will there be CV in the 3d world?
+	- find way to match 2d with 3d during/after movement decisions are made in 2d
 
-non-overlap for training/test set
-
-
-action items:
-- obj detection
-- pathfinding
+	Lower priority:
+		Dependency tree:
+			cross-level pooling
+		Runtime AI:
+			keep track of sunken costs
+			making decision under uncertainty vs under risk
+		Testing:
+			deeper test level
+		Misc:
+			look at sims for scheduling processes
 
 
-
-OBJNN
-	input: frame
-	output: 100x5 (100 objects detected max, x1,y1,x2,y2,classification)
-
-WNN
-	input: frame/100x5
-	output: NxF where N is the number of known game objects
-
-
-1S
-Pros: less developer hands on
-Cons:
-	hard to debug
-	may be not in line with OBJNN used for frame referencing
-	has to run in conjunction with OBJNN
-
-2S
-Pros:
-	Less overlap between weighting and pathfinding due to only one use of OBJNN
-	easier to train the first half
-Cons:
-	more rigid input
-
-
-questions:
-detect trees or wood?
-	caves or ores?
-	feature detection vs item dectection
-is uncertainty decreasing during training or during
-output size for obj detection
-how to train weightNN?
-	since based on looking at resources, make scnearios for each resource, then time the time it takes for it to discover the resources
-		- lacks context of dtree
-
-2 weeks of october
-4 weeks of november
-showcase - dec 1st
-
-work to be done
-- locator
-- WNN
-- OBJNN
-- presentation
-
-
-
-
-
-
-
-cross-level pooling
-
-keep track of sunken costs
-
-decreasing uncertainty as training increases
-
-making decision under uncertainty vs under risk
-
-full game integration - actions
-
-deeper test level
-
-
-
-post-training functionality (enabled once training is finished)
-	sunken cost tracking
-	uncertainty vs risk tracking
 
 
 
@@ -98,61 +27,23 @@ Semester 2 goals
 	not really, because you'd have to initially spawn a FUCKTON of identical branches for 'kill enemy' or 'stay alive'
 		unless branches can be re-spawned dynamically
 
-___ uses AI to efficiently accomplish top level goals in an environment with strict goal dependency hierarchies.
-Before simulation, ___ breaks down the top level goal's dependencies into a recursive tree of sub-goals, called a dependency tree.
-During simulation, ___ uses ML algorithms to analyze world state and player state to select and execute the most efficient sub-goal from the top level goal's dependency tree.
-After simulation, ___ trains its ML model to improve its mappings of world/player states to their corresponding sub-goal choices.
-
---------
-
-learn relations of previously pursued actions on a given action in addition to scales
-
--randomness of environment
-- training data vs simualtion data
-
--picking choices to minimize other choices in terms of solutions/attributes for PST (can it be done, period)
-
-
-
---------
-
-
-In depth:
-Before simulation, ___ breaks down the top level goal's dependencies into a recursive tree of sub-goals by matching known actions
-	(that have known world/player state requirements and results) to goals, and creating sub-goals to represent those action's dependencies, and so on.
-	Some actions are pooled to improve tree efficiency, and inefficient or recursive actions are pruned.
-During simulation, ___ uses ML algorithms to analyze world state and player state to select and execute the most efficient sub-goal from the top level goal's dependency tree.
-After simulation, ___ trains its ML model to improve its mappings of world/player states to their corresponding sub-goal choices,
-	and trains the known actions' costs to better match their real costs.
 
 
 
 
+Working Project Description:
+	___ uses AI to efficiently accomplish top level goals in an environment with strict goal dependency hierarchies.
+	Before simulation, ___ breaks down the top level goal's dependencies into a recursive tree of sub-goals, called a dependency tree.
+	During simulation, ___ uses ML algorithms to analyze world state and player state to select and execute the most efficient sub-goal from the top level goal's dependency tree.
+	After simulation, ___ trains its ML model to improve its mappings of world/player states to their corresponding sub-goal choices.
 
-look at sims for scheduling processes
 
-
-cost learned by clocking action execution times
-	for variable time processes like path finding???
-		different instances of path finding for different resources types
-			finding trees might require different  process than finding stone
-		constant times like how long to hit a block are pointless to learn because it depends on tool
-			is it really pointless to learn?
-				potentially results in overuse of tools/excess harvested resources
-cost scalar learned by comparing anticipated time, estimated scaled time, and actual scaled time and adjusting in the direction of (actual scaled time - estimated scaled time)
-	learned after task completion
+	Add:
+	-	learn relations of previously pursued actions on a given action in addition to scales
+	- 	randomness of environment
+	-	training data vs simualtion data
 
 
 
-
-or decomp until actiontarget level, pool, then keep doing decomp until action layer, etc
-
-if this AT's prereq  matches or exceeds this AT's PSS's PST attribute or any parent's, then it should be pruned.
-
-
-
-
-
-test work rules:
 /gamerule doDaylightCycle false
 /time set 6000

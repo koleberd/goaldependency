@@ -2,6 +2,11 @@ from PIL import Image
 import os
 import numpy as np
 import time
+'''
+GameWorld2d is used for simulating a 2d world based on a top down rendering of a minecraft world.
+    It can take multiple layers of a world but compresses them down into one layer. The top block takes precedence over lower blocks.
+'''
+
 
 BLOCKS_WITH_COLORS = {
     'dirt':(0,31,0,255),
@@ -69,36 +74,12 @@ class GameWorld2d:
                     if block != None:
                         self.grid[col][row] = block
 
-
-
         self.pos = spawn_pos
-
-        '''
-
-        #path = self.astar((8,90),(130,50))
-        #self.printWorld(path)
-
-        #self.pos = (8,90)
-
-
-
-
-        self.printWorld()
-        self.pos = (3,3)
-        for target in self.findClosest('wood', 1):
-            path = self.astar(self.pos,target)
-            if path != None:
-                self.printWorld(path)
-        '''
 
 
     def findClosest(self,obj,number):
         '''
-        returns the nearest >number< occurances of >obj<
-        how to select nearest instance of target object?
-            1) closest euclidian
-
-            2) for each n closest euclidian, calculate distance with A* then pick actual shortest path
+        finds the closest <number> instancse of <obj> from self.pos, in terms of euclidian distance
         '''
         locs = []
         for col in range(0,len(self.grid)):

@@ -37,8 +37,6 @@ class PlayerStateTarget:
         return str(self.ps)
 
 
-
-
     #-------------------------------------------
     #RUN TIME METHODS
     #-------------------------------------------
