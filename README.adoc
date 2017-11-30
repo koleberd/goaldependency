@@ -82,3 +82,9 @@ Tree color code:
 - purple: selected AT node
 - green: leaf AT node
 - blue: pooled PSS node
+
+
+
+== Developer
+
+Copyright 2017 Derek Koleber under MIT License
