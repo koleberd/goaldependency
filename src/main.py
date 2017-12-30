@@ -329,13 +329,12 @@ def run2d(topPS,name,world):
         scales = actFactory.scaleCosts(gs.fov)
 
         levelIndex[0][0].calculateCost(scales)
-        #time.sleep(1)#make 1 second movement
         #graphTree(levelIndex,name + '_' + str(step))
         selectedAT = levelIndex[0][0].select()
         if len(steps) == 0 or steps[-1] is not selectedAT:
             steps.append(selectedAT)
         exT = time.time()
-        graphTree(levelIndex,name + '_' + str(len(steps)),selectedAT)
+        #graphTree(levelIndex,name + '_' + str(len(steps)),selectedAT)
         selectedAT.execute(gs)
         exT = time.time() - exT
         if selectedAT not in times.keys():
@@ -347,5 +346,8 @@ def run2d(topPS,name,world):
 
 #run(PlayerState(inventory={'stone':10}),'t1')
 #run(PlayerState(inventory={'stick':4}),'t1')
-wrld = GameWorld2D('resources/2D/','train2',(528,454),(528+46,454+46))
-run2d(PlayerState(inventory={'stone pickaxe':10}),'t1',wrld)
+#wrld = GameWorld2D('resources/2D/','train2',(528,454),(528+46,454+46))
+
+#run2d(PlayerState(inventory={'stone pickaxe':10}),'t2',wrld)
+wrld = GameWorld2D('resources/2D/','train1',(1228,412),(1228+135,412+96),spawn_pos=(5,5))
+run2d(PlayerState(inventory={'wood':14}),'t1',wrld)

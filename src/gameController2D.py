@@ -61,17 +61,17 @@ def harvestObject(obj,gs,tool=None):
         gs.inv.inventory[invc1[0]][invc1[1]] = gs.inv.inventory[0][0]
         gs.inv.inventory[0][0] = hold
     gs.inv.depositStack(obj,1)
-    gs.flatworld.updateLoc(gs.flatworld.findClosest(obj,1)[0],None)
+    gs.flatworld.updateLoc(gs.flatworld.findClosestLayered(obj,1)[0],None)
 
     return True
 
 def locateObject(obj,gs,alg=None):
     #print('locating: ' + str(obj))
-    targetLoc = gs.flatworld.findClosest(obj,1)
+    targetLoc = gs.flatworld.findClosestLayered(obj,1)
     if len(targetLoc) != 0:
-        path = gs.flatworld.astar(gs.flatworld.pos, targetLoc[0])
+        path = gs.flatworld.astar(gs.flatworld.pos, (targetLoc[0][1],targetLoc[0][2]))
         gs.flatworld.pos = path[0]
-        gs.flatworld.printWorld(path)
+        gs.flatworld.saveWorld(path)
 
         return True
     return False

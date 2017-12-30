@@ -65,6 +65,7 @@ class GameWorld2D:
 
 
         #flatten
+
         self.grid = [ [None for y in range(height)] for x in range(width)]
         for layer in self.layers:
             for col in range(width):
@@ -73,6 +74,8 @@ class GameWorld2D:
                     block = layer[col][row]
                     if block != None:
                         self.grid[col][row] = block
+
+
 
         self.pos = spawn_pos
 
@@ -105,6 +108,42 @@ class GameWorld2D:
             del locs[i]
         return ranked
 
+    def isExposed(self,col,row):
+        top = row - 1 >= 0 and self.grid[col][row-1] == None
+        left = col - 1 >= 0 and self.grid[col-1][row] == None
+        right = col + 1 < len(self.grid) and self.grid[col+1][row] == None
+        bottom = row + 1 < len(self.grid[0]) and self.grid[col][row+1] == None
+        return top or left or right or bottom
+
+    def findClosestLayered(self,obj,number):
+        '''
+        finds the closest <number> instancse of <obj> from self.pos, in terms of euclidian distance. bottom object is always closer than upper objects in layers.
+        '''
+        locs = []
+        for col in range(0,len(self.layers[0])):
+            for row in range(0,len(self.layers[0][0])):
+                for layer in range(0,len(self.layers)):
+                    item = self.layers[layer][col][row]
+                    if item == obj and self.isExposed(col,row):
+                        locs.append((layer,col,row))
+        orgLen = len(locs)
+        dists = {}
+        for loc in locs:
+            dists[loc] = distance_between(self.pos,(loc[1],loc[2]))
+        ranked = []
+        while len(ranked) < number and len(ranked) < orgLen:
+            minP = 0
+            minV = dists[locs[0]]
+            for i in range(len(locs)):
+                loc = locs[i]
+                if dists[loc] < minV:
+                    minV = dists[loc]
+                    minK = loc
+                    minP = i
+            ranked.append(locs[minP])
+            del locs[i]
+        return ranked
+
     def printWorld(self,path=[]):
         render = Image.new('RGB',(len(self.grid),len(self.grid[0])),color=(255,255,255))
         for col in range(0,len(self.grid)):
@@ -119,6 +158,22 @@ class GameWorld2D:
             render.putpixel(pos,(193,28,181))
 
         render.show()
+
+    def saveWorld(self,path=[]):
+        render = Image.new('RGB',(len(self.grid),len(self.grid[0])),color=(255,255,255))
+        for col in range(0,len(self.grid)):
+            for row in range(0,len(self.grid[0])):
+                if self.grid[col][row] != None:
+                    block =  self.grid[col][row]
+                    if block in COLOR_IND.keys():
+                        render.putpixel((col,row),COLOR_IND[block])
+                    else:
+                        render.putpixel((col,row),(255,0,0))
+        for pos in path:
+            render.putpixel(pos,(193,28,181))
+
+        render.save('simulation/2Dpath/'+str(time.time())+'.jpg')
+
 
     def astar(self,start,goal):
         start_time = time.time()
@@ -178,7 +233,15 @@ class GameWorld2D:
     def isValidMovement(self,pos,exception='not none'):
         return self.grid[pos[0]][pos[1]] == None or self.grid[pos[0]][pos[1]] == exception
     def updateLoc(self,pos,newVal):
-        self.grid[pos[0]][pos[1]] = newVal
+        self.layers[pos[0]][pos[1]][pos[2]] = newVal
+        emptyFlat = False
+        curr = None
+        for layer in range(0,len(self.layers)):
+            this_layer = self.layers[layer][pos[1]][pos[2]]
+            if curr == None and this_layer != None:
+                curr = this_layer
+        self.grid[pos[1]][pos[2]] = curr
+
 
 def parseBlock(pixel):
     #print(type(pixel))

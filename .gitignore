@@ -8,3 +8,4 @@ MNIST_data
 models
 *.bat
 trainedModels/*
+simulation/2Dpath/* 
