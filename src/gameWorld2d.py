@@ -159,7 +159,7 @@ class GameWorld2D:
 
         render.show()
 
-    def saveWorld(self,path=[]):
+    def saveWorld(self,path=[],name=time.time()):
         render = Image.new('RGB',(len(self.grid),len(self.grid[0])),color=(255,255,255))
         for col in range(0,len(self.grid)):
             for row in range(0,len(self.grid[0])):
@@ -172,7 +172,7 @@ class GameWorld2D:
         for pos in path:
             render.putpixel(pos,(193,28,181))
 
-        render.save('simulation/2Dpath/'+str(time.time())+'.jpg')
+        render.save('simulation/2Dpath/'+str(name)+'.jpg')
 
 
     def astar(self,start,goal):

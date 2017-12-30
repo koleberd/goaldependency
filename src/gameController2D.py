@@ -71,7 +71,7 @@ def locateObject(obj,gs,alg=None):
     if len(targetLoc) != 0:
         path = gs.flatworld.astar(gs.flatworld.pos, (targetLoc[0][1],targetLoc[0][2]))
         gs.flatworld.pos = path[0]
-        gs.flatworld.saveWorld(path)
+        gs.flatworld.saveWorld(path,gs.cycle)
 
         return True
     return False

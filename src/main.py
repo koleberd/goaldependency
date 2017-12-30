@@ -342,6 +342,7 @@ def run2d(topPS,name,world):
         times[selectedAT] += exT
         #gs = viewer.getCurrentGameState(invM)
         downwardPruneTree(levelIndex)
+        gs.cycle += 1
 
 
 #run(PlayerState(inventory={'stone':10}),'t1')
@@ -350,4 +351,4 @@ def run2d(topPS,name,world):
 
 #run2d(PlayerState(inventory={'stone pickaxe':10}),'t2',wrld)
 wrld = GameWorld2D('resources/2D/','train1',(1228,412),(1228+135,412+96),spawn_pos=(5,5))
-run2d(PlayerState(inventory={'wood':14}),'t1',wrld)
+run2d(PlayerState(inventory={'stone pickaxe':20}),'t1',wrld)
