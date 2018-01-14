@@ -350,5 +350,6 @@ def run2d(topPS,name,world):
 #wrld = GameWorld2D('resources/2D/','train2',(528,454),(528+46,454+46))
 
 #run2d(PlayerState(inventory={'stone pickaxe':10}),'t2',wrld)
-wrld = GameWorld2D('resources/2D/','train1',(1228,412),(1228+135,412+96),spawn_pos=(5,5))
+#wrld = GameWorld2D('resources/2D/','train1',(1228,412),(1228+135,412+96),spawn_pos=(5,5))
+wrld = GameWorld2D('resources/2D/','train4',(552,391),(552+42,391+42),spawn_pos=(2,2))
 run2d(PlayerState(inventory={'stone pickaxe':20}),'t1',wrld)

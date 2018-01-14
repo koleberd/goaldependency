@@ -22,3 +22,6 @@ convert:
 
 eval:
 	@python src/tensorflow/runBlockDetector.py
+
+world:
+	@python src/gameWorld2d.py

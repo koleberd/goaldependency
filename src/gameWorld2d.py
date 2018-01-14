@@ -8,12 +8,9 @@ GameWorld2d is used for simulating a 2d world based on a top down rendering of a
 '''
 
 
-BLOCKS_WITH_COLORS = {
-    'dirt':(0,31,0,255),
-    'crafting bench':(3,240,28)
-}
 
-BLOCK_IND = {
+
+BLOCK_IND_DARK = {
     (0,31,0,255):None,
     (29,8,0,255):'wood',
     (43,0,0,255):'wood',
@@ -24,12 +21,27 @@ BLOCK_IND = {
     (15,15,15,255):'stone',
     (0,0,0,255):'stone'
 }
+BLOCK_IND = {
+    (155,122,99,255):'iron ore',
+    (175,142,118,255):'iron ore',
+    (90,69,36,255):'wood',
+    (102,81,47,255):'wood',
+    (59,59,59,255):'coal',
+    (69,69,69,255):'coal',
+    (100,100,100,255):'stone',
+    (116,116,116,255):'stone',
+    (86,157,66,255):None,
+    (65,136,45,255):None,
+    (160,105,59,255):'crafting bench'
+}
 
 COLOR_IND = {
     'wood': (0,0,255),
     'crafting bench':(0,255,0),
     'iron ore':(255,150,100),
-    'stone':(30,30,30)
+    'stone':(130,130,130),
+    'coal':(70,70,70),
+    'default':(0,0,0)
 }
 
 
@@ -78,7 +90,6 @@ class GameWorld2D:
 
 
         self.pos = spawn_pos
-
 
     def findClosest(self,obj,number):
         '''
@@ -161,6 +172,7 @@ class GameWorld2D:
 
     def saveWorld(self,path=[],name=time.time()):
         render = Image.new('RGB',(len(self.grid),len(self.grid[0])),color=(255,255,255))
+
         for col in range(0,len(self.grid)):
             for row in range(0,len(self.grid[0])):
                 if self.grid[col][row] != None:
@@ -168,12 +180,15 @@ class GameWorld2D:
                     if block in COLOR_IND.keys():
                         render.putpixel((col,row),COLOR_IND[block])
                     else:
-                        render.putpixel((col,row),(255,0,0))
+                        render.putpixel((col,row),COLOR_IND['default'])
+
+        path_dark = len(path)
         for pos in path:
-            render.putpixel(pos,(193,28,181))
-
+            mul = path_dark/len(path) + .3
+            render.putpixel(pos,((int(193*mul),int(28*mul),int(181*mul))))
+            path_dark -= 1
+        render = resize_no_blur(render,10)
         render.save('simulation/2Dpath/'+str(name)+'.jpg')
-
 
     def astar(self,start,goal):
         start_time = time.time()
@@ -232,6 +247,7 @@ class GameWorld2D:
 
     def isValidMovement(self,pos,exception='not none'):
         return self.grid[pos[0]][pos[1]] == None or self.grid[pos[0]][pos[1]] == exception
+
     def updateLoc(self,pos,newVal):
         self.layers[pos[0]][pos[1]][pos[2]] = newVal
         emptyFlat = False
@@ -241,6 +257,20 @@ class GameWorld2D:
             if curr == None and this_layer != None:
                 curr = this_layer
         self.grid[pos[1]][pos[2]] = curr
+
+
+
+
+def resize_no_blur(img,factor):
+    res = Image.new('RGB',(img.width*factor,img.height*factor))
+    for col in range(0,img.width):
+        for row in range(0,img.height):
+            for rcol in range(col*factor,(col+1)*factor):
+                for rrow in range(row*factor,(row+1)*factor):
+                    res.putpixel((rcol,rrow),img.getpixel((col,row)))
+    return res
+
+
 
 
 def parseBlock(pixel):
@@ -285,3 +315,5 @@ def deleteNodeFromList(vals,node):
 
 #GameWorld2d('resources/2D/','train1',(1230,410),(1370,520))
 #GameWorld2d('resources/2D/','train2',(528,454),(528+46,454+46))
+#wrld = GameWorld2D('resources/2D/','train4',(552,391),(552+42,391+42),spawn_pos=(2,2))
+#wrld.printWorld()
