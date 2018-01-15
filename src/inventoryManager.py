@@ -19,7 +19,7 @@ CBR_R = 457   #                      row
 HOTBAR_JUMP = 44  #extra distance between bottom row of inv and hotbar (y distance)
 
 class InventoryManager:
-    def __init__(self):
+    def __init__(self,name):
         with open('json/inventoryItem.json') as rsjs:
             self.resourceIndex = json.load(rsjs)
         self.inventory = []
@@ -27,6 +27,7 @@ class InventoryManager:
             self.inventory.append([])#rows
             for y in range(0,9):
                 self.inventory[x].append(('empty',0))
+        self.worldname = name
     def depositStack(self,obj,qnt):
         rem = qnt
         for row in range(0,4):
@@ -99,7 +100,6 @@ class InventoryManager:
                 if self.inventory[row][col][0] == obj:
                     return self.coordSlot(row,col)
         return None
-
     def coordSlot(self,r,c):
 
         resc = C_ST + CNTR_DST*c
@@ -107,7 +107,6 @@ class InventoryManager:
         if r == 0:
             resr = R_ST + 2*CNTR_DST + HOTBAR_JUMP
         return (resc,resr)
-
     def coordInvC(self,x,y):#coordinates of inventory craft
         #if x or y are 3, then returns the coordinates of the output of the crafting bench
         r = int(y)
@@ -115,7 +114,6 @@ class InventoryManager:
         if r == 3 or c == 3:
             return (ICR_C,ICR_R)
         return (IC_C_ST + c * CNTR_DST, IC_R_ST + r * CNTR_DST)
-
     def coordCbC(self,x,y):#coordinates of crafting bench craft
         #if x or y are 3, then returns the coordinates of the output of the crafting bench
         r = int(y)
@@ -141,8 +139,8 @@ class InventoryManager:
         #return False
 
         parsedInv = [None]*36
-        pInv = InventoryManager()
-        folder = 'C:\\Users\\Kirevikyn\\AppData\\Roaming\\.minecraft\\saves\\TEST_ENV_1\\playerdata'
+        pInv = InventoryManager(self.worldname)
+        folder = 'C:\\Users\\Kirevikyn\\AppData\\Roaming\\.minecraft\\saves\\' + self.worldname + '\\playerdata'
         filename = folder + '\\' + listdir(folder)[0]
         #print(filename)
         playerfile = nbt.NBTFile(filename,'rb')

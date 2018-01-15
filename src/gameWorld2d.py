@@ -45,17 +45,13 @@ COLOR_IND = {
 }
 
 
-class GameWorld2D:
-    def __init__(self,image_dir,name,c1,c2,spawn_pos=(0,0)):
+class GameWorld2d:
+    def __init__(self,layer_dir,c1,c2,spawn_pos=(0,0)):
         '''
         c1 and c2 are coordinates of the top left and bottom right corners respectively
         '''
 
-        files = os.listdir(image_dir)
-        filtered = []
-        for f in files:
-            if name in f:
-                filtered.append(f)
+        layer_names = os.listdir(layer_dir)
         '''
         img = frame.crop((w_adj,h_adj,WIDTH-w_adj,HEIGHT-h_adj))
         img = np.reshape(np.array(list(img.getdata())),(1,SIZE_TENSOR[0],SIZE_TENSOR[1],SIZE_TENSOR[2]))
@@ -65,8 +61,8 @@ class GameWorld2D:
         height = c2[1]-c1[1]
 
         self.layers = []
-        for f in filtered:
-            img = Image.open(image_dir + f).crop((c1[0],c1[1],c2[0],c2[1]))
+        for f in layer_names:
+            img = Image.open(layer_dir + '/' + f).crop((c1[0],c1[1],c2[0],c2[1]))
             layer = [ [None for y in range(height)] for x in range(width)]
             #img.show()
             #self.layers.append(np.reshape(np.array(list(img.getdata())),(width,height,4)))
@@ -90,8 +86,9 @@ class GameWorld2D:
 
 
         self.pos = spawn_pos
+        self.yaw = 0
 
-    def findClosest(self,obj,number):
+    def findClosest(self,obj,number):#not used
         '''
         finds the closest <number> instancse of <obj> from self.pos, in terms of euclidian distance
         '''
@@ -269,9 +266,6 @@ def resize_no_blur(img,factor):
                 for rrow in range(row*factor,(row+1)*factor):
                     res.putpixel((rcol,rrow),img.getpixel((col,row)))
     return res
-
-
-
 
 def parseBlock(pixel):
     #print(type(pixel))

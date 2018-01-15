@@ -1,7 +1,6 @@
 import pyautogui
 import time
 import json
-import math
 import random
 from gameState import *
 from playerState import *
@@ -11,7 +10,7 @@ from inventoryManager import *
 TURN_TIME = .25
 SCREEN_WIDTH = 1920
 SCREEN_HEIGHT = 1080
-RIGHTTURN = 10
+rightTurn = 600
 
 
 
@@ -123,48 +122,62 @@ def harvestObject(obj,gs,tool=None):#still needs to collect resource
         pyautogui.keyDown('esc')
         pyautogui.keyUp('esc')
 
-        '''
         pyautogui.keyDown('w')
         time.sleep(.5)
         pyautogui.keyUp('w')
-        '''
-
         actualInv = InventoryManager().parseInventory()
     return True
 
 def locateObject(obj,gs,alg=None):
-    '''
-    locate object is separated into 2 parts
-    1) finding the object
-    2) moving to the object
-    If gs.pm.target == None, then the object hasn't been found
-    otherwise, the object has been found and the avatar should be moving toward the target.
-
-    '''
-    if gs.pm.target == None: #has not located the object
-        objs = gs.world_2d.findClosestLayered(obj,1)
-        if len(objs) == 0:
-            raise Exception("none of target object exist in this world")
-        path = gs.world_2d.astar(gs.world_2d.pos, (objs[0][1],objs[0][2]))[:-1]
-        gs.world_2d.saveWorld(path,gs.world_step)
-        gs.pm.target = {'obj':obj,'path':path,'pos':(objs[0][1],objs[0][2])}
-    elif gs.pm.target['obj'] == obj:
-        path = gs.pm.target['path']
-        #curr_pos = gs.world_2d.pos
-        next_pos = path[-1]
-        turnToward(gs,next_pos)
-        #print(gs.world_2d.pos,gs.world_2d.yaw,next_pos)
-        moveForward(gs,1)
-        #print(gs.world_2d.pos,gs.world_2d.yaw)
-        gs.pm.target['path'] = path[:-1]
-        if len(gs.pm.target['path']) == 0:
-            turnToward(gs,gs.pm.target['pos'])
-
+    if gs.ps.lookedAt == obj and len(gs.fov) == 1:
+        print('located: ' + str(obj))
+        return True
+    print('locating: ' + str(obj))
+    if alg == None or alg == 'alg1':
+        pathfind1(obj,gs)
     return False
 
-def executeFunction(name,gs,params):
+def pathfind1(obj,gs):
+    if gs.ps.lookedAt != obj:
+        searchFor1(obj,gs)
+    elif gs.ps.lookedAt == obj and len(gs.fov) == 1:
+        turnToward1(obj,gs)
+    elif gs.ps.lookedAt == obj and len(gs.fov) != 1:
+        moveTo1(obj,gs)
 
-    print(name + ': ' + str(params))
+
+def moveTo1(obj,gs):
+    return
+    pyautogui.keyDown('w')
+    time.sleep(TURN_TIME)
+    pyautogui.keyUp('w')
+
+def searchFor1(obj,gs):
+    return
+    pyautogui.moveRel(SCREEN_WIDTH/16,0,TURN_TIME)
+    '''
+    choice = random.randint(1,8)
+    if choice > 4:
+        pyautogui.moveRel(rightTurn*(choice%4),0,TURN_TIME)
+    else:
+        switch = ['w','a','s','d']
+        pyautogui.keyDown(switch[choice-1])
+        time.sleep(TURN_TIME)
+        pyautogui.keyUp(switch[choice-1])
+    '''
+
+def turnToward1(obj,gs):
+    return
+    pyautogui.moveRel(SCREEN_WIDTH/32,0,TURN_TIME)
+
+    # return some lambda
+def executeFunction(name,gs,params):
+    #obj['function'].split(":")[0],obj['function'].split(":")[1]
+    #name = obj.split(":")[0]
+    #params = obj.split(":")[1].split(',')
+    #print('--')
+    #print(name)
+    #print(params)
     if name == 'craftObject':
         return craftObject(params[0],gs)
     if name == 'invCraftObject':
@@ -180,52 +193,3 @@ def executeFunction(name,gs,params):
         else:
             return harvestObject(params[0],gs)
     return False
-
-
-
-#MOVEMENT FUNCTIONS. REPONSIBLE FOR UPDATING gs.world_2d.pos, gs.world_2d.yaw
-def turn(gs, angle):
-    print(angle,int(angle/90))
-    pyautogui.moveRel(int(angle*600/90),None)
-
-def turnToward(gs,pos):
-    curr_pos = gs.world_2d.pos
-    angle = 180 #top
-    if curr_pos[0] < pos[0]:
-        angle = 90 #right
-    if curr_pos[0] > pos[0]:
-        angle = -90 #left
-    if curr_pos[1] < pos[1]:
-        angle = 0 #bottom
-    left_to_turn = angle - gs.world_2d.yaw
-    turn(gs,-left_to_turn)
-    gs.world_2d.yaw = angle
-
-
-def moveForward(gs,units):
-    #gs because speed boosts might be relevant
-    pyautogui.keyDown('w')
-    time.sleep(.25)
-    pyautogui.keyUp('w')
-    time.sleep(.1)
-
-    gs.world_2d.pos = (gs.world_2d.pos[0]+int(math.sin(math.radians(gs.world_2d.yaw))),
-           gs.world_2d.pos[1]+int(math.cos(math.radians(gs.world_2d.yaw))))
-
-
-
-def executeCommand(cmd):
-    pyautogui.press('t')
-    pyautogui.typewrite(cmd,interval=.05)
-    pyautogui.press('enter')
-    time.sleep(.2)
-
-
-def bindWorlds(world_3d, world_2d, spawn_pos):
-    spawn_3d_x = world_3d[0] - world_2d[0] + spawn_pos[0]
-    spawn_3d_y = world_3d[2] - world_2d[1] + spawn_pos[1]
-
-    cmd = 't/tp @s ' + str(spawn_3d_x) + ' ' + str(world_3d[1]) + ' ' + str(spawn_3d_y) + ' 0 0'
-    pyautogui.typewrite(cmd,interval=.05)
-    pyautogui.press('enter')
-    time.sleep(.211)

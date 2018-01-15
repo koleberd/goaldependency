@@ -47,3 +47,8 @@ Working Project Description:
 
 /gamerule doDaylightCycle false
 /time set 6000
+
+
+NAMING CONVENTIONS:
+For class, method, and file names: camel case
+For variable names: snake case

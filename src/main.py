@@ -12,6 +12,7 @@ from inventoryManager import *
 import time
 import pyautogui
 from gameWorld2d import *
+import gameController
 
 def getName(obj):
     if type(obj) == PlayerStateTarget:
@@ -161,7 +162,7 @@ def downwardPruneTree(levelIndex):
         if somethingRemoved:
             levelIndex[treeLevel] = newLevelList
 
-def decomposePS(ps,name,actFactory):
+def decomposePS(ps,tree_name,actFactory):
     proxyAT = ActionTarget(Action(ps,PlayerState(),0,None))
 
     levelIndex = decomposeAT(proxyAT,actFactory)
@@ -222,7 +223,7 @@ def decomposePS(ps,name,actFactory):
             for item in levelIndex[level]:
                 if item.child == None or item.getRequirement() == PlayerState():
                     leafcount += 1
-    print('Name: ' + name)
+    print('Name: ' + tree_name)
     print('Levels: ' + str(len(levelIndex)-3))
     print('Nodes: ' + str(nodecount))
     print('Leaf nodes: ' + str(leafcount))
@@ -265,7 +266,7 @@ def run(topPS,name):
     print('---- STARTING SIMUILATION  ----')
     steps = []
     times = {}
-    invM = InventoryManager()
+    invM = InventoryManager('TEST_ENV_1')
     #invM.deposit('wood',2)
     gs = viewer.getCurrentGameState(invM)
     while(not levelIndex[0][0].isComplete()):
@@ -344,6 +345,48 @@ def run2d(topPS,name,world):
         downwardPruneTree(levelIndex)
         gs.cycle += 1
 
+def run2d3d(config_name): #topPS,sim_name,world_2d,name_3d):
+    with open(config_name) as jscf:
+        config = json.load(jscf)
+    world_2d = GameWorld2d( config['world_2d_location'],
+                            (config['2d_start'][0],config['2d_start'][1]),
+                            (config['2d_end'][0],config['2d_end'][1]),
+                            (config['spawn_pos'][0],config['spawn_pos'][1])
+    )
+
+    action_factory = ActionFactory()
+    level_index = decomposePS(PlayerState.parsePlayerStateJSON(config['target_ps']),config['simulation_name'],action_factory)
+    time.sleep(1)
+    print('---- STARTING SIMUILATION  ----')
+    steps = []
+    times = {}
+    inv_manager = InventoryManager(config['world_name_3d'])
+    #Issue init commands and bind worlds
+    '''
+    for cmd in config['world_init_3d']:
+        gameController.executeCommand(cmd)
+    '''
+    gameController.bindWorlds(config['3d_bind'],config['2d_bind'],config['spawn_pos'])
+    gs = GameState(ps=None,fov=None,inv=inv_manager,world_2d=world_2d)
+    while(not level_index[0][0].isComplete()):
+        scales = action_factory.scaleCosts(gs.fov)
+        level_index[0][0].calculateCost(scales) #------------- rething where scaling shoudl be done
+        selected_at = level_index[0][0].select()
+        if len(steps) == 0 or steps[-1] is not selected_at:
+            steps.append(selected_at)
+
+        exT = time.time()
+        selected_at.execute(gs)
+        exT = time.time() - exT
+        if selected_at not in times.keys():
+            times[selected_at] = 0
+        times[selected_at] += exT
+
+        if inv_manager != InventoryManager(config['world_name_3d']).parseInventory():
+            raise Exception("INVENTORY MISMATCH. STOPPING SIMULATION")
+
+        downwardPruneTree(level_index)
+        gs.world_step += 1
 
 #run(PlayerState(inventory={'stone':10}),'t1')
 #run(PlayerState(inventory={'stick':4}),'t1')
@@ -351,5 +394,8 @@ def run2d(topPS,name,world):
 
 #run2d(PlayerState(inventory={'stone pickaxe':10}),'t2',wrld)
 #wrld = GameWorld2D('resources/2D/','train1',(1228,412),(1228+135,412+96),spawn_pos=(5,5))
-wrld = GameWorld2D('resources/2D/','train4',(552,391),(552+42,391+42),spawn_pos=(2,2))
-run2d(PlayerState(inventory={'stone pickaxe':20}),'t1',wrld)
+#wrld = GameWorld2D('resources/2D/','train4',(552,391),(552+42,391+42),spawn_pos=(2,2))
+#run2d3d(PlayerState(inventory={'stone pickaxe':20}),'t1',wrld,'TEST_ENV_4')
+
+
+run2d3d('json/simulation_configs/TEST_ENV4.json')

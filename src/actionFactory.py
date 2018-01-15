@@ -2,12 +2,13 @@ from gameObject import *
 from action import *
 from playerState import *
 import gameController
-import gameController2D
+import gameController2d
+
 
 import json
 class ActionFactory:
 
-    def __init__(self,mode='3D'):
+    def __init__(self,mode='2d3d'):
         self.mode = mode
         with open('json/resourceIndex.json') as jsfl:
             self.resourceIndex = json.load(jsfl)
@@ -22,10 +23,10 @@ class ActionFactory:
         psr = PlayerState.parsePlayerStateJSON(obj['result'])
         cst = obj['cost']
         func = None
-        if self.mode == '3D':
+        if self.mode == '2d3d':
             func = lambda gs: gameController.executeFunction(obj['function'].split(":")[0],gs,obj['function'].split(":")[1].split(','))
         else:
-            func = lambda gs: gameController2D.executeFunction(obj['function'].split(":")[0],gs,obj['function'].split(":")[1].split(','))
+            func = lambda gs: gameController2d.executeFunction(obj['function'].split(":")[0],gs,obj['function'].split(":")[1].split(','))
 
         return Action(psp,psr,cst,func)
 
