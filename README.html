@@ -562,11 +562,31 @@ The player needs to know the path the establish initially so execution isn&#8217
 and so heuristics don&#8217;t falsely throw the player off the ideal path.
 Additionally, the it&#8217;s possible that the player will deviate from that specific goal due to cost scaling (see below) at a later game step, so that previous path needs to be voided from memory at that point.</p>
 </div>
+<div class="paragraph">
+<p><code>gameController.py</code> utilizes these models and executes actions in the 2D world model, then attempts to mirror those actions in the 3D game world.
+Unfortunately, due to imprecision of inputs in the 3D world, it is common for the two worlds to get out of sync.</p>
+</div>
+<div class="paragraph">
+<p>Currently, there is no strict dependency of the backend system on the 3D world, and the 3D world mostly just acts as a flashier front end to represent the execution of actions.
+This may change depending on the inputs of the cost scalar NN (see below).</p>
+</div>
 <hr>
 <div class="paragraph">
 <p>The AI component of this project comes in the form of the cost scaling each step of execution.
 Given environmental inputs, different actions might be more efficient to pursue than others.
 Neural networks are employed to take limited environmental inputs and produce scalars (on an interval of (0:1] ) for each known action in the environment.</p>
+</div>
+<div class="paragraph">
+<p>Options for AI input:</p>
+</div>
+<div class="paragraph">
+<p>1) 2d world flattened (input: 64 x 64 + xpos + ypos)</p>
+</div>
+<div class="paragraph">
+<p>2) 1 + 2n input neurons as raycasts in 2d</p>
+</div>
+<div class="paragraph">
+<p>3) frame from 3d, cut as horizontal slice</p>
 </div>
 </div>
 </div>
@@ -644,7 +664,7 @@ Tree rendering takes a lot of time so this will slow down the simulation conside
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-01-16 14:01:45 US Mountain Standard Time
+Last updated 2018-01-16 14:36:52 US Mountain Standard Time
 </div>
 </div>
 </body>

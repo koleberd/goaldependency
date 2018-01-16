@@ -53,3 +53,14 @@ Working Project Description:
 NAMING CONVENTIONS:
 For class, method, and file names: camel case
 For variable names: snake case
+
+
+additionalnotes
+	nomenclature:
+		states have values
+		attribute have values
+		target - something to aim for
+
+	additions to readme/documentation
+		how to adapt codebase / project to other areas (as framework)
+		justify model vs any other model

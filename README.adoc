@@ -95,11 +95,27 @@ The player needs to know the path the establish initially so execution isn't bog
 and so heuristics don't falsely throw the player off the ideal path.
 Additionally, the it's possible that the player will deviate from that specific goal due to cost scaling (see below) at a later game step, so that previous path needs to be voided from memory at that point.
 
+`gameController.py` utilizes these models and executes actions in the 2D world model, then attempts to mirror those actions in the 3D game world.
+Unfortunately, due to imprecision of inputs in the 3D world, it is common for the two worlds to get out of sync.
+
+Currently, there is no strict dependency of the backend system on the 3D world, and the 3D world mostly just acts as a flashier front end to represent the execution of actions.
+This may change depending on the inputs of the cost scalar NN (see below).
+
 '''
 
 The AI component of this project comes in the form of the cost scaling each step of execution.
 Given environmental inputs, different actions might be more efficient to pursue than others.
 Neural networks are employed to take limited environmental inputs and produce scalars (on an interval of (0:1] ) for each known action in the environment.
+
+Options for AI input:
+
+1) 2d world flattened (input: 64 x 64 + xpos + ypos)
+
+2) 1 + 2n input neurons as raycasts in 2d
+
+3) frame from 3d, cut as horizontal slice
+
+
 
 
 == Usage
