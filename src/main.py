@@ -350,4 +350,5 @@ def run2d3d(config_name):
         gs.world_step += 1
 
 
-run2d3d('json/simulation_configs/TEST_ENV4.json')
+#run2d3d('json/simulation_configs/TEST_ENV4.json')
+run2d3d('json/simulation_configs/just_for_tree.json')

@@ -2,6 +2,7 @@ TODO:
 	- determine how CV will be incorporated into 2d world
 	- will there be CV in the 3d world?
 	- find way to match 2d with 3d during/after movement decisions are made in 2d
+	- RL vs CV
 
 	Lower priority:
 		Dependency tree:

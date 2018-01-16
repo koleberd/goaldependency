@@ -25,3 +25,6 @@ eval:
 
 world:
 	@python src/gameWorld2d.py
+
+doc:
+	@asciidoctor README.adoc -b html5
