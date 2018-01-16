@@ -259,62 +259,6 @@ def decomposeAT(at,factory):
 
     return levels
 
-def run(topPS,name):
-    actFactory = ActionFactory()
-    levelIndex = decomposePS(topPS,name,actFactory)
-    #graphTree(levelIndex,name + '_init')
-    print('---- STARTING SIMUILATION  ----')
-    steps = []
-    times = {}
-    invM = InventoryManager('TEST_ENV_1')
-    #invM.deposit('wood',2)
-    gs = viewer.getCurrentGameState(invM)
-    while(not levelIndex[0][0].isComplete()):
-        scales = actFactory.scaleCosts(gs.fov)
-        #print(scales)
-        levelIndex[0][0].calculateCost(scales)
-        #time.sleep(1)#make 1 second movement
-        #graphTree(levelIndex,name + '_' + str(step))
-        selectedAT = levelIndex[0][0].select()
-        if len(steps) == 0 or steps[-1] is not selectedAT:
-            steps.append(selectedAT)
-        exT = time.time()
-        #graphTree(levelIndex,name + '_' + str(len(steps)),selectedAT)
-        selectedAT.execute(gs)
-        exT = time.time() - exT
-        if selectedAT not in times.keys():
-            times[selectedAT] = 0
-        times[selectedAT] += exT
-
-
-
-        actualInv = InventoryManager().parseInventory()
-        if gs.inv != actualInv and False:
-            print('mismatch---')
-            print(gs.inv.inventory)
-            print(actualInv.inventory)
-            print(steps)
-            pyautogui.keyDown('esc')
-            pyautogui.keyUp('esc')
-            time.sleep(.1)
-            pyautogui.keyDown('esc')
-            pyautogui.keyUp('esc')
-
-        gs = viewer.getCurrentGameState(invM)
-
-
-        downwardPruneTree(levelIndex)
-        #graphTree(levelIndex,name + '_' + str(len(steps))+'_prune',selectedAT)
-
-
-        #sweep level index to remove completed tasks
-    #print('--Action execution order--')
-    #for step in steps:
-        #print(step)
-    #print('Total actions: ' + str(len(steps)))
-    #print('--Action execution time--')
-    #for t in times:
-        #print(str(t) + '\t-\t' + str(times[t]))
 
 def run2d(topPS,name,world):
     actFactory = ActionFactory('2D')
@@ -345,47 +289,54 @@ def run2d(topPS,name,world):
         downwardPruneTree(levelIndex)
         gs.cycle += 1
 
-def run2d3d(config_name): #topPS,sim_name,world_2d,name_3d):
+def run2d3d(config_name):
     with open(config_name) as jscf:
         config = json.load(jscf)
+
+    #create dependency tree
+    action_factory = ActionFactory()
+    level_index = decomposePS(PlayerState.parsePlayerStateJSON(config['target_ps']),config['simulation_name'],action_factory)
+    graphTree(level_index,config['simulation_name'] + '_init')
+
+
+    #set up inventory and world models
+    inv_manager = InventoryManager(config['world_name_3d'])
     world_2d = GameWorld2d( config['world_2d_location'],
                             (config['2d_start'][0],config['2d_start'][1]),
                             (config['2d_end'][0],config['2d_end'][1]),
                             config['3d_bind'],config['2d_bind'],
-                            (config['spawn_pos'][0],config['spawn_pos'][1])
+                            (config['spawn_pos'][0],config['spawn_pos'][1]))
+    gs = GameState(ps=None,fov=None,inv=inv_manager,world_2d=world_2d,world_name_3d=config['world_name_3d'])
 
-    )
-
-    action_factory = ActionFactory()
-    level_index = decomposePS(PlayerState.parsePlayerStateJSON(config['target_ps']),config['simulation_name'],action_factory)
-    graphTree(level_index,config['simulation_name'] + '_init')
-    time.sleep(1)
+    #Issue inititialize world and sync player location
     print('---- STARTING SIMUILATION  ----')
-    steps = []
-    times = {}
-    inv_manager = InventoryManager(config['world_name_3d'])
-    #Issue init commands and bind worlds
+    time.sleep(1)
     '''
     for cmd in config['world_init_3d']:
         gameController.executeCommand(cmd)
     '''
-    gameController.bindWorlds(config['3d_bind'],config['2d_bind'],config['spawn_pos'])
-    gs = GameState(ps=None,fov=None,inv=inv_manager,world_2d=world_2d)
+    gameController.syncLoc(gs)
+
+    steps = [] #to keep track of the series of AT's as they're executed
+    times = {} #to track the total time for each AT type
+
     while(not level_index[0][0].isComplete()):
-        scales = action_factory.scaleCosts(gs.fov)
-        level_index[0][0].calculateCost(scales) #------------- rething where scaling shoudl be done
-        selected_at = level_index[0][0].select()
-        if len(steps) == 0 or steps[-1] is not selected_at:
+
+        scales = action_factory.scaleCosts(gs.fov) #calculate cost scalars based on field of view
+        level_index[0][0].calculateCost(scales) #apply cost scalars
+        selected_at = level_index[0][0].select() #select at for execution
+        if len(steps) == 0 or steps[-1] is not selected_at: #record selected AT
             steps.append(selected_at)
             graphTree(level_index,config['simulation_name'] + str(gs.world_step),selectedAT=selected_at)
 
         exT = time.time()
-        selected_at.execute(gs)
+        selected_at.execute(gs) #execute AT
         exT = time.time() - exT
         if selected_at not in times.keys():
             times[selected_at] = 0
         times[selected_at] += exT
 
+        #block if inventories don't match
         while inv_manager != InventoryManager(config['world_name_3d']).parseInventory():
             print("INVENTORY MISMATCH")
             pyautogui.keyDown('esc')
@@ -395,19 +346,8 @@ def run2d3d(config_name): #topPS,sim_name,world_2d,name_3d):
             pyautogui.keyUp('esc')
             time.sleep(.1)
 
-
-
-        downwardPruneTree(level_index)
+        downwardPruneTree(level_index) #prune tree to clean up in case an action completed
         gs.world_step += 1
-
-#run(PlayerState(inventory={'stone':10}),'t1')
-#run(PlayerState(inventory={'stick':4}),'t1')
-#wrld = GameWorld2D('resources/2D/','train2',(528,454),(528+46,454+46))
-
-#run2d(PlayerState(inventory={'stone pickaxe':10}),'t2',wrld)
-#wrld = GameWorld2D('resources/2D/','train1',(1228,412),(1228+135,412+96),spawn_pos=(5,5))
-#wrld = GameWorld2D('resources/2D/','train4',(552,391),(552+42,391+42),spawn_pos=(2,2))
-#run2d3d(PlayerState(inventory={'stone pickaxe':20}),'t1',wrld,'TEST_ENV_4')
 
 
 run2d3d('json/simulation_configs/TEST_ENV4.json')
