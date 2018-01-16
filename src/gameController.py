@@ -3,6 +3,7 @@ import time
 import json
 import math
 import random
+import numpy as np
 from gameState import *
 from playerState import *
 from gameObject import *
@@ -99,9 +100,16 @@ def harvestObject(obj,gs,tool=None):#still needs to collect resource
         gs.inv.inventory[0][0] = hold
 
     toolTime = environmentIndex[obj]['breakTime'][toolLevel]
+    if gs.pm.target['pos'][0] != 0: #not on eye level
+        pyautogui.moveRel(None,450)
     pyautogui.mouseDown()
     time.sleep(toolTime + .25)
     pyautogui.mouseUp()
+    if gs.pm.target['pos'][0] != 0: #not on eye level
+        pyautogui.moveRel(None,-450)
+    gs.world_2d.updateLoc(gs.pm.target['pos'],None)
+    gs.pm.target = None
+
 
 
     gs.inv.depositStack(obj,1)
@@ -111,7 +119,7 @@ def harvestObject(obj,gs,tool=None):#still needs to collect resource
     time.sleep(.1)
     pyautogui.keyDown('esc')
     pyautogui.keyUp('esc')
-    actualInv = InventoryManager().parseInventory()
+    actualInv = InventoryManager('TEST_ENV4').parseInventory()
     while gs.inv != actualInv:
         print('resource missing!')
         #print(gs.inv.inventory)
@@ -129,7 +137,7 @@ def harvestObject(obj,gs,tool=None):#still needs to collect resource
         pyautogui.keyUp('w')
         '''
 
-        actualInv = InventoryManager().parseInventory()
+        actualInv = InventoryManager('TEST_ENV4').parseInventory()
     return True
 
 def locateObject(obj,gs,alg=None):
@@ -141,15 +149,24 @@ def locateObject(obj,gs,alg=None):
     otherwise, the object has been found and the avatar should be moving toward the target.
 
     '''
-    if gs.pm.target == None: #has not located the object
+    if gs.pm.target == None or gs.pm.target['obj'] != obj: #has not located the object
         objs = gs.world_2d.findClosestLayered(obj,1)
+
         if len(objs) == 0:
             raise Exception("none of target object exist in this world")
         path = gs.world_2d.astar(gs.world_2d.pos, (objs[0][1],objs[0][2]))[:-1]
         gs.world_2d.saveWorld(path,gs.world_step)
-        gs.pm.target = {'obj':obj,'path':path,'pos':(objs[0][1],objs[0][2])}
+        gs.pm.target = {'obj':obj,'path':path,'pos':objs[0]}
+        print('new object',gs.pm.target)
     elif gs.pm.target['obj'] == obj:
         path = gs.pm.target['path']
+        if len(gs.pm.target['path']) == 0:
+            syncLoc(gs)
+            gs.world_2d.yaw = 0
+            print(gs.world_2d.pos,gs.pm.target['pos'],gs.world_2d.yaw)
+            turnToward(gs,(gs.pm.target['pos'][1],gs.pm.target['pos'][2]))
+
+            return True
         #curr_pos = gs.world_2d.pos
         next_pos = path[-1]
         turnToward(gs,next_pos)
@@ -157,8 +174,7 @@ def locateObject(obj,gs,alg=None):
         moveForward(gs,1)
         #print(gs.world_2d.pos,gs.world_2d.yaw)
         gs.pm.target['path'] = path[:-1]
-        if len(gs.pm.target['path']) == 0:
-            turnToward(gs,gs.pm.target['pos'])
+
 
     return False
 
@@ -186,7 +202,10 @@ def executeFunction(name,gs,params):
 #MOVEMENT FUNCTIONS. REPONSIBLE FOR UPDATING gs.world_2d.pos, gs.world_2d.yaw
 def turn(gs, angle):
     print(angle,int(angle/90))
-    pyautogui.moveRel(int(angle*600/90),None)
+    turns = int(angle/90)
+    for t in range(0,abs(turns)):
+        pyautogui.moveRel(np.sign(turns)*660,None)
+        time.sleep(.1)
 
 def turnToward(gs,pos):
     curr_pos = gs.world_2d.pos
@@ -205,9 +224,9 @@ def turnToward(gs,pos):
 def moveForward(gs,units):
     #gs because speed boosts might be relevant
     pyautogui.keyDown('w')
-    time.sleep(.25)
+    time.sleep(.132)
     pyautogui.keyUp('w')
-    time.sleep(.1)
+    time.sleep(.15)
 
     gs.world_2d.pos = (gs.world_2d.pos[0]+int(math.sin(math.radians(gs.world_2d.yaw))),
            gs.world_2d.pos[1]+int(math.cos(math.radians(gs.world_2d.yaw))))
@@ -219,6 +238,13 @@ def executeCommand(cmd):
     pyautogui.typewrite(cmd,interval=.05)
     pyautogui.press('enter')
     time.sleep(.2)
+
+def syncLoc(gs):
+    cmd = 't/tp @s ' + str(gs.world_2d.offset_3d_x+gs.world_2d.pos[0]) + ' ' + str(gs.world_2d.elevation_3d) + ' ' + str(gs.world_2d.offset_3d_y+gs.world_2d.pos[1]) + ' 0 0'
+    pyautogui.typewrite(cmd,interval=.05)
+    pyautogui.press('enter')
+    time.sleep(.211)
+
 
 
 def bindWorlds(world_3d, world_2d, spawn_pos):

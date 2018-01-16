@@ -46,7 +46,7 @@ COLOR_IND = {
 
 
 class GameWorld2d:
-    def __init__(self,layer_dir,c1,c2,spawn_pos=(0,0)):
+    def __init__(self,layer_dir,c1,c2,bind_3d,bind_2d,spawn_pos=(0,0)):
         '''
         c1 and c2 are coordinates of the top left and bottom right corners respectively
         '''
@@ -59,6 +59,10 @@ class GameWorld2d:
 
         width  = c2[0]-c1[0]
         height = c2[1]-c1[1]
+        self.offset_3d_x = bind_3d[0] - bind_2d[0]
+        self.offset_3d_y = bind_3d[2] - bind_2d[1]
+        self.elevation_3d = bind_3d[1]
+
 
         self.layers = []
         for f in layer_names:

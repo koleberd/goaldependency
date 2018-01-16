@@ -66,7 +66,7 @@
         },
         "result":{
             "inventory":{
-                "wood pickaxe":3
+                "wood pickaxe":20
             }
         },
         "function":"craftObject:wood pickaxe",

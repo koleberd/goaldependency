@@ -87,3 +87,4 @@ class ActionTarget:
         complete = self.act.execute(gs)
         if complete:
             self.parent.updateAT(self)
+        return complete

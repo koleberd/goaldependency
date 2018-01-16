@@ -351,11 +351,14 @@ def run2d3d(config_name): #topPS,sim_name,world_2d,name_3d):
     world_2d = GameWorld2d( config['world_2d_location'],
                             (config['2d_start'][0],config['2d_start'][1]),
                             (config['2d_end'][0],config['2d_end'][1]),
+                            config['3d_bind'],config['2d_bind'],
                             (config['spawn_pos'][0],config['spawn_pos'][1])
+
     )
 
     action_factory = ActionFactory()
     level_index = decomposePS(PlayerState.parsePlayerStateJSON(config['target_ps']),config['simulation_name'],action_factory)
+    graphTree(level_index,config['simulation_name'] + '_init')
     time.sleep(1)
     print('---- STARTING SIMUILATION  ----')
     steps = []
@@ -374,6 +377,7 @@ def run2d3d(config_name): #topPS,sim_name,world_2d,name_3d):
         selected_at = level_index[0][0].select()
         if len(steps) == 0 or steps[-1] is not selected_at:
             steps.append(selected_at)
+            graphTree(level_index,config['simulation_name'] + str(gs.world_step),selectedAT=selected_at)
 
         exT = time.time()
         selected_at.execute(gs)
@@ -382,8 +386,16 @@ def run2d3d(config_name): #topPS,sim_name,world_2d,name_3d):
             times[selected_at] = 0
         times[selected_at] += exT
 
-        if inv_manager != InventoryManager(config['world_name_3d']).parseInventory():
-            raise Exception("INVENTORY MISMATCH. STOPPING SIMULATION")
+        while inv_manager != InventoryManager(config['world_name_3d']).parseInventory():
+            print("INVENTORY MISMATCH")
+            pyautogui.keyDown('esc')
+            pyautogui.keyUp('esc')
+            time.sleep(.1)
+            pyautogui.keyDown('esc')
+            pyautogui.keyUp('esc')
+            time.sleep(.1)
+
+
 
         downwardPruneTree(level_index)
         gs.world_step += 1
