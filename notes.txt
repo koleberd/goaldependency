@@ -64,7 +64,7 @@ additionalnotes
 	additions to readme/documentation
 		how to adapt codebase / project to other areas (as framework)
 		justify model vs any other model
-
+			why not written in prolog / other ways to manage dependencies (descreiption of thought rather than implementation)
 
 points in paper:
 	areas for improvement section
@@ -72,6 +72,7 @@ points in paper:
 			-abstracting playerstate
 				-modeling priority levels of attributes of one state
 	application to other areas/applicability of project to real life
+		given extension, ___ could be done
 	why is AI helpful
 		multiple areas of AI
 	why not 3d
@@ -86,8 +87,10 @@ points in paper:
 
 todo:
 	revamp action selection method to be more abstract
-	make things more modular
-	rewrite 2d world to allow for better positioning
 	write decision maker
+	rewrite 2d world to allow for better positioning
+	write gui
+	make list of sections in writeup (index)
+
 
 reenforcement learning potential?

@@ -26,6 +26,7 @@ with open('json/toolIndex.json') as tooljs:
     toolIndex = json.load(tooljs)
 
 def craftObject(obj,gs):
+    '''
     if not obj in craftingRecipes.keys():
         return True
     try:
@@ -51,8 +52,11 @@ def craftObject(obj,gs):
         #print('Could not complete script')
         raise Exception('Could not complete script')
         return False
+    '''
+    return True
 
 def invCraftObject(obj,gs):
+    '''
     if not obj in craftingRecipes.keys():
         return True
 
@@ -74,10 +78,12 @@ def invCraftObject(obj,gs):
     pyautogui.click(x=riCoord[0],y=riCoord[1])
     gs.inv.deposit(obj,craftingRecipes[obj]['output'])
     pyautogui.press('esc')
+    '''
     return True
 
 def harvestObject(obj,gs,tool=None):
         #swap to correct tool
+    '''
     toolLevel = 0
     if tool != None:
         toolLevel = toolIndex[tool]['type'][environmentIndex[obj]['toolType']]
@@ -107,11 +113,12 @@ def harvestObject(obj,gs,tool=None):
     if gs.pm.target['pos'][0] != 0: #not on eye level
         pyautogui.moveRel(None,-450)
 
+    '''
     #update world models
     gs.world_2d.updateLoc(gs.pm.target['pos'],None)
     gs.pm.target = None
     gs.inv.depositStack(obj,1)
-
+    '''
     time.sleep(.4)
 
     actualInv = InventoryManager(gs.world_name_3d).parseInventory()
@@ -123,6 +130,8 @@ def harvestObject(obj,gs,tool=None):
         pyautogui.keyUp('esc')
         actualInv = InventoryManager(gs.world_name_3d).parseInventory()
 
+
+    '''
     return True
 
 def locateObject(obj,gs,alg=None):
@@ -146,7 +155,7 @@ def locateObject(obj,gs,alg=None):
     elif gs.pm.target['obj'] == obj:
         path = gs.pm.target['path']
         if len(gs.pm.target['path']) == 0:
-            syncLoc(gs)
+            #syncLoc(gs)
             gs.world_2d.yaw = 0
             print(gs.world_2d.pos,gs.pm.target['pos'],gs.world_2d.yaw)
             turnToward(gs,(gs.pm.target['pos'][1],gs.pm.target['pos'][2]))
@@ -181,15 +190,16 @@ def turnToward(gs,pos):#turns toward an adjacent position
     if curr_pos[1] < pos[1]:
         angle = 0 #bottom
     left_to_turn = angle - gs.world_2d.yaw
-    turn(gs,-left_to_turn)
+    #turn(gs,-left_to_turn)
     gs.world_2d.yaw = angle
 
 def moveForward(gs,units):#moves forward 1 unit
+    '''
     pyautogui.keyDown('w')
     time.sleep(.1321)
     pyautogui.keyUp('w')
     time.sleep(.15)
-
+    '''
     gs.world_2d.pos = (gs.world_2d.pos[0]+int(math.sin(math.radians(gs.world_2d.yaw))),
            gs.world_2d.pos[1]+int(math.cos(math.radians(gs.world_2d.yaw))))
 

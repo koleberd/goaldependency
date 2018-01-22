@@ -310,11 +310,11 @@ def run2d3d(config_name):
                             (config['spawn_pos'][0],config['spawn_pos'][1]))
 
 
-    print(world_2d.rayCast(45,20))
+    #print(world_2d.rayCast(45,20))
 
 
 
-    return 0
+    #return 0
     gs = GameState(ps=None,fov=None,inv=inv_manager,world_2d=world_2d,world_name_3d=config['world_name_3d'])
 
     #Issue inititialize world and sync player location
@@ -336,7 +336,7 @@ def run2d3d(config_name):
         selected_at = level_index[0][0].select() #select at for execution
         if len(steps) == 0 or steps[-1] is not selected_at: #record selected AT
             steps.append(selected_at)
-            graphTree(level_index,config['simulation_name'] + str(gs.world_step),selectedAT=selected_at)
+            #graphTree(level_index,config['simulation_name'] + str(gs.world_step),selectedAT=selected_at)
 
         exT = time.time()
         selected_at.execute(gs) #execute AT
@@ -346,6 +346,7 @@ def run2d3d(config_name):
         times[selected_at] += exT
 
         #block if inventories don't match
+        '''
         while inv_manager != InventoryManager(config['world_name_3d']).parseInventory():
             print("INVENTORY MISMATCH")
             pyautogui.keyDown('esc')
@@ -354,7 +355,7 @@ def run2d3d(config_name):
             pyautogui.keyDown('esc')
             pyautogui.keyUp('esc')
             time.sleep(.1)
-
+        '''
         downwardPruneTree(level_index) #prune tree to clean up in case an action completed
         gs.world_step += 1
 
