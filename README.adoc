@@ -25,31 +25,97 @@ This project uses AI to efficiently accomplish top level goals in an environment
 
 `$pip install pillow pyautogui graphviz`
 
-== Terminology and Functionality
+== Terminology/Functionality/Architecture Description
 
-Here are a few terms that will probably be used at some point in this README
+The purpose of this project is to use AI to make goal based decisions in an environment where top level goals have subgoals with strict dependencies.
+That is to say that a goal can't be completed or even approached before its subgoals have been completed.
+Additionally, in this environment, there may be more than one way to achieve a goal, so there are potential decisions between different parallel subgoals.
+In the context of this project, the environment is a game environment for the game Minecraft.
+For the purposes of this project, the goals will be represented by a PlayerState (PS) which represents the state of the player's inventory, buffs, and the current item under crosshairs.
+Nearly all goals in the game require a certain PS before they can be approached.
+For example, crafting a certain tool might require a set of resources to be present in the player's inventory.
+This means the goal of the tool can be decomposed into subgoals for each of those resources required to be in the player's inventory.
+Similarly, if a resource needs to be harvested, a specific tool might be required along with having a specific block in front of the player.
+This would mean there would be subgoals involving both acquiring the tool AND moving into a position where the block is in front of the player.
 
-- PS: PlayerState. This is a state of the player in terms of its inventory, the object that's in its crosshairs, etc
-- Action. An action that has a PS requirement and PS result
-Actions have a cost associated with them that is the time estimate for its completion once selected.
-- AT: ActionTarget. This holds an Action object, but also has a reference to its parent PSS and child PST (if it has one).
-- PST: PlayerStateTarget: This represents a PlayerState that is a goal but doesn't have a definite solution for getting to that goal.
-It has a reference to a parent AT and at least one child PSS.
- Since a PST's desired PS might have multiple different, say, items in its inventory, the PST breaks down its desired PS into multiple attribute PS's which hold references to PSS's who solve those attributes specifically.
-- PSS: PlayerStateSolution: This represents a possible solution for a PST's attribute.
-Since a PSS might provide more than a singular PST might be asking for, for that attribute, multiple PST's can share the same PSS.
-This is called pooling.
+As described above a goal might have multiple subgoals. Additionally, there may be multiple ways to approach a subgoal.
+Due to this, a goal can be represented with a PlayerStateTarget (PST) which breaks a PS goal into attributes.
+This would mean that if two different resources are required, then they would be split into separate PS's contained by the PST.
+As previously mentioned, there might be multiple ways to complete one of these attribute PS's.
+For that reason, each attribute in the PST has a set of one or more PlayerStateSolutions (PSS) which represent a single approach to complete that respective attribute PS.
+For example, if there were two tools that could harvest one unit of a specific resource, both would be added as PSS for that resource's corresponding attribute PS in the PST.
 
-During execution, the root PST selects the cheapest leaf node overall, given the current game state.
-To do this, it asks each child to recursively calculate its cost, then picks the overall cheapest AT.
+With this environment, there is a set of known actions that have required inputs and expected outputs.
+The actions are contained by an ActionTarget (AT) which has a prerequisite PS and a result PS, and is connected to a PSS to act as an executable task.
+An PST is created to wrap the AT's prerequisite PS. The AT may not have a prerequisite, which is why all leaf nodes on the dependency tree are AT's.
 
-After completion, the AT is removed from the tree, and resources trickle through its parent PSS to the next PST.
+For the previous example, what if the output of the PSS using the first tool to harvest the resource was more than the required amount to satisfy the attribute PS corresponding to that PSS?
+This would create excess materials. To avoid this, the PSS can pool identical attribute PS's from PST's on the same tree layer. This means PSS's may have multiple parents.
+In the reverse situation, if one execution of the PSS's respective AT wouldn't satisfy the attribute PS referenced by the PSS, then the PSS will hold enough children AT's to satisfy the requirement.
 
-Since PST's might have multiple PSS for each attribute, after one PSS has delivered some resource to solve that attribute, the other PSS's downscale according to the now reduced attribute requirement.
-This allows branches to have costs that aren't stuck at the initial value before resources started to trickle upward.
+During each step during execution, a set of cost scalars are generated (more on this later) which correlate with each known action within the environment.
+These scalars are passed to each leaf AT node on the tree, then these costs are propagated upward until the topmost PST node.
+Starting from the topmost PST node, the cheapest attached PSS is picked, followed by that PSS's first AT, followed (recursively) by the AT's child PST's cheapest attached PSS.
+Once a leaf AT is selected, it is executed. If it completes this step, it propagates its returned PS upward to its parent PSS, and removes itself from the tree.
+If its parent PSS doesn't complete, that PSS's parent PST updates the competing PSS's with the lowered PS requirements.
+In turn, that PSS and its PST parent propagate upward if they have no children and are therefore complete.
 
-After a PST has no children (because they have been completed), the PST disappears, exposing its parent AT as selectable.
-This process continues until the root PST has been completed.
+'''
+
+Since the system operates within a game without a direct Python interface, operating within the game requires a substantial amount of world modeling.
+Actions in the game are generally categorized into the following areas
+
+* harvesting resources
+* locating and moving to resources
+* crafting resources
+
+Crafting and harvesting resources require certain existing inventory states and player positioning relative to certain game objects, but aren't very involved given those requirements are fulfilled.
+This means they can be completed with simple input scripts to move the mouse to certain locations within the game, given the player's inventory and positioning is known.
+However, locating and moving to resources requires substantially more knowledge about the game world.
+Ideally, this would be handled by an AI subsystem which utilized computer vision to extract dimensional data and identify the locations of resources.
+Unfortunately, this proved to be unrealistic after a training set of over 6000 labeled images was manually generated only to yield extremely unreliable CV models.
+The alternative to this would be to directly extract dimensional data from game files but this isn't possible, or at least isn't reasonable for this scope of project.
+Due to these factors, the following world models are necessary.
+
+1) The 2D world Model
+In order to simplify the world, the test environments for the project are flatted to be essentially 2D. In addition, `gameWorld2d.py` holds a representation of the game world
+based on a set of layers of the world, and tracks the player's position during execution.
+This gives the utility of locating game objects as well as pathfinding to those objects.
+
+2) The Inventory Model
+The player's inventory must be tracked and managed during execution in order for scripts to target the right positions in the player's inventory.
+`inventoryManager.py` contains an inventory manager that tracks the expected state of the player's inventory throughout execution.
+Whenever a player takes an action that would affect the player's inventory, the actual inventory needs to be cross referenced with the expected inventory.
+Luckily, the game can be temporarily paused and unpaused to save the player's actual inventory to a file which can be parsed to line up against the expected inventory.
+
+3) The Player Memory Model
+Some knowledge that the player needs doesn't fit within the abstraction level of PS.
+For example, during a 'locate and move to' action, the player initially establishes the ideal path to a game object.
+The player needs to know the path the establish initially so execution isn't bogged down by pathfinding each step of the way,
+and so heuristics don't falsely throw the player off the ideal path.
+Additionally, the it's possible that the player will deviate from that specific goal due to cost scaling (see below) at a later game step, so that previous path needs to be voided from memory at that point.
+
+`gameController.py` utilizes these models and executes actions in the 2D world model, then attempts to mirror those actions in the 3D game world.
+Unfortunately, due to imprecision of inputs in the 3D world, it is common for the two worlds to get out of sync.
+
+Currently, there is no strict dependency of the backend system on the 3D world, and the 3D world mostly just acts as a flashier front end to represent the execution of actions.
+This may change depending on the inputs of the cost scalar NN (see below).
+
+'''
+
+The AI component of this project comes in the form of the cost scaling each step of execution.
+Given environmental inputs, different actions might be more efficient to pursue than others.
+Neural networks are employed to take limited environmental inputs and produce scalars (on an interval of (0:1] ) for each known action in the environment.
+
+Options for AI input:
+
+1) 2d world flattened (input: 64 x 64 + xpos + ypos)
+
+2) 1 + 2n input neurons as raycasts in 2d
+
+3) frame from 3d, cut as horizontal slice
+
+
 
 
 == Usage
