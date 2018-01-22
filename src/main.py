@@ -214,6 +214,7 @@ def decomposePS(ps,tree_name,actFactory):
     upwardPruneTree(levelIndex)
     downwardPruneTree(levelIndex)
 
+    '''
     leafcount = 0
     nodecount = 0
 
@@ -228,6 +229,7 @@ def decomposePS(ps,tree_name,actFactory):
     print('Nodes: ' + str(nodecount))
     print('Leaf nodes: ' + str(leafcount))
     print('Branches eliminated through pooling: ' + str(pools))
+    '''
     return levelIndex
 
 def decomposeAT(at,factory):
@@ -296,7 +298,7 @@ def run2d3d(config_name):
     #create dependency tree
     action_factory = ActionFactory()
     level_index = decomposePS(PlayerState.parsePlayerStateJSON(config['target_ps']),config['simulation_name'],action_factory)
-    graphTree(level_index,config['simulation_name'] + '_init')
+    #graphTree(level_index,config['simulation_name'] + '_init')
 
 
     #set up inventory and world models
@@ -306,6 +308,13 @@ def run2d3d(config_name):
                             (config['2d_end'][0],config['2d_end'][1]),
                             config['3d_bind'],config['2d_bind'],
                             (config['spawn_pos'][0],config['spawn_pos'][1]))
+
+
+    print(world_2d.rayCast(45,20))
+
+
+
+    return 0
     gs = GameState(ps=None,fov=None,inv=inv_manager,world_2d=world_2d,world_name_3d=config['world_name_3d'])
 
     #Issue inititialize world and sync player location

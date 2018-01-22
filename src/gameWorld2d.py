@@ -259,6 +259,61 @@ class GameWorld2d:
                 curr = this_layer
         self.grid[pos[1]][pos[2]] = curr
 
+    def rayCast(self,angle,distance):
+        ng = (self.yaw+angle+360)%360
+        angr = np.deg2rad(ng)
+        xmul = 1 if ng <= 90 or ng > 270 else -1
+        ymul = -1 if ng > 90 and ng <= 270 else 1
+        #print(xmul,ymul)
+        xpos = self.pos[0]
+        ypos = self.pos[1]
+        xdis = xpos + (xmul * distance)
+        ydis = ypos + (ymul * distance)
+        xmax = len(self.grid)
+        ymax = len(self.grid[0])
+
+        xstart = max([min([xpos,xdis]),0])
+        ystart = max([min([ypos,ydis]),0])
+        xend = min([max([xpos+1,xdis]),xmax])
+        yend = min([max([ypos+1,ydis]),ymax])
+
+        #print(xstart,ystart,xend,yend)
+
+
+        grd_cp = [[False for x in range(0,len(self.grid[0]))] for y in range(0,len(self.grid))]
+
+        for col in range(xstart,xend):
+            for row in range(ystart,yend):
+                if self.grid[col][row] != None:
+                    lcor_y = xmul * ymul * .5 + row
+                    lcor_x = col - .5
+                    rcor_y = xmul * ymul * -.5 + row
+                    rcor_x = col + .5
+                    #print(lcor_x,lcor_y,rcor_x,rcor_y)
+                    angs = np.arctan2([lcor_x-xpos+.5,rcor_x-xpos+.5],[lcor_y-ypos+.5,rcor_y-ypos+.5])
+                    #print(angs)
+                    l_ang = angs[0]
+                    r_ang = angs[1]
+                    if (angr > l_ang and angr < r_ang and xmul == 1) or (angr < l_ang and angr > r_ang and xmul != 1):
+                        grd_cp[col][row] = True
+        cl_x = -1
+        cl_y = -1
+        cl_d = -1
+        for col in range(0,len(grd_cp)):
+            for row in range(0,len(grd_cp[0])):
+                if grd_cp[col][row]:
+                    dist = distance_between(self.pos,[col,row])
+                    if cl_d == -1 or dist < cl_d:
+                        cl_x = col
+                        cl_y = row
+                        cl_d = dist
+
+
+        return cl_d,[cl_x,cl_y]
+        #find actual distance to intersection with location
+        #return distance, and coord tuple
+
+
 
 
 
