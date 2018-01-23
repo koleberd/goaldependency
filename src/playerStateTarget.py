@@ -116,7 +116,7 @@ class PlayerStateTarget:
             for cl in clean_set:
                 if id(cl) == id(leaf):
                     clean = False
-            if clean and ((leaf.getResult().lookedAt != None and len(leaf.parent.parents[0].attributeList) == 1) or leaf.getResult().lookedAt == None):#looked at can't be pooled so this is safe
+            if clean and ((leaf.getResult().lookedAt != None and len(leaf.parent.parents[0].attributeList) == 1) or leaf.getResult().lookedAt == None):#looked at can't be pooled so this is safe, but you would have to enforce priority order here
                 clean_set.append(leaf)
         return clean_set
     def getLeafNodesR(self):

@@ -228,6 +228,7 @@ def decomposePS(ps,tree_name,actFactory):
     print('Leaf nodes: ' + str(leafcount))
     print('Branches eliminated through pooling: ' + str(pools))
     '''
+    levelIndex[0][0].parent = None
     return levelIndex
 
 def decomposeAT(at,factory):
@@ -269,21 +270,20 @@ def selectCheapest(at_arr):
     #print(cheapest.temp_cost_up)
     return cheapest
 def selectMostExpensive(at_arr):
-    for at in at_arr:
-        at.temp_cost_up = at.getDownwardCost()
+
     exp = at_arr[0]
     for at in at_arr:
         if at.temp_cost_up > exp.temp_cost_up:
             exp = at
     return exp
 def selectRandom(at_arr):
-    return at_arr[random.randint(0,len(at_arr))]
+    return at_arr[random.randint(0,len(at_arr)-1)]
 def selectSequential(at_arr):
     min_id = at_arr[0]
     for at in at_arr:
-        if hash(min_id) > hash(at):
+        if id(min_id) > id(at):
             min_id = at
-    #print(hash(min_id))
+    #print(id(min_id))
     return min_id
 
 def selectDeepest(at_arr):
@@ -340,8 +340,9 @@ def run2d3d(config_name,select_method,select_name="",save_tree=False,save_path=F
         root.calculateCostDown(scales)
         leaf_set = root.getLeafNodes()
         selected_at = select_method(leaf_set) #level_index[0][0].select() #select at for execution
-        if len(steps) == 0 or steps[-1] is not selected_at: #record selected AT
+        if len(steps) == 0 or id(steps[-1]) != id(selected_at): #record selected AT
             steps.append(selected_at)
+            #print("------")
             #graphTree(level_index,config['simulation_name'] + '_' + str(gs.world_step),selectedAT=selected_at)
 
 
@@ -356,11 +357,17 @@ def run2d3d(config_name,select_method,select_name="",save_tree=False,save_path=F
     print('metrics: ' + str(gs.pm.metrics))
 
 #run2d3d('json/simulation_configs/TEST_ENV4.json')
-#run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x: selectSequential(x),select_name='first')
 
-#run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x: selectRandom(x),select_name='random')
+
+run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x: selectMostShallow(x),select_name='most shallow')
 run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x: selectCheapest(x),select_name='cheapest')
-#run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x: selectMostExpensive(x),select_name='most expensive')
-#run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x: selectDeepest(x),select_name='deepest')
-#run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x: selectMostShallow(x),select_name='most shallow')
 #run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x: selectSmart(x),select_name='smart')
+
+
+'''
+bound to loop
+run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x: selectSequential(x),select_name='sequential')
+run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x: selectRandom(x),select_name='random')
+run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x: selectMostExpensive(x),select_name='most expensive')
+run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x: selectDeepest(x),select_name='deepest')
+'''

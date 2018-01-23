@@ -32,6 +32,9 @@ def craftObject(obj,gs):
         name = item.split(':')[0]
         gs.inv.withdraw(name,1)
     gs.inv.deposit(obj,craftingRecipes[obj]['output'])
+    gs.pm.target = None
+    gs.pm.prev_at = None
+    gs.pm.curr_at = None
     return True
 
 def invCraftObject(obj,gs):
@@ -56,6 +59,8 @@ def harvestObject(obj,gs,tool=None):#potentially will break if the player doesn'
 
     gs.world_2d.updateLoc(gs.pm.target['pos'],None)
     gs.pm.target = None
+    gs.pm.prev_at = None
+    gs.pm.curr_at = None
     gs.inv.depositStack(obj,1)
 
     return True
@@ -87,7 +92,7 @@ def locateObject(obj,gs,alg=None):
     If gs.pm.target == None, then the object hasn't been found
     otherwise, the object has been found and the avatar should be moving toward the target.
     '''
-    if gs.pm.target == None or gs.pm.target['obj'] != obj: #has not located the object
+    if gs.pm.target == None or gs.pm.target['obj'] != obj or (gs.pm.target['obj'] == obj and gs.pm.prev_at != None and gs.pm.curr_at != None and id(gs.pm.prev_at) != id(gs.pm.curr_at)): #has not located the object or the locate_action has been completed but harvest was skipped
         if gs.pm.prev_at != None and gs.pm.prev_at.parent == None: #if the objects don't match because the previous one was completed but not harvested (harvest is trigger for gs.pm.target = None)
             relink(gs.pm.prev_at,gs.pm.prev_at_parent,gs.pm.prev_at_parent_parent,gs.pm.prev_at_parent_parent_parent)
         objs = gs.world_2d.findClosest(obj,1)
@@ -101,6 +106,7 @@ def locateObject(obj,gs,alg=None):
         path = gs.pm.target['path']
         if len(gs.pm.target['path']) == 0:
             gs.pm.metrics['distance traveled'] += gs.pm.target['path_len']
+
             #print(gs.world_2d.pos,gs.pm.target['pos'],gs.world_2d.yaw)
 
             #set things up in case of need for rewind
@@ -141,8 +147,7 @@ def moveForward(gs,units):#moves forward 1 unit
            gs.world_2d.pos[1]+int(math.cos(math.radians(gs.world_2d.yaw))))
 
 def executeFunction(name,gs,params):
-
-    print(name + ': ' + str(params))
+    #print(name + ': ' + str(params))
     if name == 'craftObject':
         return craftObject(params[0],gs)
     if name == 'invCraftObject':

@@ -22,8 +22,10 @@ class ActionTarget:
         return self.act.ps_res
     def getRequirement(self):
         return self.act.ps_req
+    '''
     def __eq__(self,other):
         return self.act == other.act and self.child == other.child and self.parent == other.parent
+    '''
     def __ne__(self,other):
         return not (self == other)
     def __str__(self):
@@ -37,6 +39,7 @@ class ActionTarget:
         return res
     def __hash__(self):
         return hash((self.act,id(self.child),id(self.parent)))
+
     def __eq__(self,other):
         return other != None and self.act == other.act
 
@@ -85,6 +88,9 @@ class ActionTarget:
             do = 'nothing'
         self.act.cost
     def getNodeDepth(self):
+        #print('---')
+        #print(self.parent)
+        #print(self.parent.parents[0])
         if self.parent.parents[0].parent != None:
             return self.parent.parents[0].parent.getNodeDepth() + 1
         else:
@@ -109,5 +115,7 @@ class ActionTarget:
         gs.pm.curr_at = self
         complete = self.act.execute(gs)
         if complete:
+            #print("complete")
             self.parent.updateAT(self)
+
         return complete
