@@ -46,6 +46,8 @@ def invCraftObject(obj,gs):
     return True
 
 def harvestObject(obj,gs,tool=None):#potentially will break if the player doesn't have a sufficient tool, but this shouldn't be reached
+    if obj != gs.pm.target['obj']:
+        raise Exception("you went to the wrong place buddy")
     #swap to correct tool
     toolLevel = 0
     if tool != None:
@@ -58,6 +60,25 @@ def harvestObject(obj,gs,tool=None):#potentially will break if the player doesn'
 
     return True
 
+def relink(at,pss,pst,pat):
+    pss.addChild(at)
+    at.addParent(pss)
+    if len(pss.parents) == 0:
+        if pss.ps not in pst.attributeList.keys():
+            pst.attributeList[pss.ps] = []
+        #print(str(pst))
+        #print(str(pst.attributeAccumulation[pss.ps]))
+        pst.attributeAccumulation[pss.ps] = PlayerState() - at.getResult() + pst.attributeAccumulation[pss.ps]
+        #print(str(pst.attributeAccumulation[pss.ps]))
+        pst.addSolution(pss.ps,pss)
+        pss.addParent(pst)
+        if pst.parent == None:
+            #print(pss.parents)
+            pat.addChild(pst)
+            pst.addParent(pat)
+            #print(str(pat))
+
+
 def locateObject(obj,gs,alg=None):
     '''
     locate object is separated into 2 parts
@@ -67,17 +88,27 @@ def locateObject(obj,gs,alg=None):
     otherwise, the object has been found and the avatar should be moving toward the target.
     '''
     if gs.pm.target == None or gs.pm.target['obj'] != obj: #has not located the object
+        if gs.pm.prev_at != None and gs.pm.prev_at.parent == None: #if the objects don't match because the previous one was completed but not harvested (harvest is trigger for gs.pm.target = None)
+            relink(gs.pm.prev_at,gs.pm.prev_at_parent,gs.pm.prev_at_parent_parent,gs.pm.prev_at_parent_parent_parent)
         objs = gs.world_2d.findClosest(obj,1)
         if len(objs) == 0:
             raise Exception("none of target object exist in this world: " + obj)
         path = gs.world_2d.astar(gs.world_2d.pos, (objs[0][0],objs[0][1]))[:-1]
         #gs.world_2d.saveWorld(path,gs.world_step)
-        gs.pm.target = {'obj':obj,'path':path,'pos':objs[0]}
+        gs.pm.target = {'obj':obj,'path':path,'pos':objs[0],'path_len':len(path)}
         #print('new object',gs.pm.target)
     elif gs.pm.target['obj'] == obj:
         path = gs.pm.target['path']
         if len(gs.pm.target['path']) == 0:
+            gs.pm.metrics['distance traveled'] += gs.pm.target['path_len']
             #print(gs.world_2d.pos,gs.pm.target['pos'],gs.world_2d.yaw)
+
+            #set things up in case of need for rewind
+            gs.pm.prev_at = gs.pm.curr_at
+            gs.pm.prev_at_parent = gs.pm.curr_at.parent
+            gs.pm.prev_at_parent_parent = gs.pm.prev_at_parent.parents[0]
+            gs.pm.prev_at_parent_parent_parent = gs.pm.prev_at_parent_parent.parent
+
             turnToward(gs,(gs.pm.target['pos'][0],gs.pm.target['pos'][1]))
 
             return True
@@ -111,7 +142,7 @@ def moveForward(gs,units):#moves forward 1 unit
 
 def executeFunction(name,gs,params):
 
-    #print(name + ': ' + str(params))
+    print(name + ': ' + str(params))
     if name == 'craftObject':
         return craftObject(params[0],gs)
     if name == 'invCraftObject':

@@ -12,7 +12,8 @@ class PlayerStateTarget:
         attrs = self.ps.breakIntoAttrs()
         for ps in attrs:
             self.attributeList[ps] = []
-        self.tempCost = 0
+        self.temp_cost_up = 0
+        self.temp_cost_down = 0
         self.attributeAccumulation = {} #keeps track of the total accumulated PS during runtime
         for ps in attrs:
             self.attributeAccumulation[ps] = PlayerState()
@@ -42,6 +43,7 @@ class PlayerStateTarget:
     #-------------------------------------------
 
     #calculates cost based on recursive getCost calls on children and on table lookups if available
+    '''
     def getCost(self,scalars,table={}):
         total = 0
         for attr in self.attributeList:
@@ -50,19 +52,30 @@ class PlayerStateTarget:
                 if cheapest == None or sol.getCost(scalars,table) < cheapest:
                     cheapest = sol.getCost(scalars,table)/len(sol.parents)
             total += cheapest
-        self.tempCost = total
+        self.temp_cost_up = total
         return total
+    '''
     #calculates cost based on recursive calculateCost on children; no table lookups
-    def calculateCost(self,scalars,table={}):
+    def calculateCostUp(self,scalars):
         total = 0
         for attr in self.attributeList:
             cheapest = None
             for sol in self.attributeList[attr]:
-                if cheapest == None or sol.calculateCost(scalars,table) < cheapest:
-                    cheapest = sol.calculateCost(scalars,table)/len(sol.parents)
+                if cheapest == None or sol.calculateCostUp(scalars) < cheapest:
+                    cheapest = sol.calculateCostUp(scalars)/len(sol.parents)
             total += cheapest
-        self.tempCost = total
+        self.temp_cost_up = total
         return total
+    def calculateCostDown(self,scalars):
+        return self.calculateCostDownR(scalars,0)
+    def calculateCostDownR(self,scalars,passed_cost):
+        self.temp_cost_down = passed_cost
+        for attr in self.attributeList:
+            for sol in self.attributeList[attr]:
+                if sol.temp_cost_down != 0 and passed_cost < sol.temp_cost_down:
+                    sol.temp_cost_down = passed_cost
+                for at_child in sol.children:
+                    at_child.calculateCostDown(scalars,passed_cost)
 
 
     def select(self):
@@ -70,10 +83,10 @@ class PlayerStateTarget:
         cSol = None
         for attr in self.attributeList:
             for sol in self.attributeList[attr]:
-                if (cSol == None or sol.tempCost < cSol.tempCost) and (sol.ps.lookedAt == None or len(self.attributeList) == 1):
+                if (cSol == None or sol.temp_cost_up < cSol.temp_cost_up) and (sol.ps.lookedAt == None or len(self.attributeList) == 1):
                     cSol = sol
                 '''
-                if cSol == None or ((sol.tempCost < cSol.tempCost and sol.ps.lookedAt == None) or (sol.ps.lookedAt != None and len(self.attributeList) == 1)):
+                if cSol == None or ((sol.temp_cost_up < cSol.temp_cost_up and sol.ps.lookedAt == None) or (sol.ps.lookedAt != None and len(self.attributeList) == 1)):
                     cSol = sol
                     #cAttr = attr
                 '''
@@ -82,7 +95,10 @@ class PlayerStateTarget:
     #adds ps to the attribute accumulation corresponding with pss.ps
     def updatePSS(self,pss,ps):
         self.attributeAccumulation[pss.ps] = ps + self.attributeAccumulation[pss.ps]
+        #print(self.attributeAccumulation[pss.ps].fulfills(pss.ps))
         if self.attributeAccumulation[pss.ps].fulfills(pss.ps):
+            for sol in self.attributeList[pss.ps]:
+                sol.parents = []
             del self.attributeList[pss.ps]
         else:
             for sol in self.attributeList[pss.ps]:
@@ -92,3 +108,24 @@ class PlayerStateTarget:
             if self.parent != None:
                 self.parent.child = None
             self.parent = None
+    def getLeafNodes(self):
+        leafs = self.getLeafNodesR()
+        clean_set = []
+        for leaf in leafs:
+            clean = True
+            for cl in clean_set:
+                if id(cl) == id(leaf):
+                    clean = False
+            if clean and ((leaf.getResult().lookedAt != None and len(leaf.parent.parents[0].attributeList) == 1) or leaf.getResult().lookedAt == None):#looked at can't be pooled so this is safe
+                clean_set.append(leaf)
+        return clean_set
+    def getLeafNodesR(self):
+        leafs = []
+        for attr in self.attributeList:
+            for sol in self.attributeList[attr]:
+                for at in sol.children:
+                    if at.child == None or at.getRequirement() == PlayerState():
+                        leafs.append(at)
+                    else:
+                        leafs.extend(at.child.getLeafNodesR())
+        return leafs

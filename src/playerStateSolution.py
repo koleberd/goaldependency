@@ -11,7 +11,8 @@ class PlayerStateSolution:
         self.ps = ps #doesn't change, and represents the attribute that this PSS targets in its parent PST(s)
         self.children = [] #actionTargets
         self.parents = []  #PST
-        self.tempCost = 0
+        self.temp_cost_up = 0
+        self.temp_cost_down = 0
         self.adjustment = PlayerState()
     def __hash__(self):#may need editing
         ids = []
@@ -68,20 +69,28 @@ class PlayerStateSolution:
     #-------------------------------------------
     #RUN TIME METHODS
     #-------------------------------------------
-
+    '''
     def getCost(self,scalars,table={}):
         total = self.children[0].calculateCost(scalars,table)
         if len(self.children) > 1:
             for child in self.children[1:]:
                 total += child.getCost(scalars,table)
-        self.tempCost = total
+        self.temp_cost_up = total
         return total
-    def calculateCost(self,scalars,table={}):
+    '''
+
+
+    def calculateCostUp(self,scalars):
         total = 0
         for child in self.children:
-            total += child.calculateCost(scalars,table)
-        self.tempCost = total
+            total += child.calculateCostUp(scalars)
+        self.temp_cost_up = total
         return total
+    '''
+    def calculateCostDown(self,scalars):
+        return 0
+    '''
+
     def select(self):
         return self.children[0].select()
 
@@ -90,9 +99,11 @@ class PlayerStateSolution:
     #removes the action target from children, adds its result to accumulation, and updates parents if necessary
     def updateAT(self,at):
         remove(self.children,at)
+        #print(self.children)
         at.parent = None
         accumulation = at.getResult()
         for parent in self.parents:
+            #print(parent.attributeAccumulation[self.ps].fulfills(self.ps))
             if not accumulation.fulfills(self.ps): #case where multiple children and only one parent
                 self.parents[-1].updatePSS(self,at.getResult())
                 break

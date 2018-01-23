@@ -9,6 +9,7 @@ from actionFactory import *
 from graphviz import *
 from inventoryManager import *
 import time
+import random
 from gameWorld2d import *
 import gameController
 
@@ -27,17 +28,17 @@ def getName(obj):
 #len % 3 == 2 -> AT
 def graphTree(levelIndex,name,selectedAT=None):
     print('Rendering graph for ' + name)
-    g = Digraph('Tree',filename=('trees/' + name + '.gv'),format='png')
+    g = Digraph('Tree',filename=('simulation/trees/' + name + '.gv'),format='png')
     for level in range(0,len(levelIndex)):
         for item in levelIndex[level]:
             if level % 3 == 0:
                 g.attr('node',color='red')
-                g.node(getName(item),label=('PST - ' + str(item) + ' - ' + str(item.tempCost)[:4]))
+                g.node(getName(item),label=('PST - ' + str(item) + ' - ' + str(item.temp_cost_up)[:4] + ' - ' + str(item.temp_cost_down)[:4]))
             if level % 3 == 1:
                 if len(item.parents) > 1:
                     g.attr('node',style='filled')
                 g.attr('node',color='blue')
-                g.node(getName(item),label=('PSS - ' + str(item) + ' - ' + str(item.tempCost)[:4]))
+                g.node(getName(item),label=('PSS - ' + str(item) + ' - ' + str(item.temp_cost_up)[:4] + ' - ' + str(item.temp_cost_down)[:4]))
                 g.attr('node',style='unfilled')
             if level % 3 == 2:
                 if item.child == None:
@@ -45,7 +46,7 @@ def graphTree(levelIndex,name,selectedAT=None):
                 g.attr('node',color='green')
                 if hash(item) == hash(selectedAT):
                     g.attr('node',color='purple')
-                g.node(getName(item),label=('AT - ' + str(item) + ' - ' + str(item.tempCost)[:4]))
+                g.node(getName(item),label=('AT - ' + str(item) + ' - ' + str(item.temp_cost_up)[:4] + ' - ' + str(item.temp_cost_down)[:4]))
                 g.attr('node',style='unfilled')
 
     for level in range(0,len(levelIndex)):
@@ -258,7 +259,58 @@ def decomposeAT(at,factory):
 
     return levels
 
-def run2d3d(config_name):
+
+# action target selection functions
+def selectCheapest(at_arr):
+    cheapest = at_arr[0]
+    for at in at_arr:
+        if at.temp_cost_up < cheapest.temp_cost_up:
+            cheapest = at
+    #print(cheapest.temp_cost_up)
+    return cheapest
+def selectMostExpensive(at_arr):
+    for at in at_arr:
+        at.temp_cost_up = at.getDownwardCost()
+    exp = at_arr[0]
+    for at in at_arr:
+        if at.temp_cost_up > exp.temp_cost_up:
+            exp = at
+    return exp
+def selectRandom(at_arr):
+    return at_arr[random.randint(0,len(at_arr))]
+def selectSequential(at_arr):
+    min_id = at_arr[0]
+    for at in at_arr:
+        if hash(min_id) > hash(at):
+            min_id = at
+    #print(hash(min_id))
+    return min_id
+
+def selectDeepest(at_arr):
+    depth = [0 for x in range(0,len(at_arr))]
+    for i in range(0,len(at_arr)):
+        depth[i] = at_arr[i].getNodeDepth()
+    sel = 0
+    for i in range(0,len(at_arr)):
+        if depth[sel] < depth[i]:
+            sel = i
+    return at_arr[sel]
+def selectMostShallow(at_arr):
+    depth = [0 for x in range(0,len(at_arr))]
+    for i in range(0,len(at_arr)):
+        depth[i] = at_arr[i].getNodeDepth()
+    sel = 0
+    for i in range(0,len(at_arr)):
+        if depth[sel] > depth[i]:
+            sel = i
+    return at_arr[sel]
+def selectSmart(at_arr):
+    #select a node with a highly reduced upward cost but a large downward cost
+    return selectFirst(at_arr)
+
+
+
+def run2d3d(config_name,select_method,select_name="",save_tree=False,save_path=False):
     full_start = time.time()
     with open(config_name) as jscf:
         config = json.load(jscf)
@@ -275,29 +327,40 @@ def run2d3d(config_name):
     gs = GameState(ps=None,fov=None,inv=inv_manager,world_2d=world_2d)
 
     print('---- STARTING SIMUILATION  ----')
+    print('selection method: ' + str(select_name))
 
     steps = [] #to keep track of the series of AT's as they're executed
-    times = {} #to track the total time for each AT type
+
 
     full_start2 = time.time()
-    while(not level_index[0][0].isComplete()):
-
+    root = level_index[0][0]
+    while(not root.isComplete()):
         scales = action_factory.scaleCosts(gs.fov) #calculate cost scalars based on field of view
-        level_index[0][0].calculateCost(scales) #apply cost scalars
-        selected_at = level_index[0][0].select() #select at for execution
+        root.calculateCostUp(scales) #apply cost scalars
+        root.calculateCostDown(scales)
+        leaf_set = root.getLeafNodes()
+        selected_at = select_method(leaf_set) #level_index[0][0].select() #select at for execution
         if len(steps) == 0 or steps[-1] is not selected_at: #record selected AT
             steps.append(selected_at)
-            #graphTree(level_index,config['simulation_name'] + str(gs.world_step),selectedAT=selected_at)
-        exT = time.time()
+            #graphTree(level_index,config['simulation_name'] + '_' + str(gs.world_step),selectedAT=selected_at)
+
+
         selected_at.execute(gs) #execute AT
-        exT = time.time() - exT
-        if selected_at not in times.keys():
-            times[selected_at] = 0
-        times[selected_at] += exT
+
+
         downwardPruneTree(level_index) #prune tree to clean up in case an action completed
+        #upwardPruneTree(level_index)
         gs.world_step += 1
     print(str(time.time()-full_start) + ' sec full run')
     print(str(time.time()-full_start2) + ' sec sim')
+    print('metrics: ' + str(gs.pm.metrics))
 
 #run2d3d('json/simulation_configs/TEST_ENV4.json')
-run2d3d('json/simulation_configs/rv_1.json')
+#run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x: selectSequential(x),select_name='first')
+
+#run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x: selectRandom(x),select_name='random')
+run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x: selectCheapest(x),select_name='cheapest')
+#run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x: selectMostExpensive(x),select_name='most expensive')
+#run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x: selectDeepest(x),select_name='deepest')
+#run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x: selectMostShallow(x),select_name='most shallow')
+#run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x: selectSmart(x),select_name='smart')

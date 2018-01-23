@@ -8,7 +8,8 @@ class ActionTarget:
         self.act = act
         self.child = None
         self.parent = None
-        self.tempCost = 0
+        self.temp_cost_up = 0
+        self.temp_cost_down = 0
         self.execMemory = {} #used by pathfinders etc to keep track of execution memory
     def addChild(self,child):
         self.child = child
@@ -44,15 +45,24 @@ class ActionTarget:
     #RUN TIME METHODS
     #-------------------------------------------
 
-    def calculateCost(self,scalars,table={}):
+    def calculateCostUp(self,scalars):
         scalar = 1
         if self.act in scalars.keys():
             scalar = scalars[self.act]
         res = self.act.cost*scalar
         if self.child != None and self.getRequirement() != PlayerState():
-            res += self.child.calculateCost(scalars,table)
-        self.tempCost = res
+            res += self.child.calculateCostUp(scalars)
+        self.temp_cost_up = res
         return res
+    def calculateCostDown(self,scalars,passed_cost):
+        scalar = 1
+        if self.act in scalars.keys():
+            scalar = scalars[self.act]
+        self.temp_cost_down = passed_cost + self.act.cost*scalar
+        if self.child != None and self.getRequirement() != PlayerState():
+            self.child.calculateCostDownR(scalars,self.temp_cost_down)
+
+    '''
     def getCost(self,scalars,table={}):
         scalar = 1
         if self.act in scalars.keys():
@@ -62,14 +72,27 @@ class ActionTarget:
             if not self.act in table.keys():
                 table[self.act] = res + self.child.getCost(scalars,table)
             res = table[self.act]
-        self.tempCost = res
+        self.temp_cost_up = res
         return res
+    '''
     def select(self):
         if self.child == None:
             return self
         return self.child.select()
+    def getDownwardCost(self):
+        cheapest_parent = self.parent.parents[0]
+        for ppt in self.parent.parents:
+            do = 'nothing'
+        self.act.cost
+    def getNodeDepth(self):
+        if self.parent.parents[0].parent != None:
+            return self.parent.parents[0].parent.getNodeDepth() + 1
+        else:
+            return 0
+    '''
     def isComplete(self):
         return True
+    '''
     def execute(self,gs):
         '''
         execute(gs) is a pretty round-a-bout method so here's how it works
@@ -83,7 +106,7 @@ class ActionTarget:
         '''
 
 
-
+        gs.pm.curr_at = self
         complete = self.act.execute(gs)
         if complete:
             self.parent.updateAT(self)
