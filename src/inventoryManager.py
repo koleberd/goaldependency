@@ -1,25 +1,11 @@
 import json
-import nbt
 from os import listdir
 import time
 #from os.path import isfile,join
 
 
-CNTR_DST = 36 #distance between centers of slots
-C_ST = 824 #column start
-R_ST = 553 #row
-IC_C_ST = 1004  #inventory crafting column start
-IC_R_ST = 422   #                   row
-ICR_C = 1116 #inventory crafting output position column
-ICR_R = 441 #                                    row
-CB_C_ST = 868 #crafting bench column start
-CB_R_ST = 420 #               row
-CBR_C = 1056  #crafting bench output column
-CBR_R = 457   #                      row
-HOTBAR_JUMP = 44  #extra distance between bottom row of inv and hotbar (y distance)
-
 class InventoryManager:
-    def __init__(self,name):
+    def __init__(self):
         with open('json/inventoryItem.json') as rsjs:
             self.resourceIndex = json.load(rsjs)
         self.inventory = []
@@ -27,7 +13,6 @@ class InventoryManager:
             self.inventory.append([])#rows
             for y in range(0,9):
                 self.inventory[x].append(('empty',0))
-        self.worldname = name
     def depositStack(self,obj,qnt):
         rem = qnt
         for row in range(0,4):
@@ -100,27 +85,6 @@ class InventoryManager:
                 if self.inventory[row][col][0] == obj:
                     return self.coordSlot(row,col)
         return None
-    def coordSlot(self,r,c):
-
-        resc = C_ST + CNTR_DST*c
-        resr = R_ST + CNTR_DST*r
-        if r == 0:
-            resr = R_ST + 2*CNTR_DST + HOTBAR_JUMP
-        return (resc,resr)
-    def coordInvC(self,x,y):#coordinates of inventory craft
-        #if x or y are 3, then returns the coordinates of the output of the crafting bench
-        r = int(y)
-        c = int(x)
-        if r == 3 or c == 3:
-            return (ICR_C,ICR_R)
-        return (IC_C_ST + c * CNTR_DST, IC_R_ST + r * CNTR_DST)
-    def coordCbC(self,x,y):#coordinates of crafting bench craft
-        #if x or y are 3, then returns the coordinates of the output of the crafting bench
-        r = int(y)
-        c = int(x)
-        if r == 3 or c == 3:
-            return (CBR_C,CBR_R)
-        return (CB_C_ST + c * CNTR_DST, CB_R_ST + r * CNTR_DST)
     def coordNextEmpty(self):
         for row in range(0,4):
             for col in range(0,9):
@@ -135,20 +99,6 @@ class InventoryManager:
         if name in translate.keys():
             name = translate[name]
         return name
-    def parseInventory(self):
-        #return False
-
-        parsedInv = [None]*36
-        pInv = InventoryManager(self.worldname)
-        folder = 'C:\\Users\\Kirevikyn\\AppData\\Roaming\\.minecraft\\saves\\' + self.worldname + '\\playerdata'
-        filename = folder + '\\' + listdir(folder)[0]
-        #print(filename)
-        playerfile = nbt.NBTFile(filename,'rb')
-        items = playerfile['Inventory'].tags
-        for item in items:
-            #parsedInv[item['Slot'].value]={self.translate(item['id'].value):item['Count'].value}
-            pInv.inventory[int(item['Slot'].value/9)][item['Slot'].value%9] = (self.translate(item['id'].value),item['Count'].value)
-        return pInv
     def __eq__(self,other):
         for row in range(0,4):
             for col in range(0,9):

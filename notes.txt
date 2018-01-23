@@ -64,9 +64,10 @@ additionalnotes
 	additions to readme/documentation
 		how to adapt codebase / project to other areas (as framework)
 		justify model vs any other model
-			why not written in prolog / other ways to manage dependencies (descreiption of thought rather than implementation)
+			why not written in prolog / other ways to manage dependencies (description of thought rather than implementation)
 
 points in paper:
+	start with definitions
 	areas for improvement section
 		-transformation to goal framework
 			-abstracting playerstate
@@ -77,6 +78,7 @@ points in paper:
 		multiple areas of AI
 	why not 3d
 		why not cv
+	MATH AND FORMULAS AND MORE MATH AND FORMULAS
 
 2d advantages
 	- faster sims

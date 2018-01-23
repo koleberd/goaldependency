@@ -2,37 +2,16 @@ from PIL import Image
 import os
 import numpy as np
 import time
-'''
-GameWorld2d is used for simulating a 2d world based on a top down rendering of a minecraft world.
-    It can take multiple layers of a world but compresses them down into one layer. The top block takes precedence over lower blocks.
-'''
 
-
-
-
-BLOCK_IND_DARK = {
-    (0,31,0,255):None,
-    (29,8,0,255):'wood',
-    (43,0,0,255):'wood',
-    (59,4,0,255):'crafting bench',
-    (45,12,0,255):'iron ore',
-    (25,0,0,255):'iron ore',
-    (0,41,50,255):'diamond ore',
-    (15,15,15,255):'stone',
-    (0,0,0,255):'stone'
-}
 BLOCK_IND = {
-    (155,122,99,255):'iron ore',
-    (175,142,118,255):'iron ore',
-    (90,69,36,255):'wood',
-    (102,81,47,255):'wood',
-    (59,59,59,255):'coal',
-    (69,69,69,255):'coal',
-    (100,100,100,255):'stone',
-    (116,116,116,255):'stone',
-    (86,157,66,255):None,
-    (65,136,45,255):None,
-    (160,105,59,255):'crafting bench'
+    (0,0,0):'wall',
+    (127,127,127):'stone',
+    (255,0,0):'iron ore',
+    (237,28,36):'iron ore',
+    (255,201,14):'coal',
+    (185,122,87):'wood',
+    (34,177,76):'crafting bench',
+    (255,255,255):None
 }
 
 COLOR_IND = {
@@ -46,49 +25,15 @@ COLOR_IND = {
 
 
 class GameWorld2d:
-    def __init__(self,layer_dir,c1,c2,bind_3d,bind_2d,spawn_pos=(0,0)):
-        '''
-        c1 and c2 are coordinates of the top left and bottom right corners respectively
-        '''
+    def __init__(self,image_path,spawn_pos=(0,0)):
 
-        layer_names = os.listdir(layer_dir)
-        '''
-        img = frame.crop((w_adj,h_adj,WIDTH-w_adj,HEIGHT-h_adj))
-        img = np.reshape(np.array(list(img.getdata())),(1,SIZE_TENSOR[0],SIZE_TENSOR[1],SIZE_TENSOR[2]))
-        '''
-
-        width  = c2[0]-c1[0]
-        height = c2[1]-c1[1]
-        self.offset_3d_x = bind_3d[0] - bind_2d[0]
-        self.offset_3d_y = bind_3d[2] - bind_2d[1]
-        self.elevation_3d = bind_3d[1]
-
-
-        self.layers = []
-        for f in layer_names:
-            img = Image.open(layer_dir + '/' + f).crop((c1[0],c1[1],c2[0],c2[1]))
-            layer = [ [None for y in range(height)] for x in range(width)]
-            #img.show()
-            #self.layers.append(np.reshape(np.array(list(img.getdata())),(width,height,4)))
-            for col in range(width):
-                for row in range(height):
-                    layer[col][row] = parseBlock(img.getpixel((col,row)))
-            self.layers.append(layer)
-
-
-        #flatten
-
-        self.grid = [ [None for y in range(height)] for x in range(width)]
-        for layer in self.layers:
-            for col in range(width):
-                for row in range(height):
-                    #block = self.parseBlock(layer[col][row])
-                    block = layer[col][row]
-                    if block != None:
-                        self.grid[col][row] = block
-
-
-
+        img = Image.open(image_path)
+        self.width = img.width
+        self.height = img.height
+        self.grid = [ [None for y in range(self.height)] for x in range(self.width)]
+        for col in range(self.width):
+            for row in range(self.height):
+                self.grid[col][row] = parseBlock(img.getpixel((col,row)))
         self.pos = spawn_pos
         self.yaw = 0
 
@@ -97,8 +42,8 @@ class GameWorld2d:
         finds the closest <number> instancse of <obj> from self.pos, in terms of euclidian distance
         '''
         locs = []
-        for col in range(0,len(self.grid)):
-            for row in range(0,len(self.grid[col])):
+        for col in range(0,self.width):
+            for row in range(0,self.height):
                 item = self.grid[col][row]
                 if item == obj:
                     locs.append((col,row))
@@ -127,39 +72,11 @@ class GameWorld2d:
         bottom = row + 1 < len(self.grid[0]) and self.grid[col][row+1] == None
         return top or left or right or bottom
 
-    def findClosestLayered(self,obj,number):
-        '''
-        finds the closest <number> instancse of <obj> from self.pos, in terms of euclidian distance. bottom object is always closer than upper objects in layers.
-        '''
-        locs = []
-        for col in range(0,len(self.layers[0])):
-            for row in range(0,len(self.layers[0][0])):
-                for layer in range(0,len(self.layers)):
-                    item = self.layers[layer][col][row]
-                    if item == obj and self.isExposed(col,row):
-                        locs.append((layer,col,row))
-        orgLen = len(locs)
-        dists = {}
-        for loc in locs:
-            dists[loc] = distance_between(self.pos,(loc[1],loc[2]))
-        ranked = []
-        while len(ranked) < number and len(ranked) < orgLen:
-            minP = 0
-            minV = dists[locs[0]]
-            for i in range(len(locs)):
-                loc = locs[i]
-                if dists[loc] < minV:
-                    minV = dists[loc]
-                    minK = loc
-                    minP = i
-            ranked.append(locs[minP])
-            del locs[i]
-        return ranked
 
     def printWorld(self,path=[]):
-        render = Image.new('RGB',(len(self.grid),len(self.grid[0])),color=(255,255,255))
-        for col in range(0,len(self.grid)):
-            for row in range(0,len(self.grid[0])):
+        render = Image.new('RGB',(self.width,self.height),color=(255,255,255))
+        for col in range(0,self.width):
+            for row in range(0,self.height):
                 if self.grid[col][row] != None:
                     block =  self.grid[col][row]
                     if block in COLOR_IND.keys():
@@ -172,10 +89,10 @@ class GameWorld2d:
         render.show()
 
     def saveWorld(self,path=[],name=time.time()):
-        render = Image.new('RGB',(len(self.grid),len(self.grid[0])),color=(255,255,255))
+        render = Image.new('RGB',(self.width,self.height),color=(255,255,255))
 
-        for col in range(0,len(self.grid)):
-            for row in range(0,len(self.grid[0])):
+        for col in range(0,self.width):
+            for row in range(0,self.height):
                 if self.grid[col][row] != None:
                     block =  self.grid[col][row]
                     if block in COLOR_IND.keys():
@@ -188,7 +105,7 @@ class GameWorld2d:
             mul = path_dark/len(path) + .3
             render.putpixel(pos,((int(193*mul),int(28*mul),int(181*mul))))
             path_dark -= 1
-        render = resize_no_blur(render,10)
+        render = resize_no_blur(render,4)
         render.save('simulation/2Dpath/'+str(name)+'.jpg')
 
     def astar(self,start,goal):
@@ -250,14 +167,8 @@ class GameWorld2d:
         return self.grid[pos[0]][pos[1]] == None or self.grid[pos[0]][pos[1]] == exception
 
     def updateLoc(self,pos,newVal):
-        self.layers[pos[0]][pos[1]][pos[2]] = newVal
-        emptyFlat = False
-        curr = None
-        for layer in range(0,len(self.layers)):
-            this_layer = self.layers[layer][pos[1]][pos[2]]
-            if curr == None and this_layer != None:
-                curr = this_layer
-        self.grid[pos[1]][pos[2]] = curr
+        self.grid[pos[0]][pos[1]] = newVal
+
 
     def rayCast(self,angle,distance):
         ng = (self.yaw+angle+360)%360
@@ -269,8 +180,8 @@ class GameWorld2d:
         ypos = self.pos[1]
         xdis = xpos + (xmul * distance)
         ydis = ypos + (ymul * distance)
-        xmax = len(self.grid)
-        ymax = len(self.grid[0])
+        xmax = self.width
+        ymax = self.height
 
         xstart = max([min([xpos,xdis]),0])
         ystart = max([min([ypos,ydis]),0])
@@ -279,8 +190,7 @@ class GameWorld2d:
 
         #print(xstart,ystart,xend,yend)
 
-
-        grd_cp = [[False for x in range(0,len(self.grid[0]))] for y in range(0,len(self.grid))]
+        grd_cp = [[False for x in range(0,self.heigh)] for y in range(0,self.width)]
 
         for col in range(xstart,xend):
             for row in range(ystart,yend):
@@ -313,10 +223,6 @@ class GameWorld2d:
         #find actual distance to intersection with location
         #return distance, and coord tuple
 
-
-
-
-
 def resize_no_blur(img,factor):
     res = Image.new('RGB',(img.width*factor,img.height*factor))
     for col in range(0,img.width):
@@ -328,8 +234,9 @@ def resize_no_blur(img,factor):
 
 def parseBlock(pixel):
     #print(type(pixel))
+    npx = (pixel[0],pixel[1],pixel[2])
     for match in BLOCK_IND:
-        if match == pixel:
+        if match == npx:
             return BLOCK_IND[match]
     return 'OCCUPIED'
 

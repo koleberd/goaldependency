@@ -7,10 +7,8 @@ from actionTarget import *
 from playerStateFactory import *
 from actionFactory import *
 from graphviz import *
-import viewer
 from inventoryManager import *
 import time
-import pyautogui
 from gameWorld2d import *
 import gameController
 
@@ -181,7 +179,6 @@ def decomposePS(ps,tree_name,actFactory):
                 levelIndex[-2].extend(layerInd[1])
                 levelIndex[-1].extend(layerInd[2])
 
-
         for i in range(0,len(levelIndex[-2])):
             for j in range(i,len(levelIndex[-2])):
                 pss = levelIndex[-2][i]
@@ -261,37 +258,8 @@ def decomposeAT(at,factory):
 
     return levels
 
-
-def run2d(topPS,name,world):
-    actFactory = ActionFactory('2D')
-    levelIndex = decomposePS(topPS,name,actFactory)
-    #graphTree(levelIndex,name + '_init')
-    print('---- STARTING SIMUILATION  ----')
-    steps = []
-    times = {}
-    invM = InventoryManager()
-    w2d = world
-    gs = GameState(ps=None,fov=None,inv=invM,flatworld=w2d)
-    while(not levelIndex[0][0].isComplete()):
-        scales = actFactory.scaleCosts(gs.fov)
-
-        levelIndex[0][0].calculateCost(scales)
-        #graphTree(levelIndex,name + '_' + str(step))
-        selectedAT = levelIndex[0][0].select()
-        if len(steps) == 0 or steps[-1] is not selectedAT:
-            steps.append(selectedAT)
-        exT = time.time()
-        #graphTree(levelIndex,name + '_' + str(len(steps)),selectedAT)
-        selectedAT.execute(gs)
-        exT = time.time() - exT
-        if selectedAT not in times.keys():
-            times[selectedAT] = 0
-        times[selectedAT] += exT
-        #gs = viewer.getCurrentGameState(invM)
-        downwardPruneTree(levelIndex)
-        gs.cycle += 1
-
 def run2d3d(config_name):
+    full_start = time.time()
     with open(config_name) as jscf:
         config = json.load(jscf)
 
@@ -300,35 +268,18 @@ def run2d3d(config_name):
     level_index = decomposePS(PlayerState.parsePlayerStateJSON(config['target_ps']),config['simulation_name'],action_factory)
     #graphTree(level_index,config['simulation_name'] + '_init')
 
-
     #set up inventory and world models
-    inv_manager = InventoryManager(config['world_name_3d'])
-    world_2d = GameWorld2d( config['world_2d_location'],
-                            (config['2d_start'][0],config['2d_start'][1]),
-                            (config['2d_end'][0],config['2d_end'][1]),
-                            config['3d_bind'],config['2d_bind'],
-                            (config['spawn_pos'][0],config['spawn_pos'][1]))
+    inv_manager = InventoryManager()
+    world_2d = GameWorld2d( config['world_2d_location'],(config['spawn_pos'][0],config['spawn_pos'][1]))
 
+    gs = GameState(ps=None,fov=None,inv=inv_manager,world_2d=world_2d)
 
-    #print(world_2d.rayCast(45,20))
-
-
-
-    #return 0
-    gs = GameState(ps=None,fov=None,inv=inv_manager,world_2d=world_2d,world_name_3d=config['world_name_3d'])
-
-    #Issue inititialize world and sync player location
     print('---- STARTING SIMUILATION  ----')
-    time.sleep(1)
-    '''
-    for cmd in config['world_init_3d']:
-        gameController.executeCommand(cmd)
-    '''
-    gameController.syncLoc(gs)
 
     steps = [] #to keep track of the series of AT's as they're executed
     times = {} #to track the total time for each AT type
 
+    full_start2 = time.time()
     while(not level_index[0][0].isComplete()):
 
         scales = action_factory.scaleCosts(gs.fov) #calculate cost scalars based on field of view
@@ -337,28 +288,16 @@ def run2d3d(config_name):
         if len(steps) == 0 or steps[-1] is not selected_at: #record selected AT
             steps.append(selected_at)
             #graphTree(level_index,config['simulation_name'] + str(gs.world_step),selectedAT=selected_at)
-
         exT = time.time()
         selected_at.execute(gs) #execute AT
         exT = time.time() - exT
         if selected_at not in times.keys():
             times[selected_at] = 0
         times[selected_at] += exT
-
-        #block if inventories don't match
-        '''
-        while inv_manager != InventoryManager(config['world_name_3d']).parseInventory():
-            print("INVENTORY MISMATCH")
-            pyautogui.keyDown('esc')
-            pyautogui.keyUp('esc')
-            time.sleep(.1)
-            pyautogui.keyDown('esc')
-            pyautogui.keyUp('esc')
-            time.sleep(.1)
-        '''
         downwardPruneTree(level_index) #prune tree to clean up in case an action completed
         gs.world_step += 1
-
+    print(str(time.time()-full_start) + ' sec full run')
+    print(str(time.time()-full_start2) + ' sec sim')
 
 #run2d3d('json/simulation_configs/TEST_ENV4.json')
-run2d3d('json/simulation_configs/just_for_tree.json')
+run2d3d('json/simulation_configs/rv_1.json')
