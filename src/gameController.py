@@ -32,6 +32,7 @@ def craftObject(obj,gs):
         name = item.split(':')[0]
         gs.inv.withdraw(name,1)
     gs.inv.deposit(obj,craftingRecipes[obj]['output'])
+    gs.world_2d.saveWorld(gs.pm.target['full_path'],gs.world_step)
     gs.pm.target = None
     gs.pm.prev_at = None
     gs.pm.curr_at = None
@@ -58,9 +59,11 @@ def harvestObject(obj,gs,tool=None):#potentially will break if the player doesn'
         #needs to withdraw one use from tool
 
     gs.world_2d.updateLoc(gs.pm.target['pos'],None)
+    gs.world_2d.saveWorld(gs.pm.target['full_path'],gs.world_step)
     gs.pm.target = None
     gs.pm.prev_at = None
     gs.pm.curr_at = None
+
     gs.inv.depositStack(obj,1)
 
     return True
@@ -100,7 +103,7 @@ def locateObject(obj,gs,alg=None):
             raise Exception("none of target object exist in this world: " + obj)
         path = gs.world_2d.astar(gs.world_2d.pos, (objs[0][0],objs[0][1]))[:-1]
         #gs.world_2d.saveWorld(path,gs.world_step)
-        gs.pm.target = {'obj':obj,'path':path,'pos':objs[0],'path_len':len(path)}
+        gs.pm.target = {'obj':obj,'path':path,'pos':objs[0],'path_len':len(path),'full_path':path}
         #print('new object',gs.pm.target)
     elif gs.pm.target['obj'] == obj:
         path = gs.pm.target['path']

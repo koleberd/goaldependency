@@ -337,7 +337,7 @@ def run2d3d(config_name,select_method,select_name="",save_tree=False,save_path=F
     while(not root.isComplete()):
         scales = action_factory.scaleCosts(gs.fov) #calculate cost scalars based on field of view
         root.calculateCostUp(scales) #apply cost scalars
-        root.calculateCostDown(scales)
+        #root.calculateCostDown(scales)
         leaf_set = root.getLeafNodes()
         selected_at = select_method(leaf_set) #level_index[0][0].select() #select at for execution
         if len(steps) == 0 or id(steps[-1]) != id(selected_at): #record selected AT
@@ -349,7 +349,7 @@ def run2d3d(config_name,select_method,select_name="",save_tree=False,save_path=F
         selected_at.execute(gs) #execute AT
 
 
-        downwardPruneTree(level_index) #prune tree to clean up in case an action completed
+        #downwardPruneTree(level_index) #prune tree to clean up in case an action completed - only needed if the tree needs to be graphed
         #upwardPruneTree(level_index)
         gs.world_step += 1
     print(str(time.time()-full_start) + ' sec full run')
@@ -359,7 +359,7 @@ def run2d3d(config_name,select_method,select_name="",save_tree=False,save_path=F
 #run2d3d('json/simulation_configs/TEST_ENV4.json')
 
 
-run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x: selectMostShallow(x),select_name='most shallow')
+#run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x: selectMostShallow(x),select_name='most shallow')
 run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x: selectCheapest(x),select_name='cheapest')
 #run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x: selectSmart(x),select_name='smart')
 
