@@ -32,7 +32,7 @@ def craftObject(obj,gs):
         name = item.split(':')[0]
         gs.inv.withdraw(name,1)
     gs.inv.deposit(obj,craftingRecipes[obj]['output'])
-    gs.world_2d.saveWorld(gs.pm.target['full_path'],gs.world_step)
+    #gs.world_2d.saveWorld(gs.pm.target['full_path'],gs.world_step)
     gs.pm.target = None
     gs.pm.prev_at = None
     gs.pm.curr_at = None
@@ -59,7 +59,7 @@ def harvestObject(obj,gs,tool=None):#potentially will break if the player doesn'
         #needs to withdraw one use from tool
 
     gs.world_2d.updateLoc(gs.pm.target['pos'],None)
-    gs.world_2d.saveWorld(gs.pm.target['full_path'],gs.world_step)
+    #gs.world_2d.saveWorld(gs.pm.target['full_path'],gs.world_step)
     gs.pm.target = None
     gs.pm.prev_at = None
     gs.pm.curr_at = None

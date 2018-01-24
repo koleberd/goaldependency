@@ -2,6 +2,7 @@ from PIL import Image
 import os
 import numpy as np
 import time
+import imageio
 
 BLOCK_IND = {
     (0,0,0):'wall',
@@ -88,7 +89,7 @@ class GameWorld2d:
 
         render.show()
 
-    def saveWorld(self,path=[],name=time.time()):
+    def saveWorld(self,path=[],name=time.time(),resize=4):
         render = Image.new('RGB',(self.width,self.height),color=(255,255,255))
 
         for col in range(0,self.width):
@@ -105,7 +106,8 @@ class GameWorld2d:
             mul = path_dark/len(path) + .3
             render.putpixel(pos,((int(193*mul),int(28*mul),int(181*mul))))
             path_dark -= 1
-        render = resize_no_blur(render,4)
+        if resize != 1:
+            render = resize_no_blur(render,resize)
         render.save('simulation/2Dpath/'+str(name)+'.jpg')
 
     def astar(self,start,goal):
@@ -168,6 +170,37 @@ class GameWorld2d:
 
     def updateLoc(self,pos,newVal):
         self.grid[pos[0]][pos[1]] = newVal
+
+    def renderPath(self,path):
+        render = Image.new('RGB',(self.width,self.height),color=(255,255,255))
+
+        for col in range(0,self.width):
+            for row in range(0,self.height):
+                if self.grid[col][row] != None:
+                    block =  self.grid[col][row]
+                    if block in COLOR_IND.keys():
+                        render.putpixel((col,row),COLOR_IND[block])
+                    else:
+                        render.putpixel((col,row),COLOR_IND['default'])
+
+        path_dark = len(path)
+        for pos in path:
+            mul = path_dark/len(path) + .3
+            render.putpixel(pos,((int(193*mul),int(28*mul),int(181*mul))))
+            path_dark -= 1
+        return render
+    def renderGif(self,path,name):
+        images = []
+        for i in range(0,len(path)):
+            subpath = []
+            if i < 10:
+                subpath = path[0:i]
+            else:
+                subpath = path[i-10:i]
+
+            images.append(np.array(resize_no_blur(self.renderPath(subpath),5)))
+        imageio.mimsave('simulation/' + name + '.gif',images)
+
 
 
     def rayCast(self,angle,distance):

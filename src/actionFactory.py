@@ -22,7 +22,8 @@ class ActionFactory:
         cst = obj['cost']
         func = None
         func = lambda gs: gameController.executeFunction(obj['function'].split(":")[0],gs,obj['function'].split(":")[1].split(','))
-        return Action(psp,psr,cst,func)
+        nm = obj['function']
+        return Action(psp,psr,cst,func,nm)
 
     #1. try to find an action with the desired output
     #2. if that can't be found, try one that hasn't been tried with the lowest cost??? - not sure if this is the right way to experiment

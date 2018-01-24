@@ -3,11 +3,12 @@ from playerState import PlayerState
 
 
 class Action:
-    def __init__(self,ps_req,ps_res,cost,executionFunction):
+    def __init__(self,ps_req,ps_res,cost,executionFunction,name=''):
         self.ps_res = ps_res
         self.ps_req = ps_req
         self.cost = cost
         self.executionFunction = executionFunction
+        self.name = name
     #returns if completed
     def execute(self,gs):
         return self.executionFunction(gs)

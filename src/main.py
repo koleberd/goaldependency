@@ -285,7 +285,6 @@ def selectSequential(at_arr):
             min_id = at
     #print(id(min_id))
     return min_id
-
 def selectDeepest(at_arr):
     depth = [0 for x in range(0,len(at_arr))]
     for i in range(0,len(at_arr)):
@@ -307,7 +306,23 @@ def selectMostShallow(at_arr):
 def selectSmart(at_arr):
     #select a node with a highly reduced upward cost but a large downward cost
     return selectFirst(at_arr)
-
+def selectUser(at_arr):
+    return selectMostShallow(at_arr)
+    for at in at_arr:
+        if 'harvest' in at.act.name:
+            return at
+    for at in at_arr:
+        if 'craft' in at.act.name and 'inv' not in at.act.name:
+            return at
+    for at in at_arr:
+        if 'craft' in at.act.name:
+            return at
+    return at_arr[0]
+    #select in order of priority
+    #   harvest
+    #   craft
+    #   inv craft
+    #   locate
 
 
 def run2d3d(config_name,select_method,select_name="",save_tree=False,save_path=False):
@@ -324,7 +339,8 @@ def run2d3d(config_name,select_method,select_name="",save_tree=False,save_path=F
     inv_manager = InventoryManager()
     world_2d = GameWorld2d( config['world_2d_location'],(config['spawn_pos'][0],config['spawn_pos'][1]))
 
-    gs = GameState(ps=None,fov=None,inv=inv_manager,world_2d=world_2d)
+    pm = PlayerMemory()
+    gs = GameState(ps=None,pm=pm,fov=None,inv=inv_manager,world_2d=world_2d)
 
     print('---- STARTING SIMUILATION  ----')
     print('selection method: ' + str(select_name))
@@ -342,9 +358,10 @@ def run2d3d(config_name,select_method,select_name="",save_tree=False,save_path=F
         selected_at = select_method(leaf_set) #level_index[0][0].select() #select at for execution
         if len(steps) == 0 or id(steps[-1]) != id(selected_at): #record selected AT
             steps.append(selected_at)
+            #print(selected_at.act.name)
             #print("------")
             #graphTree(level_index,config['simulation_name'] + '_' + str(gs.world_step),selectedAT=selected_at)
-
+        gs.pm.metrics['path'].append(gs.world_2d.pos)
 
         selected_at.execute(gs) #execute AT
 
@@ -352,14 +369,20 @@ def run2d3d(config_name,select_method,select_name="",save_tree=False,save_path=F
         #downwardPruneTree(level_index) #prune tree to clean up in case an action completed - only needed if the tree needs to be graphed
         #upwardPruneTree(level_index)
         gs.world_step += 1
+
     print(str(time.time()-full_start) + ' sec full run')
     print(str(time.time()-full_start2) + ' sec sim')
-    print('metrics: ' + str(gs.pm.metrics))
+    print('steps taken: ' + str(len(gs.pm.metrics['path'])))
+    print('rendering .gif')
+    render_t = time.time()
+    gs.world_2d.renderGif(gs.pm.metrics['path'],select_name)
+    print('rendered .gif in ' + str(time.time() - render_t) + ' sec')
 
 #run2d3d('json/simulation_configs/TEST_ENV4.json')
 
 
-#run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x: selectMostShallow(x),select_name='most shallow')
+run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x: selectMostShallow(x),select_name='most shallow')
+run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x: selectUser(x),select_name='user')
 run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x: selectCheapest(x),select_name='cheapest')
 #run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x: selectSmart(x),select_name='smart')
 
