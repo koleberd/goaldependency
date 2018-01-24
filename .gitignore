@@ -6,6 +6,7 @@ training
 models
 trainedModels
 json/oldjson
+simulation/trees
 
 
 src/__pycache__

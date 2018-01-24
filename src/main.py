@@ -324,7 +324,6 @@ def selectUser(at_arr):
     #   inv craft
     #   locate
 
-
 def run2d3d(config_name,select_method,select_name="",save_tree=False,save_path=False):
     full_start = time.time()
     with open(config_name) as jscf:
@@ -346,6 +345,7 @@ def run2d3d(config_name,select_method,select_name="",save_tree=False,save_path=F
     print('selection method: ' + str(select_name))
 
     steps = [] #to keep track of the series of AT's as they're executed
+    images = []
 
 
     full_start2 = time.time()
@@ -362,21 +362,24 @@ def run2d3d(config_name,select_method,select_name="",save_tree=False,save_path=F
             #print("------")
             #graphTree(level_index,config['simulation_name'] + '_' + str(gs.world_step),selectedAT=selected_at)
         gs.pm.metrics['path'].append(gs.world_2d.pos)
-
+        #images.append(np.array(resize_no_blur(gs.world_2d.renderPath(gs.pm.metrics['path'][-10:]),2)))
         selected_at.execute(gs) #execute AT
 
 
         #downwardPruneTree(level_index) #prune tree to clean up in case an action completed - only needed if the tree needs to be graphed
         #upwardPruneTree(level_index)
         gs.world_step += 1
+        #print(gs.world_step)
 
     print(str(time.time()-full_start) + ' sec full run')
     print(str(time.time()-full_start2) + ' sec sim')
     print('steps taken: ' + str(len(gs.pm.metrics['path'])))
+    '''
     print('rendering .gif')
     render_t = time.time()
-    gs.world_2d.renderGif(gs.pm.metrics['path'],select_name)
+    imageio.mimsave('simulation/' + select_name + '_animation.gif',images)
     print('rendered .gif in ' + str(time.time() - render_t) + ' sec')
+    '''
 
 #run2d3d('json/simulation_configs/TEST_ENV4.json')
 

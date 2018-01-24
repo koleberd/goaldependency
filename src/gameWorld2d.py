@@ -189,17 +189,7 @@ class GameWorld2d:
             render.putpixel(pos,((int(193*mul),int(28*mul),int(181*mul))))
             path_dark -= 1
         return render
-    def renderGif(self,path,name):
-        images = []
-        for i in range(0,len(path)):
-            subpath = []
-            if i < 10:
-                subpath = path[0:i]
-            else:
-                subpath = path[i-10:i]
-
-            images.append(np.array(resize_no_blur(self.renderPath(subpath),5)))
-        imageio.mimsave('simulation/' + name + '.gif',images)
+    
 
 
 
