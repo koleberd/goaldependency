@@ -23,6 +23,7 @@ COLOR_IND = {
     'coal':(70,70,70),
     'default':(0,0,0)
 }
+BLOCK_TYPES = ['wood','crafting bench', 'iron ore', 'stone', 'coal']
 
 
 class GameWorld2d:
@@ -72,7 +73,6 @@ class GameWorld2d:
         right = col + 1 < len(self.grid) and self.grid[col+1][row] == None
         bottom = row + 1 < len(self.grid[0]) and self.grid[col][row+1] == None
         return top or left or right or bottom
-
 
     def printWorld(self,path=[]):
         render = Image.new('RGB',(self.width,self.height),color=(255,255,255))
@@ -189,9 +189,6 @@ class GameWorld2d:
             render.putpixel(pos,((int(193*mul),int(28*mul),int(181*mul))))
             path_dark -= 1
         return render
-    
-
-
 
     def rayCast(self,angle,distance):
         ng = (self.yaw+angle+360)%360
@@ -213,7 +210,7 @@ class GameWorld2d:
 
         #print(xstart,ystart,xend,yend)
 
-        grd_cp = [[False for x in range(0,self.heigh)] for y in range(0,self.width)]
+        grd_cp = [[False for x in range(0,self.height)] for y in range(0,self.width)]
 
         for col in range(xstart,xend):
             for row in range(ystart,yend):
@@ -242,9 +239,28 @@ class GameWorld2d:
                         cl_d = dist
 
 
-        return cl_d,[cl_x,cl_y]
+        return cl_d, self.grid[cl_x][cl_y]
         #find actual distance to intersection with location
-        #return distance, and coord tuple
+        #return distance and the object #and coord tuple
+
+    def getAverageDistances(self,):
+        print('Calculating average distances...')
+        dist_set = {}
+        for bl in BLOCK_TYPES:
+            dist_set[bl] = []
+        for bl in BLOCK_TYPES:
+            print('Calculating for ' + bl)
+            for col in range(0,self.width):
+                for row in range(0,self.height):
+                    if self.grid[col][row] == bl:
+                        for col2 in range(0,self.width):
+                            for row2 in range(0,self.height):
+                                if self.grid[col2][row2] == None:
+                                    dist_set[bl].append(distance_between((col,row),(col2,row2)))
+        avg_set = {}
+        for bl in BLOCK_TYPES:
+            avg_set[bl] = sum(dist_set[bl])/float(len(dist_set[bl]))
+        return avg_set
 
 def resize_no_blur(img,factor):
     res = Image.new('RGB',(img.width*factor,img.height*factor))

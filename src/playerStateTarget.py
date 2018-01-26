@@ -77,7 +77,18 @@ class PlayerStateTarget:
                 for at_child in sol.children:
                     at_child.calculateCostDown(scalars,passed_cost)
 
+    def calculateCostSetDown(self,passed_set):
+        for attr in self.attributeList:
+            for sol in self.attributeList[attr]:
+                for at in sol.children:
+                    at.calculateCostSetDown(passed_set)
 
+    def calculateDepth(self,depth):
+        for attr in self.attributeList:
+            for sol in self.attributeList[attr]:
+                for at in sol.children:
+                    at.calculateDepth(depth)
+    '''
     def select(self):
         #cAttr = None
         cSol = None
@@ -85,13 +96,8 @@ class PlayerStateTarget:
             for sol in self.attributeList[attr]:
                 if (cSol == None or sol.temp_cost_up < cSol.temp_cost_up) and (sol.ps.lookedAt == None or len(self.attributeList) == 1):
                     cSol = sol
-                '''
-                if cSol == None or ((sol.temp_cost_up < cSol.temp_cost_up and sol.ps.lookedAt == None) or (sol.ps.lookedAt != None and len(self.attributeList) == 1)):
-                    cSol = sol
-                    #cAttr = attr
-                '''
-
         return cSol.select()
+    '''
     #adds ps to the attribute accumulation corresponding with pss.ps
     def updatePSS(self,pss,ps):
         self.attributeAccumulation[pss.ps] = ps + self.attributeAccumulation[pss.ps]

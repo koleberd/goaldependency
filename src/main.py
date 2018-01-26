@@ -12,6 +12,8 @@ import time
 import random
 from gameWorld2d import *
 import gameController
+import tensorflow as tf
+import numpy as np
 
 def getName(obj):
     if type(obj) == PlayerStateTarget:
@@ -260,14 +262,12 @@ def decomposeAT(at,factory):
 
     return levels
 
-
 # action target selection functions
 def selectCheapest(at_arr):
     cheapest = at_arr[0]
     for at in at_arr:
         if at.temp_cost_up < cheapest.temp_cost_up:
             cheapest = at
-    #print(cheapest.temp_cost_up)
     return cheapest
 def selectMostExpensive(at_arr):
 
@@ -295,14 +295,11 @@ def selectDeepest(at_arr):
             sel = i
     return at_arr[sel]
 def selectMostShallow(at_arr):
-    depth = [0 for x in range(0,len(at_arr))]
-    for i in range(0,len(at_arr)):
-        depth[i] = at_arr[i].getNodeDepth()
-    sel = 0
-    for i in range(0,len(at_arr)):
-        if depth[sel] > depth[i]:
-            sel = i
-    return at_arr[sel]
+    sel = at_arr[0]
+    for at in at_arr:
+        if at.node_depth < sel.node_depth:
+            sel = at
+    return sel
 def selectSmart(at_arr):
     #select a node with a highly reduced upward cost but a large downward cost
     return selectFirst(at_arr)
@@ -324,52 +321,124 @@ def selectUser(at_arr):
     #   inv craft
     #   locate
 
+def getWorldCosts(world,world_name):
+    flnm = 'json/world_configs/'+world_name+'_costs.json'
+    if not os.path.isfile(flnm):
+        dists = world.getAverageDistances()
+        with open(flnm,'w+') as fl:
+            json.dump(dists,fl,indent=4)
+
+    with open(flnm) as wldcf:
+        return json.load(wldcf)
+
+
+
+DISTANCE = 10
+RAYS = 5
+FOV_ANGLE = 120
+
+def getFrame(world):
+    bl_ind = {None:0,'wood':1,'stone':2,'crafting bench':3,'iron ore':4,'coal':5,'wall':6}
+    casts = []
+    angle_incr = (FOV_ANGLE)/((RAYS - 1)/2)
+    for x in range(0,RAYS):
+        dist, bl = world.rayCast(x*angle_incr - (FOV_ANGLE/2),DISTANCE)
+        casts.extend([dist,bl_ind[bl]])
+    #print(casts)
+    return casts
+
+
+def weightVar(in_dim,out_dim):
+    return tf.Variable(tf.truncated_normal([in_dim,out_dim], mean=.5, stddev=0.25))
+def biasVar(in_dim):
+    return tf.Variable(tf.zeros([in_dim]))
+def deepnn(input_tensor):
+    input_dim = RAYS*2
+    hidden1_dim = 256
+    hidden2_dim = 256
+    out_dim = RAYS
+    dropout_rate = tf.placeholder(tf.float32)
+
+    hidden1 = tf.matmul(input_tensor,weightVar(input_dim,hidden1_dim))
+    hidden1 = tf.add(hidden1,biasVar(hidden1_dim))
+    hidden1 = tf.nn.relu(hidden1)
+    hidden2 = tf.matmul(hidden1,weightVar(hidden1_dim,hidden2_dim))
+    hidden2 = tf.add(hidden2,biasVar(hidden2_dim))
+    hidden2 = tf.nn.relu(hidden2)
+    hidden2 = tf.nn.dropout(hidden2, dropout_rate)
+    output_tensor = tf.matmul(hidden2,weightVar(hidden2_dim,out_dim))
+    output_tensor = tf.add(output_tensor,biasVar(out_dim))
+    output_tensor = tf.nn.relu(output_tensor)
+
+    #input is n * (resource_type, distance) where n is number or rays
+    #output is n * float with range [0:1]
+
+
+    return output_tensor, dropout_rate
+
 def run2d3d(config_name,select_method,select_name="",save_tree=False,save_path=False):
     full_start = time.time()
+
     with open(config_name) as jscf:
         config = json.load(jscf)
-
-    #create dependency tree
-    action_factory = ActionFactory()
-    level_index = decomposePS(PlayerState.parsePlayerStateJSON(config['target_ps']),config['simulation_name'],action_factory)
-    #graphTree(level_index,config['simulation_name'] + '_init')
-
-    #set up inventory and world models
-    inv_manager = InventoryManager()
     world_2d = GameWorld2d( config['world_2d_location'],(config['spawn_pos'][0],config['spawn_pos'][1]))
-
+    default_costs = getWorldCosts(world_2d,'rv_1')
+    action_factory = ActionFactory(default_costs)
+    level_index = decomposePS(PlayerState.parsePlayerStateJSON(config['target_ps']),config['simulation_name'],action_factory)
+    inv_manager = InventoryManager()
     pm = PlayerMemory()
     gs = GameState(ps=None,pm=pm,fov=None,inv=inv_manager,world_2d=world_2d)
 
+    root = level_index[0][0]
+    scales = {} #action_factory.scaleCosts(gs.fov)
+    root.calculateCostUp(scales)
+    root.calculateCostSetDown([])
+    root.calculateDepth(0)
+    steps = [] #to keep track of the series of AT's as they're executed
+    images = [] #used for gif rendering
+
+
+    #====TENSORFLOW SETUP====#
+    learning_rate = 0
+    training_rounds = 10
+    input_tensor = tf.placeholder(tf.float32,shape=[None,RAYS*2],name='input_tensor')
+    network_output,dropout_rate = deepnn(input_tensor)
+    loss = tf.reduce_mean(tf.log(network_output))
+    optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate)
+    train_step = optimizer.minimize(loss)
+
+
+
+
+
+
+
+
+
+
     print('---- STARTING SIMUILATION  ----')
     print('selection method: ' + str(select_name))
-
-    steps = [] #to keep track of the series of AT's as they're executed
-    images = []
-
-
     full_start2 = time.time()
-    root = level_index[0][0]
     while(not root.isComplete()):
-        scales = action_factory.scaleCosts(gs.fov) #calculate cost scalars based on field of view
-        root.calculateCostUp(scales) #apply cost scalars
-        #root.calculateCostDown(scales)
+        #calculate cost scalars based on field of view
+        #root.calculateCostUp(scales)
+        #images.append(np.array(resize_no_blur(gs.world_2d.renderPath(gs.pm.metrics['path'][-10:]),2))) #uncomment if rendering a gif
         leaf_set = root.getLeafNodes()
+        getFrame(world_2d)
         selected_at = select_method(leaf_set) #level_index[0][0].select() #select at for execution
         if len(steps) == 0 or id(steps[-1]) != id(selected_at): #record selected AT
             steps.append(selected_at)
-            #print(selected_at.act.name)
-            #print("------")
+            #upwardPruneTree(level_index) #only need to prune if you're graphing the tree
+            #downwardPruneTree(level_index)
             #graphTree(level_index,config['simulation_name'] + '_' + str(gs.world_step),selectedAT=selected_at)
         gs.pm.metrics['path'].append(gs.world_2d.pos)
-        #images.append(np.array(resize_no_blur(gs.world_2d.renderPath(gs.pm.metrics['path'][-10:]),2)))
-        selected_at.execute(gs) #execute AT
-
-
-        #downwardPruneTree(level_index) #prune tree to clean up in case an action completed - only needed if the tree needs to be graphed
-        #upwardPruneTree(level_index)
+        if selected_at.execute(gs): #execute AT
+            root.calculateCostUp(scales)
         gs.world_step += 1
-        #print(gs.world_step)
+
+
+
+
 
     print(str(time.time()-full_start) + ' sec full run')
     print(str(time.time()-full_start2) + ' sec sim')
@@ -381,7 +450,6 @@ def run2d3d(config_name,select_method,select_name="",save_tree=False,save_path=F
     print('rendered .gif in ' + str(time.time() - render_t) + ' sec')
     '''
 
-#run2d3d('json/simulation_configs/TEST_ENV4.json')
 
 
 run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x: selectMostShallow(x),select_name='most shallow')

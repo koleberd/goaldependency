@@ -2,16 +2,17 @@ from gameObject import *
 from action import *
 from playerState import *
 import gameController
-
+import os.path
 
 import json
 class ActionFactory:
 
-    def __init__(self):
+    def __init__(self,costs):
         with open('json/resourceIndex.json') as jsfl:
             self.resourceIndex = json.load(jsfl)
         with open('json/actionMemory.json') as jsfl:
             actMemory = json.load(jsfl)
+        self.costs = costs
         self.actionMemory = []
         for key in actMemory:
             self.actionMemory.append(self.parseActionJSON(actMemory[key]))
@@ -20,7 +21,12 @@ class ActionFactory:
         psp = PlayerState.parsePlayerStateJSON(obj['prereq'])
         psr = PlayerState.parsePlayerStateJSON(obj['result'])
         cst = obj['cost']
-        func = None
+        if 'locate' in obj['function']:
+            item = obj['function'].split(':')[1]
+            if item in self.costs.keys():
+                cst = self.costs[item]
+        else:
+            cst = 1
         func = lambda gs: gameController.executeFunction(obj['function'].split(":")[0],gs,obj['function'].split(":")[1].split(','))
         nm = obj['function']
         return Action(psp,psr,cst,func,nm)

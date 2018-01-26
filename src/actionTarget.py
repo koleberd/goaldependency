@@ -10,6 +10,8 @@ class ActionTarget:
         self.parent = None
         self.temp_cost_up = 0
         self.temp_cost_down = 0
+        self.node_depth = 0
+        self.cost_down = []
         #self.execMemory = {} #used by pathfinders etc to keep track of execution memory
     def addChild(self,child):
         self.child = child
@@ -65,6 +67,18 @@ class ActionTarget:
         if self.child != None and self.getRequirement() != PlayerState():
             self.child.calculateCostDownR(scalars,self.temp_cost_down)
 
+
+    def calculateCostSetDown(self,passed_set):
+        self.cost_down = passed_set
+        self.cost_down.append(self.act)
+        if self.child != None:
+            self.child.calculateCostSetDown(self.cost_down)
+    def calculateDepth(self,depth):
+        self.node_depth = depth
+        if self.child != None:
+            self.child.calculateDepth(depth+1)
+
+
     '''
     def getCost(self,scalars,table={}):
         scalar = 1
@@ -77,16 +91,13 @@ class ActionTarget:
             res = table[self.act]
         self.temp_cost_up = res
         return res
-    '''
+
     def select(self):
         if self.child == None:
             return self
         return self.child.select()
-    def getDownwardCost(self):
-        cheapest_parent = self.parent.parents[0]
-        for ppt in self.parent.parents:
-            do = 'nothing'
-        self.act.cost
+    '''
+    
     def getNodeDepth(self):
         #print('---')
         #print(self.parent)
