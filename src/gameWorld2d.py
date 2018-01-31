@@ -243,7 +243,15 @@ class GameWorld2d:
         #find actual distance to intersection with location
         #return distance and the object #and coord tuple
 
-    def getAverageDistances(self,):
+    def getKernel(self,radius):
+        startx = max([0,self.pos[0]-radius])
+        starty = max([0,self.pos[1]-radius])
+        endx = min([self.width-1,self.pos[0]+radius])
+        endy = min([self.height-1,self.pos[1]+radius])
+        bl_ind = {None:0,'wood':1,'stone':2,'crafting bench':3,'iron ore':4,'coal':5,'wall':6}
+        return [[bl_ind[self.grid[i][j]] for j in range(0,self.height)] for i in range(0,self.width)]
+
+    def getAverageDistances(self):
         print('Calculating average distances...')
         dist_set = {}
         for bl in BLOCK_TYPES:

@@ -336,7 +336,7 @@ def getWorldCosts(world,world_name):
 DISTANCE = 10
 RAYS = 5
 FOV_ANGLE = 120
-
+KERNEL_RADIUS = 10
 def getFrame(world):
     bl_ind = {None:0,'wood':1,'stone':2,'crafting bench':3,'iron ore':4,'coal':5,'wall':6}
     casts = []
@@ -346,8 +346,6 @@ def getFrame(world):
         casts.extend([dist,bl_ind[bl]])
     #print(casts)
     return casts
-
-
 def weightVar(in_dim,out_dim):
     return tf.Variable(tf.truncated_normal([in_dim,out_dim], mean=.5, stddev=0.25))
 def biasVar(in_dim):
@@ -369,6 +367,14 @@ def deepnn(input_tensor):
     output_tensor = tf.matmul(hidden2,weightVar(hidden2_dim,out_dim))
     output_tensor = tf.add(output_tensor,biasVar(out_dim))
     output_tensor = tf.nn.relu(output_tensor)
+    output_tensor = tf.div(
+                        tf.subtract(
+                            output_tensor,
+                            tf.reduce_min(output_tensor)),
+                        tf.subtract(
+                            tf.reduce_max(output_tensor),
+                            tf.reduce_min(output_tensor)))
+
 
     #input is n * (resource_type, distance) where n is number or rays
     #output is n * float with range [0:1]
@@ -401,7 +407,7 @@ def run2d3d(config_name,select_method,select_name="",save_tree=False,save_path=F
     #====TENSORFLOW SETUP====#
     learning_rate = 0
     training_rounds = 10
-    input_tensor = tf.placeholder(tf.float32,shape=[None,RAYS*2],name='input_tensor')
+    input_tensor = tf.placeholder(tf.float32,shape=[None,KERNEL_RADIUS,KERNEL_RADIUS],name='input_tensor')
     network_output,dropout_rate = deepnn(input_tensor)
     loss = tf.reduce_mean(tf.log(network_output))
     optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate)
@@ -424,7 +430,7 @@ def run2d3d(config_name,select_method,select_name="",save_tree=False,save_path=F
         #root.calculateCostUp(scales)
         #images.append(np.array(resize_no_blur(gs.world_2d.renderPath(gs.pm.metrics['path'][-10:]),2))) #uncomment if rendering a gif
         leaf_set = root.getLeafNodes()
-        getFrame(world_2d)
+        world_2d.getKernel(KERNEL_RADIUS)
         selected_at = select_method(leaf_set) #level_index[0][0].select() #select at for execution
         if len(steps) == 0 or id(steps[-1]) != id(selected_at): #record selected AT
             steps.append(selected_at)
