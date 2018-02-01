@@ -331,33 +331,25 @@ def getWorldCosts(world,world_name):
     with open(flnm) as wldcf:
         return json.load(wldcf)
 
-
-
 DISTANCE = 10
 RAYS = 5
 FOV_ANGLE = 120
 KERNEL_RADIUS = 10
-def getFrame(world):
-    bl_ind = {None:0,'wood':1,'stone':2,'crafting bench':3,'iron ore':4,'coal':5,'wall':6}
-    casts = []
-    angle_incr = (FOV_ANGLE)/((RAYS - 1)/2)
-    for x in range(0,RAYS):
-        dist, bl = world.rayCast(x*angle_incr - (FOV_ANGLE/2),DISTANCE)
-        casts.extend([dist,bl_ind[bl]])
-    #print(casts)
-    return casts
+INPUT_DIM = (KERNEL_RADIUS*2+1)**2
+OUTPUT_DIM = 6
+bl_ind = {None:0,'wood':1,'stone':2,'crafting bench':3,'iron ore':4,'coal':5,'wall':6}
+
 def weightVar(in_dim,out_dim):
     return tf.Variable(tf.truncated_normal([in_dim,out_dim], mean=.5, stddev=0.25))
 def biasVar(in_dim):
     return tf.Variable(tf.zeros([in_dim]))
 def deepnn(input_tensor):
-    input_dim = RAYS*2
     hidden1_dim = 256
     hidden2_dim = 256
-    out_dim = RAYS
+    out_dim = OUTPUT_DIM
     dropout_rate = tf.placeholder(tf.float32)
 
-    hidden1 = tf.matmul(input_tensor,weightVar(input_dim,hidden1_dim))
+    hidden1 = tf.matmul(input_tensor,weightVar(INPUT_DIM,hidden1_dim))
     hidden1 = tf.add(hidden1,biasVar(hidden1_dim))
     hidden1 = tf.nn.relu(hidden1)
     hidden2 = tf.matmul(hidden1,weightVar(hidden1_dim,hidden2_dim))
@@ -382,6 +374,20 @@ def deepnn(input_tensor):
 
     return output_tensor, dropout_rate
 
+def preproc(stats,averages):
+    ats = {}
+    for i in range(0,len(stats)):
+        el = stats[i]
+        if el['at'] not in at_id.keys():
+            ats[el['at']] = {'type':el['type'],'inputs':[el['frame']]}
+        else:
+            ats[el['at']]['frames'].append(el['frame'])
+    
+
+
+
+
+
 def run2d3d(config_name,select_method,select_name="",save_tree=False,save_path=False):
     full_start = time.time()
 
@@ -402,24 +408,7 @@ def run2d3d(config_name,select_method,select_name="",save_tree=False,save_path=F
     root.calculateDepth(0)
     steps = [] #to keep track of the series of AT's as they're executed
     images = [] #used for gif rendering
-
-
-    #====TENSORFLOW SETUP====#
-    learning_rate = 0
-    training_rounds = 10
-    input_tensor = tf.placeholder(tf.float32,shape=[None,KERNEL_RADIUS,KERNEL_RADIUS],name='input_tensor')
-    network_output,dropout_rate = deepnn(input_tensor)
-    loss = tf.reduce_mean(tf.log(network_output))
-    optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate)
-    train_step = optimizer.minimize(loss)
-
-
-
-
-
-
-
-
+    sim_output = []
 
 
     print('---- STARTING SIMUILATION  ----')
@@ -430,7 +419,7 @@ def run2d3d(config_name,select_method,select_name="",save_tree=False,save_path=F
         #root.calculateCostUp(scales)
         #images.append(np.array(resize_no_blur(gs.world_2d.renderPath(gs.pm.metrics['path'][-10:]),2))) #uncomment if rendering a gif
         leaf_set = root.getLeafNodes()
-        world_2d.getKernel(KERNEL_RADIUS)
+        frame =world_2d.getKernel(KERNEL_RADIUS)
         selected_at = select_method(leaf_set) #level_index[0][0].select() #select at for execution
         if len(steps) == 0 or id(steps[-1]) != id(selected_at): #record selected AT
             steps.append(selected_at)
@@ -438,9 +427,11 @@ def run2d3d(config_name,select_method,select_name="",save_tree=False,save_path=F
             #downwardPruneTree(level_index)
             #graphTree(level_index,config['simulation_name'] + '_' + str(gs.world_step),selectedAT=selected_at)
         gs.pm.metrics['path'].append(gs.world_2d.pos)
-        if selected_at.execute(gs): #execute AT
+        at_completed = selected_at.execute(gs)
+        if at_completed: #execute AT
             root.calculateCostUp(scales)
         gs.world_step += 1
+        sim_output.append({'frame':frame,'at':id(selected_at),'completed':at_completed,'type':selected_at.act.name})
 
 
 
@@ -455,14 +446,30 @@ def run2d3d(config_name,select_method,select_name="",save_tree=False,save_path=F
     imageio.mimsave('simulation/' + select_name + '_animation.gif',images)
     print('rendered .gif in ' + str(time.time() - render_t) + ' sec')
     '''
+    return sim_output
+
+def main():
+    learning_rate = 0
+    training_rounds = 10
+    input_tensor = tf.placeholder(tf.float32,shape=[None,INPUT_DIM],name='input_tensor')
+    network_output,dropout_rate = deepnn(input_tensor)
+    loss = tf.reduce_mean(tf.log(network_output))
+    optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate)
+    train_step = optimizer.minimize(loss)
+
+    average_costs = {}
+    #run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x: selectMostShallow(x),select_name='most shallow')
+    #run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x: selectUser(x),select_name='user')
+    sim_out = run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x: selectCheapest(x),select_name='cheapest')
+    sim_out = preproc(sim_out)
+    print(sim_out)
+
+    with tf.Session() as sess:
+        do = 'something'
 
 
-
-run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x: selectMostShallow(x),select_name='most shallow')
-run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x: selectUser(x),select_name='user')
-run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x: selectCheapest(x),select_name='cheapest')
 #run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x: selectSmart(x),select_name='smart')
-
+main()
 
 '''
 bound to loop

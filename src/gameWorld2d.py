@@ -244,12 +244,21 @@ class GameWorld2d:
         #return distance and the object #and coord tuple
 
     def getKernel(self,radius):
+        '''
         startx = max([0,self.pos[0]-radius])
         starty = max([0,self.pos[1]-radius])
         endx = min([self.width-1,self.pos[0]+radius])
         endy = min([self.height-1,self.pos[1]+radius])
+        '''
+
         bl_ind = {None:0,'wood':1,'stone':2,'crafting bench':3,'iron ore':4,'coal':5,'wall':6}
-        return [[bl_ind[self.grid[i][j]] for j in range(0,self.height)] for i in range(0,self.width)]
+        res = [[0 for x in range(0,radius*2+1)] for y in range(0,radius*2+1)]
+        for col in range(self.pos[0]-radius,self.pos[0]+radius+1):
+            for row in range(self.pos[1]-radius,self.pos[1]+radius+1):
+                if not (row < 0 or col < 0 or col >= self.width or row >= self.height):
+                    res[col+radius-self.pos[0]][row+radius-self.pos[1]] = bl_ind[self.grid[col][row]]
+        return np.array(res).flatten()
+        #return [[bl_ind[self.grid[i][j]] for j in range(0,self.height)] for i in range(0,self.width)]
 
     def getAverageDistances(self):
         print('Calculating average distances...')
