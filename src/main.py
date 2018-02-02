@@ -16,6 +16,10 @@ import tensorflow as tf
 import numpy as np
 import dependencyTree as dtree
 import sys
+import math
+
+
+
 
 #gets average distance for every object from every open position for a world, and puts it in a json file
 def getWorldCosts(world,world_name):
@@ -35,6 +39,17 @@ def getWorldCosts(world,world_name):
     with open(flnm) as wldcf:
         return json.load(wldcf)
 
+
+DISTANCE = 10
+RAYS = 5
+FOV_ANGLE = 120
+KERNEL_RADIUS = 10
+INPUT_DIM = (KERNEL_RADIUS*2+1)**2
+OUTPUT_DIM = 6
+FRAME_SKIP_THRESHOLD = .35
+
+bl_ind = {None:0,'wood':1,'stone':2,'crafting bench':3,'iron ore':4,'coal':5,'wall':6}
+action_set = ['locateObject:wood','locateObject:stone','locateObject:crafting bench','locateObject:iron ore','locateObject:coal']
 
 # action target selection functions
 def selectCheapest(at_arr,frame):
@@ -95,29 +110,33 @@ def selectUser(at_arr,frame):
     #   inv craft
     #   locate
 
-def selectCheapestDNN(at_arr,frame,nn):
-    return selectCheapest(at_arr,frame)
+def selectCheapestDNN(at_arr,frame,nn_in,nn_out):
+    scaled = [float(at.temp_cost_up) for at in at_arr]
 
-DISTANCE = 10
-RAYS = 5
-FOV_ANGLE = 120
-KERNEL_RADIUS = 10
-INPUT_DIM = (KERNEL_RADIUS*2+1)**2
-OUTPUT_DIM = 6
-FRAME_SKIP_THRESHOLD = .35
+    #nn_in = frame
+    weights = nn_out.eval(feed_dict={'input_tensor:0':[frame],'dropout_rate:0':1.0})[0]
+    #print(weights)
+    for i in range(0,len(at_arr)):
+        a_n = at_arr[i].act.name
+        if a_n in action_set:
+            w_ind = action_set.index(a_n)
+            if not math.isnan(weights[w_ind]):
+                scaled[i] *= weights[w_ind]
+    #print(scaled)
+    cheapest_ind = scaled.index(min(scaled))
+    return at_arr[cheapest_ind]
 
-bl_ind = {None:0,'wood':1,'stone':2,'crafting bench':3,'iron ore':4,'coal':5,'wall':6}
-action_set = ['locateObject:wood','locateObject:stone','locateObject:crafting bench','locateObject:iron ore','locateObject:coal']
+
 
 def weightVar(in_dim,out_dim):
-    return tf.Variable(tf.truncated_normal([in_dim,out_dim], stddev=0.1))
+    return tf.Variable(tf.truncated_normal([in_dim,out_dim], mean=0.5, stddev=0.25))
 def biasVar(in_dim):
     return tf.Variable(tf.zeros([in_dim]))
 def deepnn(input_tensor):
     hidden1_dim = 256
     hidden2_dim = 256
     out_dim = len(action_set)
-    dropout_rate = tf.placeholder(tf.float32)
+    dropout_rate = tf.placeholder(tf.float32, name='dropout_rate')
 
     hidden1 = tf.matmul(input_tensor,weightVar(INPUT_DIM,hidden1_dim))
     hidden1 = tf.add(hidden1,biasVar(hidden1_dim))
@@ -129,7 +148,7 @@ def deepnn(input_tensor):
     output_tensor = tf.matmul(hidden2,weightVar(hidden2_dim,out_dim))
     output_tensor = tf.add(output_tensor,biasVar(out_dim))
     output_tensor = tf.nn.relu(output_tensor)
-    '''
+
     output_tensor = tf.div(
                         tf.subtract(
                             output_tensor,
@@ -138,7 +157,7 @@ def deepnn(input_tensor):
                             tf.reduce_max(output_tensor),
                             tf.reduce_min(output_tensor)))
 
-    '''
+
     #input is n * (resource_type, distance) where n is number or rays
     #output is n * float with range [0:1]
 
@@ -208,9 +227,11 @@ def run2d3d(config_name,select_method,select_name="",save_tree=False,save_path=F
         #images.append(np.array(resize_no_blur(gs.world_2d.renderPath(gs.pm.metrics['path'][-10:]),2))) #uncomment if rendering a gif
         leaf_set = root.getLeafNodes()
         frame = world_2d.getKernel(KERNEL_RADIUS)
+        #print(frame)
         selected_at = select_method(leaf_set,frame) #level_index[0][0].select() #select at for execution
         if len(steps) == 0 or id(steps[-1]) != id(selected_at): #record selected AT
             steps.append(selected_at)
+            #print(selected_at.act.name)
             #upwardPruneTree(level_index) #only need to prune if you're graphing the tree
             #downwardPruneTree(level_index)
             #graphTree(level_index,config['simulation_name'] + '_' + str(gs.world_step),selectedAT=selected_at)
@@ -256,7 +277,7 @@ def main():
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
         for step in range(0,training_rounds):
-            sim_out,sim_len = run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x,frame: selectCheapestDNN(x,frame,output_tensor),select_name='cheapest')
+            sim_out,sim_len = run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x,frame: selectCheapestDNN(x,frame,input_tensor,output_tensor),select_name='cheapest')
             sim_out = preproc(sim_out,average_costs)
             '''
             print('.',end='')
