@@ -1,7 +1,7 @@
 {
-    "coal": 49.98394868928827,
-    "stone": 48.31908893401897,
-    "crafting bench": 46.5647298385803,
-    "iron ore": 52.055360384398384,
-    "wood": 52.004398821837576
+    "locateObject:iron ore": 52.055360384398384,
+    "locateObject:wood": 52.004398821837576,
+    "locateObject:crafting bench": 46.5647298385803,
+    "locateObject:coal": 49.98394868928827,
+    "locateObject:stone": 48.31908893401897
 }
