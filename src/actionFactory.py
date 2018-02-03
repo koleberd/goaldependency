@@ -21,10 +21,8 @@ class ActionFactory:
         psp = PlayerState.parsePlayerStateJSON(obj['prereq'])
         psr = PlayerState.parsePlayerStateJSON(obj['result'])
         cst = obj['cost']
-        if 'locate' in obj['function']:
-            item = obj['function'].split(':')[1]
-            if item in self.costs.keys():
-                cst = self.costs[item]
+        if obj['function'] in self.costs.keys():
+            cst = self.costs[obj['function']]
         else:
             cst = 1
         func = lambda gs: gameController.executeFunction(obj['function'].split(":")[0],gs,obj['function'].split(":")[1].split(','))

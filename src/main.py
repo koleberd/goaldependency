@@ -109,7 +109,6 @@ def selectUser(at_arr,frame):
     #   craft
     #   inv craft
     #   locate
-
 def selectCheapestDNN(at_arr,frame,nn_in,nn_out):
     scaled = [float(at.temp_cost_up) for at in at_arr]
 
@@ -123,10 +122,9 @@ def selectCheapestDNN(at_arr,frame,nn_in,nn_out):
             if not math.isnan(weights[w_ind]):
                 scaled[i] *= weights[w_ind]
     #print(scaled)
+    #print(scaled)
     cheapest_ind = scaled.index(min(scaled))
     return at_arr[cheapest_ind]
-
-
 
 def weightVar(in_dim,out_dim):
     return tf.Variable(tf.truncated_normal([in_dim,out_dim], mean=0.5, stddev=0.25))
@@ -184,7 +182,6 @@ def preproc(stats,averages):
         if at['type'] in averages.keys() and len(at['inputs']) > averages[at['type']]:
             at['output'] = [max(1.0,x) for x in at['output']]
     return ats
-
 def constructBatch(stats):
     inputs = []
     logits = []
@@ -255,7 +252,7 @@ def run2d3d(config_name,select_method,select_name="",save_tree=False,save_path=F
 
 def main():
     learning_rate = 0
-    training_rounds = 10
+    training_rounds = 50
 
     input_tensor = tf.placeholder(tf.float32,shape=[None,INPUT_DIM],name='input_tensor')
     label_tensor = tf.placeholder(tf.float32, [None, len(action_set)])
@@ -274,6 +271,7 @@ def main():
         if 0 in at['output']:
             print(at['type'] + '\t|\t' + str(at['output']))
     '''
+    total_samples = 0
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
         for step in range(0,training_rounds):
@@ -284,6 +282,7 @@ def main():
             sys.stdout.flush()
             '''
             batch = constructBatch(sim_out)
+            total_samples += len(batch[0])
             print('training on batch ' + str(step) + ' with ' + str(len(batch[0])) + ' samples (sim world cycles: ' + str(sim_len) + ')')
             '''
             BATCH_SIZE = len(batch_set[0])
@@ -291,7 +290,7 @@ def main():
             next_element_training = trainingSet.make_one_shot_iterator().get_next()
             '''
             train_step.run(feed_dict={input_tensor: batch[0], label_tensor: batch[1], dropout_rate: 0.5})
-
+    print('total samples trained: ' + str(total_samples))
 
 
 
