@@ -198,7 +198,7 @@ def run2d3d(config_name,select_method,select_name="",save_tree=False,save_path=F
     PRINT = False
     with open(config_name) as jscf:
         config = json.load(jscf)
-    world_2d = GameWorld2d( config['world_2d_location'],(config['spawn_pos'][0],config['spawn_pos'][1]))
+    world_2d = GameWorld2d( config['world_2d_location'],spawn_random=True)# (config['spawn_pos'][0],config['spawn_pos'][1]))
     default_costs = getWorldCosts(world_2d,'rv_1')
     action_factory = ActionFactory(default_costs)
     level_index = dtree.decomposePS(PlayerState.parsePlayerStateJSON(config['target_ps']),config['simulation_name'],action_factory)
@@ -238,6 +238,11 @@ def run2d3d(config_name,select_method,select_name="",save_tree=False,save_path=F
             root.calculateCostUp(scales)
         gs.world_step += 1
         sim_output.append({'frame':frame,'at':id(selected_at),'completed':at_completed,'type':selected_at.act.name})
+        if gs.world_step > 1500:
+            gs.world_step = -1
+            break
+        #print('.',end='')
+        #sys.stdout.flush()
 
     print(str(time.time()-full_start) + ' sec full run') if PRINT else None
     print(str(time.time()-full_start2) + ' sec sim') if PRINT else None
@@ -248,11 +253,12 @@ def run2d3d(config_name,select_method,select_name="",save_tree=False,save_path=F
     imageio.mimsave('simulation/' + select_name + '_animation.gif',images)
     print('rendered .gif in ' + str(time.time() - render_t) + ' sec')
     '''
-    return sim_output,len(gs.pm.metrics['path'])
+    sim_len = gs.world_step#len(gs.pm.metrics['path'])
+    return sim_output,sim_len
 
 def main():
     learning_rate = 0
-    training_rounds = 50
+    training_rounds = 5000
 
     input_tensor = tf.placeholder(tf.float32,shape=[None,INPUT_DIM],name='input_tensor')
     label_tensor = tf.placeholder(tf.float32, [None, len(action_set)])
@@ -271,11 +277,15 @@ def main():
         if 0 in at['output']:
             print(at['type'] + '\t|\t' + str(at['output']))
     '''
+    stats = []
     total_samples = 0
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
         for step in range(0,training_rounds):
             sim_out,sim_len = run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x,frame: selectCheapestDNN(x,frame,input_tensor,output_tensor),select_name='cheapest')
+            if sim_len == -1:
+                print('skipping batch')
+                continue
             sim_out = preproc(sim_out,average_costs)
             '''
             print('.',end='')
@@ -283,6 +293,7 @@ def main():
             '''
             batch = constructBatch(sim_out)
             total_samples += len(batch[0])
+            stats.append({'samples':len(batch[0]),'world cycles':sim_len,'batch num':step})
             print('training on batch ' + str(step) + ' with ' + str(len(batch[0])) + ' samples (sim world cycles: ' + str(sim_len) + ')')
             '''
             BATCH_SIZE = len(batch_set[0])
@@ -292,6 +303,8 @@ def main():
             train_step.run(feed_dict={input_tensor: batch[0], label_tensor: batch[1], dropout_rate: 0.5})
     print('total samples trained: ' + str(total_samples))
 
+    with open('json/simulation_stats/rv_1_' + str(time.time()) + 'stats.json','w+') as ojs:
+        json.dump({'stats':stats},ojs,indent=4,sort_keys=True)
 
 
 #run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x: selectMostShallow(x),select_name='most shallow')

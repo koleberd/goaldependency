@@ -1,0 +1,29 @@
+{
+    "stats": [
+        {
+            "batch num": 0,
+            "samples": 111,
+            "world cycles": 340
+        },
+        {
+            "batch num": 1,
+            "samples": 149,
+            "world cycles": 393
+        },
+        {
+            "batch num": 2,
+            "samples": 177,
+            "world cycles": 515
+        },
+        {
+            "batch num": 3,
+            "samples": 129,
+            "world cycles": 390
+        },
+        {
+            "batch num": 4,
+            "samples": 156,
+            "world cycles": 434
+        }
+    ]
+}

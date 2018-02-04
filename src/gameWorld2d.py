@@ -3,6 +3,7 @@ import os
 import numpy as np
 import time
 import imageio
+import random
 
 BLOCK_IND = {
     (0,0,0):'wall',
@@ -27,7 +28,7 @@ BLOCK_TYPES = ['wood','crafting bench', 'iron ore', 'stone', 'coal']
 
 
 class GameWorld2d:
-    def __init__(self,image_path,spawn_pos=(0,0)):
+    def __init__(self,image_path,spawn_pos=(0,0),spawn_random=False):
 
         img = Image.open(image_path)
         self.width = img.width
@@ -37,7 +38,15 @@ class GameWorld2d:
             for row in range(self.height):
                 self.grid[col][row] = parseBlock(img.getpixel((col,row)))
         self.pos = spawn_pos
+        if spawn_random:
+            self.randomizePos()
         self.yaw = 0
+
+    def randomizePos(self):
+        npos = (random.randint(0,self.width-1),random.randint(0,self.height-1))
+        while self.grid[npos[0]][npos[1]] != None:
+            npos = (random.randint(0,self.width-1),random.randint(0,self.height-1))
+        self.pos = npos
 
     def findClosest(self,obj,number):#not used
         '''
