@@ -1,6 +1,6 @@
 run_basic: clean
-	
 	@python src/main.py
+	@python src/util/simAnalysis.py
 t:
 	@python src/test.py
 
@@ -14,6 +14,9 @@ init:
 	@mkdir simulation/2dpath
 	@mkdir models
 	@pip install imageio
+
+	@mkdir json/simulation_stats
+
 mv: clean
 	@python src/controller.py
 
@@ -21,7 +24,8 @@ mv: clean
 learn:
 	@python src/tensorflow/blockDetector3.py
 
-
-
 doc:
 	@asciidoctor README.adoc -b html5
+
+analysis:
+	@python src/util/simAnalysis.py

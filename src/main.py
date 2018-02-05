@@ -258,7 +258,7 @@ def run2d3d(config_name,select_method,select_name="",save_tree=False,save_path=F
 
 def main():
     learning_rate = 0
-    training_rounds = 5000
+    training_rounds = 500
 
     input_tensor = tf.placeholder(tf.float32,shape=[None,INPUT_DIM],name='input_tensor')
     label_tensor = tf.placeholder(tf.float32, [None, len(action_set)])
@@ -282,7 +282,9 @@ def main():
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
         for step in range(0,training_rounds):
+            sim_time = time.time()
             sim_out,sim_len = run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x,frame: selectCheapestDNN(x,frame,input_tensor,output_tensor),select_name='cheapest')
+            sim_time = time.time() - sim_time
             if sim_len == -1:
                 print('skipping batch')
                 continue
@@ -293,7 +295,7 @@ def main():
             '''
             batch = constructBatch(sim_out)
             total_samples += len(batch[0])
-            stats.append({'samples':len(batch[0]),'world cycles':sim_len,'batch num':step})
+            stats.append({'samples':len(batch[0]),'world cycles':sim_len,'batch num':step,'sim time':sim_time})
             print('training on batch ' + str(step) + ' with ' + str(len(batch[0])) + ' samples (sim world cycles: ' + str(sim_len) + ')')
             '''
             BATCH_SIZE = len(batch_set[0])

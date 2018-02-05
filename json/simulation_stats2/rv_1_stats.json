@@ -1,20 +1,4 @@
 {
-    "analysis": {
-        "moving average": [
-            491.36,
-            473.36,
-            467.76,
-            461.96,
-            474.34,
-            472.8,
-            471.0,
-            476.46,
-            474.08,
-            457.48
-        ],
-        "total samples": 82762,
-        "total simulations": 500
-    },
     "stats": [
         {
             "batch num": 0,
