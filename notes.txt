@@ -95,4 +95,4 @@ todo:
 	make list of sections in writeup (index)
 
 
-reenforcement learning potential?
+generated labels shouldn't always be 1 for actions that are ones besides the one that the label corresponds with. the labels should have values for the average in the simulatino rather than the specific one
