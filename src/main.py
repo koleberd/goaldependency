@@ -52,12 +52,7 @@ bl_ind = {None:0,'wood':1,'stone':2,'crafting bench':3,'iron ore':4,'coal':5,'wa
 action_set = ['locateObject:wood','locateObject:stone','locateObject:crafting bench','locateObject:iron ore','locateObject:coal']
 
 # action target selection functions
-def selectCheapest(at_arr,frame):
-    cheapest = at_arr[0]
-    for at in at_arr:
-        if at.temp_cost_up < cheapest.temp_cost_up:
-            cheapest = at
-    return cheapest
+'''
 def selectMostExpensive(at_arr,frame):
 
     exp = at_arr[0]
@@ -83,16 +78,25 @@ def selectDeepest(at_arr,frame):
         if depth[sel] < depth[i]:
             sel = i
     return at_arr[sel]
-def selectMostShallow(at_arr,frame):
+'''
+def selectMostShallow(at_arr,frame,prev):
     sel = at_arr[0]
     for at in at_arr:
         if at.node_depth < sel.node_depth:
             sel = at
     return sel
-def selectSmart(at_arr,frame):
-    #select a node with a highly reduced upward cost but a large downward cost
-    return selectFirst(at_arr)
-def selectUser(at_arr,frame):
+def selectCheapest(at_arr,frame,prev):
+    cheapest = at_arr[0]
+    for at in at_arr:
+        if at.temp_cost_up < cheapest.temp_cost_up:
+            cheapest = at
+    return cheapest
+#select in order of priority
+#   harvest
+#   craft
+#   inv craft
+#   locate
+def selectUser(at_arr,frame,prev):
     return selectMostShallow(at_arr)
     for at in at_arr:
         if 'harvest' in at.act.name:
@@ -104,12 +108,8 @@ def selectUser(at_arr,frame):
         if 'craft' in at.act.name:
             return at
     return at_arr[0]
-    #select in order of priority
-    #   harvest
-    #   craft
-    #   inv craft
-    #   locate
-def selectCheapestDNN(at_arr,frame,nn_in,nn_out):
+
+def selectCheapestDNN(at_arr,frame,prev,nn_in,nn_out):
     scaled = [float(at.temp_cost_up) for at in at_arr]
 
     #nn_in = frame
@@ -124,7 +124,12 @@ def selectCheapestDNN(at_arr,frame,nn_in,nn_out):
     #print(scaled)
     #print(scaled)
     cheapest_ind = scaled.index(min(scaled))
-    return at_arr[cheapest_ind]
+    selected = at_arr[cheapest_ind]
+    if prev != None and selected.act.name == prev.act.name:
+        print(prev)
+        print(selected)
+        selected = prev
+    return selected
 
 def weightVar(in_dim,out_dim):
     return tf.Variable(tf.truncated_normal([in_dim,out_dim], mean=0.5, stddev=0.25))
@@ -154,6 +159,8 @@ def deepnn(input_tensor):
                         tf.subtract(
                             tf.reduce_max(output_tensor),
                             tf.reduce_min(output_tensor)))
+    final_bias = [.0001 for x in range(0,out_dim)]
+    output_tensor = tf.add(output_tensor,final_bias)
 
 
     #input is n * (resource_type, distance) where n is number or rays
@@ -173,11 +180,7 @@ def preproc(stats,averages):
 
     for at_k in ats:
         at = ats[at_k]
-        #print(at['type'])
-        '''
-        if at['type'] in averages.keys():
-            print(str(len(at['inputs'])) + '\t|\t' + str(averages[at['type']]))
-        '''
+
         at['output'] = [0.0 if at['type'] == action_set[x] else 1.0 for x in range(0,len(action_set))]
         if at['type'] in averages.keys() and len(at['inputs']) > averages[at['type']]:
             at['output'] = [max(1.0,x) for x in at['output']]
@@ -218,23 +221,26 @@ def run2d3d(config_name,select_method,select_name="",save_tree=False,save_path=F
     print('---- STARTING SIMUILATION  ----') if PRINT else None
     print('selection method: ' + str(select_name)) if PRINT else None
     full_start2 = time.time()
+    prev_at = None
     while(not root.isComplete()):
         #calculate cost scalars based on field of view
         #root.calculateCostUp(scales)
         #images.append(np.array(resize_no_blur(gs.world_2d.renderPath(gs.pm.metrics['path'][-10:]),2))) #uncomment if rendering a gif
         leaf_set = root.getLeafNodes()
         frame = world_2d.getKernel(KERNEL_RADIUS)
-        #print(frame)
-        selected_at = select_method(leaf_set,frame) #level_index[0][0].select() #select at for execution
+        selected_at = select_method(leaf_set,frame,prev_at) #level_index[0][0].select() #select at for execution
         if len(steps) == 0 or id(steps[-1]) != id(selected_at): #record selected AT
             steps.append(selected_at)
-            #print(selected_at.act.name)
-            #upwardPruneTree(level_index) #only need to prune if you're graphing the tree
-            #downwardPruneTree(level_index)
-            #graphTree(level_index,config['simulation_name'] + '_' + str(gs.world_step),selectedAT=selected_at)
+            #print(selected_at.act.name+ '-' + str(id(selected_at)))
+
+
+            #dtree.upwardPruneTree(level_index) #only need to prune if you're graphing the tree - BUGGED
+            #dtree.downwardPruneTree(level_index)
+            #dtree.graphTree(level_index,config['simulation_name'] + '_' + str(gs.world_step),selectedAT=selected_at)
         gs.pm.metrics['path'].append(gs.world_2d.pos)
         at_completed = selected_at.execute(gs)
         if at_completed: #execute AT
+            prev_at = None
             root.calculateCostUp(scales)
         gs.world_step += 1
         sim_output.append({'frame':frame,'at':id(selected_at),'completed':at_completed,'type':selected_at.act.name})
@@ -258,7 +264,7 @@ def run2d3d(config_name,select_method,select_name="",save_tree=False,save_path=F
 
 def main():
     learning_rate = 0
-    training_rounds = 500
+    training_rounds = 10
 
     input_tensor = tf.placeholder(tf.float32,shape=[None,INPUT_DIM],name='input_tensor')
     label_tensor = tf.placeholder(tf.float32, [None, len(action_set)])
@@ -283,11 +289,11 @@ def main():
         sess.run(tf.global_variables_initializer())
         for step in range(0,training_rounds):
             sim_time = time.time()
-            sim_out,sim_len = run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x,frame: selectCheapestDNN(x,frame,input_tensor,output_tensor),select_name='cheapest')
+            sim_out,sim_len = run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x,frame,prev: selectCheapestDNN(x,frame,prev,input_tensor,output_tensor),select_name='cheapest')
             sim_time = time.time() - sim_time
             if sim_len == -1:
-                print('skipping batch')
-                continue
+                print('Bad batch')
+                return False
             sim_out = preproc(sim_out,average_costs)
             '''
             print('.',end='')
@@ -312,6 +318,8 @@ def main():
 
 #run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x: selectMostShallow(x),select_name='most shallow')
 #run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x: selectUser(x),select_name='user')
+#sim = run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x,f: selectCheapest(x,f),select_name='cheapest')
+#print(sim[1])
 main()
 
 '''

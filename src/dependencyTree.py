@@ -5,7 +5,7 @@ from playerStateSolution import *
 from actionTarget import *
 from playerStateFactory import *
 from actionFactory import *
-
+from graphviz import *
 
 
 
@@ -78,6 +78,9 @@ def printTree(levelIndex):
                 print(str(item.getRequirement()) + " = " + str(item.getResult()))
     print("=/TREE=")
 
+
+
+#BUGGED - ASSUMES EVERY ACTION WITHOUT A CHILD NEEDS TO BE PRUNED
 def upwardPruneTree(levelIndex):
     #prune the tree
     #node pruned if nonzero requirements and zero children
