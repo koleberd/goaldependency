@@ -47,13 +47,11 @@ def testHash():
     tps2 = PlayerState(inventory={'wood':1})
     tps3 = PlayerState(inventory={'wood':2})
     tps4 = PlayerState(inventory={'wood':1,'stone':1})
-    tps5 = PlayerState(inventory={'wood':1},buffs={'speed':1})
-
 
     assert(hash(tps) == hash(tps2))
     assert(hash(tps) != hash(tps3))
     assert(hash(tps) != hash(tps4))
-    assert(hash(tps) != hash(tps5))
+
 
 def testPS():
     tps1 = PlayerState(inventory={'wood':1})
@@ -71,8 +69,8 @@ def testPS():
     assert(tps4 - tps1 == tps3)
     assert(tps4 - tps3 == tps1)
 
-    ps1 = PlayerState(inventory={'wood':1,'stone':1},lookedAt='furnace')
-    psa1 = [PlayerState(inventory={'wood':1}),PlayerState(inventory={'stone':1}),PlayerState(lookedAt='furnace')]
+    ps1 = PlayerState(inventory={'wood':1,'stone':1},inFrontOf='furnace')
+    psa1 = [PlayerState(inventory={'wood':1}),PlayerState(inventory={'stone':1}),PlayerState(inFrontOf='furnace')]
     psa2 = ps1.breakIntoAttrs()
     for ps in psa1:
         assert(ps in psa2)

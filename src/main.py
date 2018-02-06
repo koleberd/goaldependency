@@ -296,7 +296,8 @@ def main():
             batch = constructBatch(sim_out)
             total_samples += len(batch[0])
             stats.append({'samples':len(batch[0]),'world cycles':sim_len,'batch num':step,'sim time':sim_time})
-            print('training on batch ' + str(step) + ' with ' + str(len(batch[0])) + ' samples (sim world cycles: ' + str(sim_len) + ')')
+            print(('training on batch ' + str(step) + ' with ' + str(len(batch[0])) + ' samples (sim world cycles: ' + str(sim_len) + ')').encode("utf-8").decode("ascii"))
+            sys.stdout.flush()
             '''
             BATCH_SIZE = len(batch_set[0])
             trainingSet = tf.contrib.data.Dataset.from_tensor_slices(batch_set)

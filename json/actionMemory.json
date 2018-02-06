@@ -3,14 +3,14 @@
         "prereq":{
         },
         "result":{
-            "lookedAt":"wood"
+            "inFrontOf":"wood"
         },
         "function":"locateObject:wood",
         "cost":15
     },
     "harvestWoodPlayerand":{
         "prereq":{
-            "lookedAt":"wood"
+            "inFrontOf":"wood"
         },
         "result":{
             "inventory":{
@@ -51,7 +51,7 @@
     "locateCraftingBench":{
         "prereq":{},
         "result":{
-            "lookedAt":"crafting bench"
+            "inFrontOf":"crafting bench"
         },
         "function":"locateObject:crafting bench",
         "cost":12
@@ -62,7 +62,7 @@
                 "stick":2,
                 "wood plank":3
             },
-            "lookedAt":"crafting bench"
+            "inFrontOf":"crafting bench"
         },
         "result":{
             "inventory":{
@@ -75,14 +75,14 @@
     "locateStone":{
         "prereq":{},
         "result":{
-            "lookedAt":"stone"
+            "inFrontOf":"stone"
         },
         "function":"locateObject:stone",
         "cost":15
     },
     "harvestStoneWoodPickaxe":{
         "prereq":{
-            "lookedAt":"stone",
+            "inFrontOf":"stone",
             "inventory":{
                 "wood pickaxe":1
             }
@@ -101,7 +101,7 @@
                 "stone":3,
                 "stick":2
             },
-            "lookedAt":"crafting bench"
+            "inFrontOf":"crafting bench"
         },
         "result":{
             "inventory":{
@@ -114,7 +114,7 @@
     "locateCoal":{
         "prereq":{},
         "result":{
-            "lookedAt":"coal"
+            "inFrontOf":"coal"
         },
         "function":"locateObject:coal",
         "cost":15
@@ -122,14 +122,14 @@
     "locateIronOre":{
         "prereq":{},
         "result":{
-            "lookedAt":"iron ore"
+            "inFrontOf":"iron ore"
         },
         "function":"locateObject:iron",
         "cost":15
     },
     "harvestCoalWoodPickaxe":{
         "prereq":{
-            "lookedAt":"coal",
+            "inFrontOf":"coal",
             "inventory":{
                 "wood pickaxe":1
             }
@@ -144,7 +144,7 @@
     },
     "harvestIronOreStonePickaxe":{
         "prereq":{
-            "lookedAt":"iron ore",
+            "inFrontOf":"iron ore",
             "inventory":{
                 "stone pickaxe":1
             }
@@ -160,7 +160,7 @@
     "locateFurnace":{
         "prereq":{},
         "result":{
-            "lookedAt":"furnace"
+            "inFrontOf":"furnace"
         },
         "function":"locateObject:furnace",
         "cost":15
@@ -171,7 +171,7 @@
                 "iron ore":1,
                 "coal":1
             },
-            "lookedAt":"furnace"
+            "inFrontOf":"furnace"
         },
         "result":{
             "inventory":{
@@ -187,7 +187,7 @@
                 "iron":3,
                 "stick":2
             },
-            "lookedAt":"crafting bench"
+            "inFrontOf":"crafting bench"
         },
         "result":{
             "inventory":{
@@ -204,7 +204,7 @@
                 "wood plank":3,
                 "stick":2
             },
-            "lookedAt":"crafting bench"
+            "inFrontOf":"crafting bench"
         },
         "result":{
             "inventory":{
@@ -217,7 +217,7 @@
 
     "harvestWoodWoodAxe":{
         "prereq":{
-            "lookedAt":"wood",
+            "inFrontOf":"wood",
             "inventory":{
                 "wood axe":1
             }
@@ -232,7 +232,7 @@
     },
     "harvestStoneStonePickaxe":{
         "prereq":{
-            "lookedAt":"stone",
+            "inFrontOf":"stone",
             "inventory":{
                 "stone pickaxe":1
             }
@@ -247,7 +247,7 @@
     },
     "harvestStoneIronPickaxe":{
         "prereq":{
-            "lookedAt":"stone",
+            "inFrontOf":"stone",
             "inventory":{
                 "iron pickaxe":1
             }
@@ -262,7 +262,7 @@
     },
     "harvestIronOreIronPickaxe":{
         "prereq":{
-            "lookedAt":"iron ore",
+            "inFrontOf":"iron ore",
             "inventory":{
                 "iron pickaxe":1
             }
@@ -278,14 +278,14 @@
     "locate":{
         "prereq":{},
         "result":{
-            "lookedAt":""
+            "inFrontOf":""
         },
         "function":"locateObject:",
         "cost":15
     },
     "harvest":{
         "prereq":{
-            "lookedAt":"",
+            "inFrontOf":"",
             "inventory":{
                 "":1
             }
@@ -303,7 +303,7 @@
             "inventory":{
                 "":1
             },
-            "lookedAt":"crafting bench"
+            "inFrontOf":"crafting bench"
         },
         "result":{
             "inventory":{

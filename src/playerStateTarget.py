@@ -94,7 +94,7 @@ class PlayerStateTarget:
         cSol = None
         for attr in self.attributeList:
             for sol in self.attributeList[attr]:
-                if (cSol == None or sol.temp_cost_up < cSol.temp_cost_up) and (sol.ps.lookedAt == None or len(self.attributeList) == 1):
+                if (cSol == None or sol.temp_cost_up < cSol.temp_cost_up) and (sol.ps.inFrontOf == None or len(self.attributeList) == 1):
                     cSol = sol
         return cSol.select()
     '''
@@ -122,7 +122,7 @@ class PlayerStateTarget:
             for cl in clean_set:
                 if id(cl) == id(leaf):
                     clean = False
-            if clean and ((leaf.getResult().lookedAt != None and len(leaf.parent.parents[0].attributeList) == 1) or leaf.getResult().lookedAt == None):#looked at can't be pooled so this is safe, but you would have to enforce priority order here
+            if clean and ((leaf.getResult().inFrontOf != None and len(leaf.parent.parents[0].attributeList) == 1) or leaf.getResult().inFrontOf == None):#looked at can't be pooled so this is safe, but you would have to enforce priority order here
                 clean_set.append(leaf)
         return clean_set
     def getLeafNodesR(self):

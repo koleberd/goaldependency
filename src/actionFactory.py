@@ -44,6 +44,6 @@ class ActionFactory:
             return res
         for act in self.actionMemory:
             ps = act.ps_res
-            if ps.lookedAt in scalars.keys():
-                res[act] = scalars[ps.lookedAt]
+            if ps.inFrontOf in scalars.keys():
+                res[act] = scalars[ps.inFrontOf]
         return res

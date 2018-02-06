@@ -134,18 +134,18 @@ def getFOV(frame):
                 objTally[y] += 1
     return scaleCounts(objTally)
 
-def getLookedAt(frame):
+def getinFrontOf(frame):
     #downsize frame to center of FOV
     adj = len(frame[0])/2
-    lookedAtPixels = []
+    inFrontOfPixels = []
     for row in range(int(len(frame)/2-adj),int(len(frame)/2+adj)):
-        lookedAtPixels.append([])
+        inFrontOfPixels.append([])
         for pixel in frame[row]:
-            lookedAtPixels[-1].append(pixel)
+            inFrontOfPixels[-1].append(pixel)
 
     #tally items in center of screen
     tally = {}
-    for row in lookedAtPixels:
+    for row in inFrontOfPixels:
         for item in row:
             if item not in tally.keys():
                 tally[item] = 1
@@ -172,5 +172,5 @@ def runSim():
 def getCurrentGameState(inventory):
     frame = getMatchedFrame()
     currentFOV = getFOV(frame)
-    ps = PlayerState(lookedAt=getLookedAt(frame))
+    ps = PlayerState(inFrontOf=getinFrontOf(frame))
     return GameState(ps=ps,fov=currentFOV,inv=inventory)
