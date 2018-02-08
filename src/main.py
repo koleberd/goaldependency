@@ -39,46 +39,20 @@ def getWorldCosts(world,world_name):
     with open(flnm) as wldcf:
         return json.load(wldcf)
 
-
 DISTANCE = 10
 RAYS = 5
 FOV_ANGLE = 120
 KERNEL_RADIUS = 10
 INPUT_DIM = (KERNEL_RADIUS*2+1)**2
 OUTPUT_DIM = 6
-FRAME_SKIP_THRESHOLD = .35
+FRAME_SKIP_THRESHOLD = .15 #pick frame if random number [0,1] under threshold
+MOVING_AVERAGE_SIZE = 10
+OUTPUT_LOWER_BIAS = .25
 
 bl_ind = {None:0,'wood':1,'stone':2,'crafting bench':3,'iron ore':4,'coal':5,'wall':6}
 action_set = ['locateObject:wood','locateObject:stone','locateObject:crafting bench','locateObject:iron ore','locateObject:coal']
 
 # action target selection functions
-'''
-def selectMostExpensive(at_arr,frame):
-
-    exp = at_arr[0]
-    for at in at_arr:
-        if at.temp_cost_up > exp.temp_cost_up:
-            exp = at
-    return exp
-def selectRandom(at_arr,frame):
-    return at_arr[random.randint(0,len(at_arr)-1)]
-def selectSequential(at_arr,frame):
-    min_id = at_arr[0]
-    for at in at_arr:
-        if id(min_id) > id(at):
-            min_id = at
-    #print(id(min_id))
-    return min_id
-def selectDeepest(at_arr,frame):
-    depth = [0 for x in range(0,len(at_arr))]
-    for i in range(0,len(at_arr)):
-        depth[i] = at_arr[i].getNodeDepth()
-    sel = 0
-    for i in range(0,len(at_arr)):
-        if depth[sel] < depth[i]:
-            sel = i
-    return at_arr[sel]
-'''
 def selectMostShallow(at_arr,frame,prev):
     sel = at_arr[0]
     for at in at_arr:
@@ -91,12 +65,12 @@ def selectCheapest(at_arr,frame,prev):
         if at.temp_cost_up < cheapest.temp_cost_up:
             cheapest = at
     return cheapest
-#select in order of priority
-#   harvest
-#   craft
-#   inv craft
-#   locate
 def selectUser(at_arr,frame,prev):
+    #select in order of priority
+    #   harvest
+    #   craft
+    #   inv craft
+    #   locate
     return selectMostShallow(at_arr)
     for at in at_arr:
         if 'harvest' in at.act.name:
@@ -108,7 +82,6 @@ def selectUser(at_arr,frame,prev):
         if 'craft' in at.act.name:
             return at
     return at_arr[0]
-
 def selectCheapestDNN(at_arr,frame,prev,nn_in,nn_out):
     scaled = [float(at.temp_cost_up) for at in at_arr]
 
@@ -170,7 +143,7 @@ def deepnn(input_tensor):
                             tf.reduce_min(output_tensor)))
 
     #normalize to [.25:1]
-    final_bias = [.25 for x in range(0,out_dim)]
+    final_bias = [OUTPUT_LOWER_BIAS for x in range(0,out_dim)]
     output_tensor = tf.scalar_mul(.75, tf.add(output_tensor,final_bias))
 
 
@@ -180,7 +153,7 @@ def deepnn(input_tensor):
 
     return output_tensor, dropout_rate
 
-def preproc(stats,averages):
+def preproc2(stats,averages):
     ats = {}
     for i in range(0,len(stats)):
         el = stats[i]
@@ -195,17 +168,71 @@ def preproc(stats,averages):
         at['output'] = [0.0 if at['type'] == action_set[x] else 1.0 for x in range(0,len(action_set))]
         if at['type'] in averages.keys() and len(at['inputs']) > averages[at['type']]:
             at['output'] = [max(1.0,x) for x in at['output']]
-    return ats
+    return ats,moved_average
+
+def preproc(stats,averages):
+    ats = {}
+    moved_average = [x for x in averages]
+    for i in range(0,len(stats)):
+        el = stats[i]
+        if el['at'] not in ats.keys():
+            ats[el['at']] = {'type':el['type'],'inputs':[el['frame']]}
+        else:
+            ats[el['at']]['inputs'].append(el['frame'])
+
+    for at_k in ats:
+        at = ats[at_k]
+
+        at['output'] = [0.0 if at['type'] == action_set[x] else 1.0 for x in range(0,len(action_set))]
+        if at['type'] in averages.keys() and len(at['inputs']) > averages[at['type']]:
+            at['output'] = [max(1.0,x) for x in at['output']]
+    return ats,moved_average
+
+def generateBatch(stats,averages):
+    #group identical ats
+    OUTPUT_CLASSES = len(action_set)
+    ats = {}
+    for i in range(0,len(stats)):
+        el = stats[i]
+        if el['at'] not in ats.keys():
+            ats[el['at']] = {'type':el['type'],'inputs':[el['frame']]}
+        else:
+            ats[el['at']]['inputs'].append(el['frame'])
+
+    sim_sums = [x for x in range(OUTPUT_CLASSES)]
+    sim_counts = [x for x in range(OUTPUT_CLASSES)]
+
+    inputs = []
+    for atk in ats.keys():
+        at = ats[atk]
+        if at['type'] in action_set:
+            ind = action_set.index(at['type'])
+            sim_sums[ind] += len(at['inputs'])
+            sim_counts[ind] += 1
+            for ip in at['inputs']:
+                if random.random() < FRAME_SKIP_THRESHOLD:
+                    inputs.append(ip)
+
+    sim_averages = [float(sim_sums[x]) / float(sim_counts[x]) for x in range(OUTPUT_CLASSES)]
+    #print(sim_averages)
+    #print(averages)
+    sim_label = [0 if sim_averages[x] < averages[x] else 1 for x in range(OUTPUT_CLASSES)]
+
+
+
+    labels = [sim_label for x in range(0,len(inputs))]
+    return (inputs,labels),sim_averages
+
 def constructBatch(stats):
     inputs = []
-    logits = []
+    labels = []
     for at_k in stats:
         at = stats[at_k]
         for ip in at['inputs']:
             if random.random() < FRAME_SKIP_THRESHOLD:
                 inputs.append(ip)
-                logits.append(at['output'])
-    return (inputs,logits)
+                labels.append(at['output'])
+    return (inputs,labels)
 
 def run2d3d(config_name,select_method,select_name="",save_tree=False,save_path=False):
     full_start = time.time()
@@ -275,7 +302,7 @@ def run2d3d(config_name,select_method,select_name="",save_tree=False,save_path=F
 
 def main():
     learning_rate = 0
-    training_rounds = 500
+    training_rounds = 100
 
     input_tensor = tf.placeholder(tf.float32,shape=[None,INPUT_DIM],name='input_tensor')
     label_tensor = tf.placeholder(tf.float32, [None, len(action_set)])
@@ -296,6 +323,8 @@ def main():
     '''
     stats = []
     total_samples = 0
+    moving_averages = [[average_costs[x] for x in action_set]]
+    print(moving_averages)
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
         training_time = time.time()
@@ -306,15 +335,24 @@ def main():
             if sim_len == -1:
                 print('Bad batch')
                 return False
-            sim_out = preproc(sim_out,average_costs)
+            #sim_out, average_costs = preproc(sim_out,average_costs)
             '''
             print('.',end='')
             sys.stdout.flush()
             '''
-            batch = constructBatch(sim_out)
+            #batch = constructBatch(sim_out)
+            current_averages = [0 for x in range(len(action_set))]
+            for x in moving_averages:
+                for i in range(len(action_set)):
+                    current_averages[i] += x[i]
+            current_averages = [float(x)/float(len(moving_averages)) for x in current_averages]
+
+            batch, sim_averages = generateBatch(sim_out,current_averages)
+            moving_averages = moving_averages[1:]
+            moving_averages.append(sim_averages)
             total_samples += len(batch[0])
             stats.append({'samples':len(batch[0]),'world cycles':sim_len,'batch num':step,'sim time':sim_time})
-            print(('training on batch ' + str(step) + ' with ' + str(len(batch[0])) + ' samples (sim world cycles: ' + str(sim_len) + ')').encode("utf-8").decode("ascii"))
+            print(('training on batch ' + str(step) + ' with ' + str(len(batch[0])) + ' samples (sim world cycles: ' + str(sim_len) + ') ' + str(batch[1][0])).encode("utf-8").decode("ascii"))
             sys.stdout.flush()
             '''
             BATCH_SIZE = len(batch_set[0])
