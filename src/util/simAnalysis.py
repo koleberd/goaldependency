@@ -16,11 +16,11 @@ for f in files:
         for s in range(0,seg_size):
             seg_sum += sim_stats['stats'][x*seg_size+s]['world cycles']
         segs[x] = seg_sum/seg_size
-    analysis['moving average'] = segs
-    analysis['total samples'] = 0
-    analysis['total simulations'] = len(sim_stats['stats'])
+    sim_stats['analysis']['moving average'] = segs
+    sim_stats['analysis']['total samples'] = 0
+    sim_stats['analysis']['total simulations'] = len(sim_stats['stats'])
     for s in sim_stats['stats']:
-        analysis['total samples'] += s['samples']
-    sim_stats['analysis'] = analysis
+        sim_stats['analysis']['total samples'] += s['samples']
+
     with open(f,'w+') as sim_js:
         json.dump(sim_stats,sim_js,indent=4,sort_keys=True)

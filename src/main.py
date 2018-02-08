@@ -121,14 +121,23 @@ def selectCheapestDNN(at_arr,frame,prev,nn_in,nn_out):
             w_ind = action_set.index(a_n)
             if not math.isnan(weights[w_ind]):
                 scaled[i] *= weights[w_ind]
-    #print(scaled)
-    #print(scaled)
-    cheapest_ind = scaled.index(min(scaled))
-    selected = at_arr[cheapest_ind]
+
+    #cheapest_ind = scaled.index(min(scaled))
+    #selected = at_arr[cheapest_ind]
+
+    mincst = min(scaled)
+    mins_set = []
+    for i in range(0,len(scaled)):
+        if scaled[i] == mincst:
+            mins_set.append(at_arr[i])
+
+    selected = sorted(mins_set,key=lambda s: s.node_depth,reverse=True)[0]
+
     if prev != None and selected.act.name == prev.act.name:
         print(prev)
         print(selected)
         selected = prev
+
     return selected
 
 def weightVar(in_dim,out_dim):
@@ -151,7 +160,7 @@ def deepnn(input_tensor):
     output_tensor = tf.matmul(hidden2,weightVar(hidden2_dim,out_dim))
     output_tensor = tf.add(output_tensor,biasVar(out_dim))
     output_tensor = tf.nn.relu(output_tensor)
-
+    #normalize to [0:1]
     output_tensor = tf.div(
                         tf.subtract(
                             output_tensor,
@@ -159,8 +168,10 @@ def deepnn(input_tensor):
                         tf.subtract(
                             tf.reduce_max(output_tensor),
                             tf.reduce_min(output_tensor)))
-    final_bias = [.0001 for x in range(0,out_dim)]
-    output_tensor = tf.add(output_tensor,final_bias)
+
+    #normalize to [.25:1]
+    final_bias = [.25 for x in range(0,out_dim)]
+    output_tensor = tf.scalar_mul(.75, tf.add(output_tensor,final_bias))
 
 
     #input is n * (resource_type, distance) where n is number or rays
@@ -264,7 +275,7 @@ def run2d3d(config_name,select_method,select_name="",save_tree=False,save_path=F
 
 def main():
     learning_rate = 0
-    training_rounds = 10
+    training_rounds = 500
 
     input_tensor = tf.placeholder(tf.float32,shape=[None,INPUT_DIM],name='input_tensor')
     label_tensor = tf.placeholder(tf.float32, [None, len(action_set)])
@@ -287,6 +298,7 @@ def main():
     total_samples = 0
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
+        training_time = time.time()
         for step in range(0,training_rounds):
             sim_time = time.time()
             sim_out,sim_len = run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x,frame,prev: selectCheapestDNN(x,frame,prev,input_tensor,output_tensor),select_name='cheapest')
@@ -311,9 +323,12 @@ def main():
             '''
             train_step.run(feed_dict={input_tensor: batch[0], label_tensor: batch[1], dropout_rate: 0.5})
     print('total samples trained: ' + str(total_samples))
-
+    training_time = time.time() - training_time
+    analysis = {}
+    analysis['training time'] = training_time
+    analysis['time per simulation'] = training_time / float(len(stats))
     with open('json/simulation_stats/rv_1_' + str(time.time()) + 'stats.json','w+') as ojs:
-        json.dump({'stats':stats},ojs,indent=4,sort_keys=True)
+        json.dump({'stats':stats,'analysis':analysis},ojs,indent=4,sort_keys=True)
 
 
 #run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x: selectMostShallow(x),select_name='most shallow')
