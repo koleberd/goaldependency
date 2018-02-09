@@ -1,0 +1,3022 @@
+{
+    "analysis": {
+        "moving average": [
+            430.48,
+            440.84,
+            447.38,
+            457.42,
+            438.56,
+            453.84,
+            442.22,
+            430.62,
+            444.98,
+            445.96
+        ],
+        "time per simulation": 1.3863772959709169,
+        "total samples": 205115,
+        "total simulations": 500,
+        "training time": 693.1886479854584
+    },
+    "stats": [
+        {
+            "batch num": 0,
+            "samples": 465,
+            "sim time": 1.6240928173065186,
+            "world cycles": 498
+        },
+        {
+            "batch num": 1,
+            "samples": 417,
+            "sim time": 1.0900623798370361,
+            "world cycles": 450
+        },
+        {
+            "batch num": 2,
+            "samples": 421,
+            "sim time": 1.8291046619415283,
+            "world cycles": 454
+        },
+        {
+            "batch num": 3,
+            "samples": 485,
+            "sim time": 1.9221100807189941,
+            "world cycles": 518
+        },
+        {
+            "batch num": 4,
+            "samples": 462,
+            "sim time": 1.4130809307098389,
+            "world cycles": 495
+        },
+        {
+            "batch num": 5,
+            "samples": 495,
+            "sim time": 1.9541118144989014,
+            "world cycles": 528
+        },
+        {
+            "batch num": 6,
+            "samples": 306,
+            "sim time": 0.8190469741821289,
+            "world cycles": 339
+        },
+        {
+            "batch num": 7,
+            "samples": 293,
+            "sim time": 0.7760443687438965,
+            "world cycles": 326
+        },
+        {
+            "batch num": 8,
+            "samples": 305,
+            "sim time": 0.7970454692840576,
+            "world cycles": 338
+        },
+        {
+            "batch num": 9,
+            "samples": 484,
+            "sim time": 1.917109727859497,
+            "world cycles": 517
+        },
+        {
+            "batch num": 10,
+            "samples": 424,
+            "sim time": 1.1350648403167725,
+            "world cycles": 457
+        },
+        {
+            "batch num": 11,
+            "samples": 442,
+            "sim time": 1.1760673522949219,
+            "world cycles": 475
+        },
+        {
+            "batch num": 12,
+            "samples": 459,
+            "sim time": 1.2300701141357422,
+            "world cycles": 492
+        },
+        {
+            "batch num": 13,
+            "samples": 280,
+            "sim time": 0.7470426559448242,
+            "world cycles": 313
+        },
+        {
+            "batch num": 14,
+            "samples": 482,
+            "sim time": 1.91910982131958,
+            "world cycles": 515
+        },
+        {
+            "batch num": 15,
+            "samples": 453,
+            "sim time": 1.2300703525543213,
+            "world cycles": 486
+        },
+        {
+            "batch num": 16,
+            "samples": 288,
+            "sim time": 0.7950453758239746,
+            "world cycles": 321
+        },
+        {
+            "batch num": 17,
+            "samples": 415,
+            "sim time": 1.8151037693023682,
+            "world cycles": 448
+        },
+        {
+            "batch num": 18,
+            "samples": 460,
+            "sim time": 1.2780730724334717,
+            "world cycles": 493
+        },
+        {
+            "batch num": 19,
+            "samples": 290,
+            "sim time": 0.7690439224243164,
+            "world cycles": 323
+        },
+        {
+            "batch num": 20,
+            "samples": 287,
+            "sim time": 0.7610437870025635,
+            "world cycles": 320
+        },
+        {
+            "batch num": 21,
+            "samples": 456,
+            "sim time": 1.1680667400360107,
+            "world cycles": 489
+        },
+        {
+            "batch num": 22,
+            "samples": 445,
+            "sim time": 1.2220699787139893,
+            "world cycles": 478
+        },
+        {
+            "batch num": 23,
+            "samples": 484,
+            "sim time": 1.9491114616394043,
+            "world cycles": 517
+        },
+        {
+            "batch num": 24,
+            "samples": 304,
+            "sim time": 0.8180468082427979,
+            "world cycles": 337
+        },
+        {
+            "batch num": 25,
+            "samples": 497,
+            "sim time": 2.020115613937378,
+            "world cycles": 530
+        },
+        {
+            "batch num": 26,
+            "samples": 284,
+            "sim time": 0.8060462474822998,
+            "world cycles": 317
+        },
+        {
+            "batch num": 27,
+            "samples": 446,
+            "sim time": 1.5150864124298096,
+            "world cycles": 479
+        },
+        {
+            "batch num": 28,
+            "samples": 495,
+            "sim time": 2.2311275005340576,
+            "world cycles": 528
+        },
+        {
+            "batch num": 29,
+            "samples": 289,
+            "sim time": 0.7890450954437256,
+            "world cycles": 322
+        },
+        {
+            "batch num": 30,
+            "samples": 427,
+            "sim time": 1.9001085758209229,
+            "world cycles": 460
+        },
+        {
+            "batch num": 31,
+            "samples": 414,
+            "sim time": 1.8861079216003418,
+            "world cycles": 447
+        },
+        {
+            "batch num": 32,
+            "samples": 483,
+            "sim time": 2.1831247806549072,
+            "world cycles": 516
+        },
+        {
+            "batch num": 33,
+            "samples": 456,
+            "sim time": 1.3360764980316162,
+            "world cycles": 489
+        },
+        {
+            "batch num": 34,
+            "samples": 281,
+            "sim time": 1.0650608539581299,
+            "world cycles": 314
+        },
+        {
+            "batch num": 35,
+            "samples": 290,
+            "sim time": 0.834047794342041,
+            "world cycles": 323
+        },
+        {
+            "batch num": 36,
+            "samples": 417,
+            "sim time": 1.7500998973846436,
+            "world cycles": 450
+        },
+        {
+            "batch num": 37,
+            "samples": 470,
+            "sim time": 1.555088996887207,
+            "world cycles": 503
+        },
+        {
+            "batch num": 38,
+            "samples": 299,
+            "sim time": 0.8140466213226318,
+            "world cycles": 332
+        },
+        {
+            "batch num": 39,
+            "samples": 445,
+            "sim time": 1.4160809516906738,
+            "world cycles": 478
+        },
+        {
+            "batch num": 40,
+            "samples": 481,
+            "sim time": 1.928110122680664,
+            "world cycles": 514
+        },
+        {
+            "batch num": 41,
+            "samples": 303,
+            "sim time": 0.9260530471801758,
+            "world cycles": 336
+        },
+        {
+            "batch num": 42,
+            "samples": 294,
+            "sim time": 0.8230471611022949,
+            "world cycles": 327
+        },
+        {
+            "batch num": 43,
+            "samples": 482,
+            "sim time": 1.91910982131958,
+            "world cycles": 515
+        },
+        {
+            "batch num": 44,
+            "samples": 293,
+            "sim time": 0.7770442962646484,
+            "world cycles": 326
+        },
+        {
+            "batch num": 45,
+            "samples": 421,
+            "sim time": 1.1160638332366943,
+            "world cycles": 454
+        },
+        {
+            "batch num": 46,
+            "samples": 295,
+            "sim time": 0.7860448360443115,
+            "world cycles": 328
+        },
+        {
+            "batch num": 47,
+            "samples": 496,
+            "sim time": 1.9571118354797363,
+            "world cycles": 529
+        },
+        {
+            "batch num": 48,
+            "samples": 418,
+            "sim time": 1.8211042881011963,
+            "world cycles": 451
+        },
+        {
+            "batch num": 49,
+            "samples": 296,
+            "sim time": 0.8220469951629639,
+            "world cycles": 329
+        },
+        {
+            "batch num": 50,
+            "samples": 450,
+            "sim time": 1.3730785846710205,
+            "world cycles": 483
+        },
+        {
+            "batch num": 51,
+            "samples": 287,
+            "sim time": 0.8200469017028809,
+            "world cycles": 320
+        },
+        {
+            "batch num": 52,
+            "samples": 460,
+            "sim time": 1.423081398010254,
+            "world cycles": 493
+        },
+        {
+            "batch num": 53,
+            "samples": 425,
+            "sim time": 1.1170639991760254,
+            "world cycles": 458
+        },
+        {
+            "batch num": 54,
+            "samples": 310,
+            "sim time": 0.8220469951629639,
+            "world cycles": 343
+        },
+        {
+            "batch num": 55,
+            "samples": 504,
+            "sim time": 2.022115707397461,
+            "world cycles": 537
+        },
+        {
+            "batch num": 56,
+            "samples": 473,
+            "sim time": 1.9311103820800781,
+            "world cycles": 506
+        },
+        {
+            "batch num": 57,
+            "samples": 422,
+            "sim time": 1.799102783203125,
+            "world cycles": 455
+        },
+        {
+            "batch num": 58,
+            "samples": 300,
+            "sim time": 0.8200469017028809,
+            "world cycles": 333
+        },
+        {
+            "batch num": 59,
+            "samples": 467,
+            "sim time": 1.3480772972106934,
+            "world cycles": 500
+        },
+        {
+            "batch num": 60,
+            "samples": 474,
+            "sim time": 1.9711127281188965,
+            "world cycles": 507
+        },
+        {
+            "batch num": 61,
+            "samples": 450,
+            "sim time": 1.4000802040100098,
+            "world cycles": 483
+        },
+        {
+            "batch num": 62,
+            "samples": 450,
+            "sim time": 1.2480714321136475,
+            "world cycles": 483
+        },
+        {
+            "batch num": 63,
+            "samples": 488,
+            "sim time": 1.9581120014190674,
+            "world cycles": 521
+        },
+        {
+            "batch num": 64,
+            "samples": 300,
+            "sim time": 0.8870506286621094,
+            "world cycles": 333
+        },
+        {
+            "batch num": 65,
+            "samples": 416,
+            "sim time": 1.307074785232544,
+            "world cycles": 449
+        },
+        {
+            "batch num": 66,
+            "samples": 422,
+            "sim time": 1.9551119804382324,
+            "world cycles": 455
+        },
+        {
+            "batch num": 67,
+            "samples": 421,
+            "sim time": 1.8711068630218506,
+            "world cycles": 454
+        },
+        {
+            "batch num": 68,
+            "samples": 294,
+            "sim time": 0.8160464763641357,
+            "world cycles": 327
+        },
+        {
+            "batch num": 69,
+            "samples": 520,
+            "sim time": 2.1231212615966797,
+            "world cycles": 553
+        },
+        {
+            "batch num": 70,
+            "samples": 428,
+            "sim time": 1.7761015892028809,
+            "world cycles": 461
+        },
+        {
+            "batch num": 71,
+            "samples": 437,
+            "sim time": 1.8811075687408447,
+            "world cycles": 470
+        },
+        {
+            "batch num": 72,
+            "samples": 458,
+            "sim time": 1.2200698852539062,
+            "world cycles": 491
+        },
+        {
+            "batch num": 73,
+            "samples": 429,
+            "sim time": 1.8361048698425293,
+            "world cycles": 462
+        },
+        {
+            "batch num": 74,
+            "samples": 434,
+            "sim time": 1.1390652656555176,
+            "world cycles": 467
+        },
+        {
+            "batch num": 75,
+            "samples": 442,
+            "sim time": 1.3410766124725342,
+            "world cycles": 475
+        },
+        {
+            "batch num": 76,
+            "samples": 471,
+            "sim time": 2.045116901397705,
+            "world cycles": 504
+        },
+        {
+            "batch num": 77,
+            "samples": 461,
+            "sim time": 1.3330762386322021,
+            "world cycles": 494
+        },
+        {
+            "batch num": 78,
+            "samples": 287,
+            "sim time": 0.830047607421875,
+            "world cycles": 320
+        },
+        {
+            "batch num": 79,
+            "samples": 441,
+            "sim time": 1.317075252532959,
+            "world cycles": 474
+        },
+        {
+            "batch num": 80,
+            "samples": 308,
+            "sim time": 0.837047815322876,
+            "world cycles": 341
+        },
+        {
+            "batch num": 81,
+            "samples": 482,
+            "sim time": 2.017115354537964,
+            "world cycles": 515
+        },
+        {
+            "batch num": 82,
+            "samples": 415,
+            "sim time": 1.8291046619415283,
+            "world cycles": 448
+        },
+        {
+            "batch num": 83,
+            "samples": 309,
+            "sim time": 0.8550488948822021,
+            "world cycles": 342
+        },
+        {
+            "batch num": 84,
+            "samples": 281,
+            "sim time": 0.8090462684631348,
+            "world cycles": 314
+        },
+        {
+            "batch num": 85,
+            "samples": 483,
+            "sim time": 1.9811134338378906,
+            "world cycles": 516
+        },
+        {
+            "batch num": 86,
+            "samples": 298,
+            "sim time": 0.8210470676422119,
+            "world cycles": 331
+        },
+        {
+            "batch num": 87,
+            "samples": 462,
+            "sim time": 1.313075065612793,
+            "world cycles": 495
+        },
+        {
+            "batch num": 88,
+            "samples": 438,
+            "sim time": 1.2300703525543213,
+            "world cycles": 471
+        },
+        {
+            "batch num": 89,
+            "samples": 410,
+            "sim time": 1.180067539215088,
+            "world cycles": 443
+        },
+        {
+            "batch num": 90,
+            "samples": 447,
+            "sim time": 1.2720727920532227,
+            "world cycles": 480
+        },
+        {
+            "batch num": 91,
+            "samples": 456,
+            "sim time": 1.2640721797943115,
+            "world cycles": 489
+        },
+        {
+            "batch num": 92,
+            "samples": 455,
+            "sim time": 1.2840735912322998,
+            "world cycles": 488
+        },
+        {
+            "batch num": 93,
+            "samples": 278,
+            "sim time": 0.7770442962646484,
+            "world cycles": 311
+        },
+        {
+            "batch num": 94,
+            "samples": 443,
+            "sim time": 1.2410707473754883,
+            "world cycles": 476
+        },
+        {
+            "batch num": 95,
+            "samples": 312,
+            "sim time": 0.8640494346618652,
+            "world cycles": 345
+        },
+        {
+            "batch num": 96,
+            "samples": 296,
+            "sim time": 0.8090462684631348,
+            "world cycles": 329
+        },
+        {
+            "batch num": 97,
+            "samples": 447,
+            "sim time": 1.2550716400146484,
+            "world cycles": 480
+        },
+        {
+            "batch num": 98,
+            "samples": 296,
+            "sim time": 0.8620493412017822,
+            "world cycles": 329
+        },
+        {
+            "batch num": 99,
+            "samples": 455,
+            "sim time": 1.432081937789917,
+            "world cycles": 488
+        },
+        {
+            "batch num": 100,
+            "samples": 424,
+            "sim time": 1.1730670928955078,
+            "world cycles": 457
+        },
+        {
+            "batch num": 101,
+            "samples": 479,
+            "sim time": 1.9351108074188232,
+            "world cycles": 512
+        },
+        {
+            "batch num": 102,
+            "samples": 413,
+            "sim time": 1.1470656394958496,
+            "world cycles": 446
+        },
+        {
+            "batch num": 103,
+            "samples": 454,
+            "sim time": 1.3000743389129639,
+            "world cycles": 487
+        },
+        {
+            "batch num": 104,
+            "samples": 279,
+            "sim time": 0.7840447425842285,
+            "world cycles": 312
+        },
+        {
+            "batch num": 105,
+            "samples": 431,
+            "sim time": 1.8851077556610107,
+            "world cycles": 464
+        },
+        {
+            "batch num": 106,
+            "samples": 416,
+            "sim time": 1.1150636672973633,
+            "world cycles": 449
+        },
+        {
+            "batch num": 107,
+            "samples": 428,
+            "sim time": 1.8321049213409424,
+            "world cycles": 461
+        },
+        {
+            "batch num": 108,
+            "samples": 431,
+            "sim time": 1.1490657329559326,
+            "world cycles": 464
+        },
+        {
+            "batch num": 109,
+            "samples": 496,
+            "sim time": 1.9501116275787354,
+            "world cycles": 529
+        },
+        {
+            "batch num": 110,
+            "samples": 303,
+            "sim time": 0.8850507736206055,
+            "world cycles": 336
+        },
+        {
+            "batch num": 111,
+            "samples": 429,
+            "sim time": 1.1790673732757568,
+            "world cycles": 462
+        },
+        {
+            "batch num": 112,
+            "samples": 416,
+            "sim time": 1.1480658054351807,
+            "world cycles": 449
+        },
+        {
+            "batch num": 113,
+            "samples": 427,
+            "sim time": 1.184067726135254,
+            "world cycles": 460
+        },
+        {
+            "batch num": 114,
+            "samples": 411,
+            "sim time": 1.1310646533966064,
+            "world cycles": 444
+        },
+        {
+            "batch num": 115,
+            "samples": 416,
+            "sim time": 1.9281103610992432,
+            "world cycles": 449
+        },
+        {
+            "batch num": 116,
+            "samples": 416,
+            "sim time": 1.1540660858154297,
+            "world cycles": 449
+        },
+        {
+            "batch num": 117,
+            "samples": 299,
+            "sim time": 0.8190469741821289,
+            "world cycles": 332
+        },
+        {
+            "batch num": 118,
+            "samples": 288,
+            "sim time": 0.8060462474822998,
+            "world cycles": 321
+        },
+        {
+            "batch num": 119,
+            "samples": 301,
+            "sim time": 0.8240470886230469,
+            "world cycles": 334
+        },
+        {
+            "batch num": 120,
+            "samples": 421,
+            "sim time": 1.1690669059753418,
+            "world cycles": 454
+        },
+        {
+            "batch num": 121,
+            "samples": 460,
+            "sim time": 1.309074878692627,
+            "world cycles": 493
+        },
+        {
+            "batch num": 122,
+            "samples": 520,
+            "sim time": 2.0961198806762695,
+            "world cycles": 553
+        },
+        {
+            "batch num": 123,
+            "samples": 468,
+            "sim time": 1.307074785232544,
+            "world cycles": 501
+        },
+        {
+            "batch num": 124,
+            "samples": 419,
+            "sim time": 1.1510655879974365,
+            "world cycles": 452
+        },
+        {
+            "batch num": 125,
+            "samples": 290,
+            "sim time": 0.8070461750030518,
+            "world cycles": 323
+        },
+        {
+            "batch num": 126,
+            "samples": 480,
+            "sim time": 1.9811131954193115,
+            "world cycles": 513
+        },
+        {
+            "batch num": 127,
+            "samples": 455,
+            "sim time": 1.428081750869751,
+            "world cycles": 488
+        },
+        {
+            "batch num": 128,
+            "samples": 303,
+            "sim time": 0.8900511264801025,
+            "world cycles": 336
+        },
+        {
+            "batch num": 129,
+            "samples": 467,
+            "sim time": 1.3020744323730469,
+            "world cycles": 500
+        },
+        {
+            "batch num": 130,
+            "samples": 418,
+            "sim time": 1.8151037693023682,
+            "world cycles": 451
+        },
+        {
+            "batch num": 131,
+            "samples": 431,
+            "sim time": 1.911109209060669,
+            "world cycles": 464
+        },
+        {
+            "batch num": 132,
+            "samples": 427,
+            "sim time": 1.180067539215088,
+            "world cycles": 460
+        },
+        {
+            "batch num": 133,
+            "samples": 430,
+            "sim time": 1.8231043815612793,
+            "world cycles": 463
+        },
+        {
+            "batch num": 134,
+            "samples": 432,
+            "sim time": 1.1870677471160889,
+            "world cycles": 465
+        },
+        {
+            "batch num": 135,
+            "samples": 280,
+            "sim time": 0.7960455417633057,
+            "world cycles": 313
+        },
+        {
+            "batch num": 136,
+            "samples": 455,
+            "sim time": 1.2770729064941406,
+            "world cycles": 488
+        },
+        {
+            "batch num": 137,
+            "samples": 468,
+            "sim time": 1.911109447479248,
+            "world cycles": 501
+        },
+        {
+            "batch num": 138,
+            "samples": 436,
+            "sim time": 1.1570661067962646,
+            "world cycles": 469
+        },
+        {
+            "batch num": 139,
+            "samples": 432,
+            "sim time": 1.8301045894622803,
+            "world cycles": 465
+        },
+        {
+            "batch num": 140,
+            "samples": 422,
+            "sim time": 1.812103509902954,
+            "world cycles": 455
+        },
+        {
+            "batch num": 141,
+            "samples": 417,
+            "sim time": 1.779101848602295,
+            "world cycles": 450
+        },
+        {
+            "batch num": 142,
+            "samples": 426,
+            "sim time": 1.1320648193359375,
+            "world cycles": 459
+        },
+        {
+            "batch num": 143,
+            "samples": 423,
+            "sim time": 1.1380650997161865,
+            "world cycles": 456
+        },
+        {
+            "batch num": 144,
+            "samples": 291,
+            "sim time": 0.7880451679229736,
+            "world cycles": 324
+        },
+        {
+            "batch num": 145,
+            "samples": 482,
+            "sim time": 1.8941082954406738,
+            "world cycles": 515
+        },
+        {
+            "batch num": 146,
+            "samples": 478,
+            "sim time": 1.907109022140503,
+            "world cycles": 511
+        },
+        {
+            "batch num": 147,
+            "samples": 495,
+            "sim time": 1.9341108798980713,
+            "world cycles": 528
+        },
+        {
+            "batch num": 148,
+            "samples": 423,
+            "sim time": 1.1550660133361816,
+            "world cycles": 456
+        },
+        {
+            "batch num": 149,
+            "samples": 413,
+            "sim time": 1.7390995025634766,
+            "world cycles": 446
+        },
+        {
+            "batch num": 150,
+            "samples": 289,
+            "sim time": 0.7670438289642334,
+            "world cycles": 322
+        },
+        {
+            "batch num": 151,
+            "samples": 302,
+            "sim time": 0.7950453758239746,
+            "world cycles": 335
+        },
+        {
+            "batch num": 152,
+            "samples": 443,
+            "sim time": 1.8521060943603516,
+            "world cycles": 476
+        },
+        {
+            "batch num": 153,
+            "samples": 461,
+            "sim time": 1.3880794048309326,
+            "world cycles": 494
+        },
+        {
+            "batch num": 154,
+            "samples": 417,
+            "sim time": 1.808103322982788,
+            "world cycles": 450
+        },
+        {
+            "batch num": 155,
+            "samples": 462,
+            "sim time": 1.2490713596343994,
+            "world cycles": 495
+        },
+        {
+            "batch num": 156,
+            "samples": 460,
+            "sim time": 1.3890795707702637,
+            "world cycles": 493
+        },
+        {
+            "batch num": 157,
+            "samples": 499,
+            "sim time": 1.9481115341186523,
+            "world cycles": 532
+        },
+        {
+            "batch num": 158,
+            "samples": 456,
+            "sim time": 1.2220697402954102,
+            "world cycles": 489
+        },
+        {
+            "batch num": 159,
+            "samples": 303,
+            "sim time": 0.8000457286834717,
+            "world cycles": 336
+        },
+        {
+            "batch num": 160,
+            "samples": 418,
+            "sim time": 1.0920624732971191,
+            "world cycles": 451
+        },
+        {
+            "batch num": 161,
+            "samples": 476,
+            "sim time": 1.8871078491210938,
+            "world cycles": 509
+        },
+        {
+            "batch num": 162,
+            "samples": 441,
+            "sim time": 1.1540660858154297,
+            "world cycles": 474
+        },
+        {
+            "batch num": 163,
+            "samples": 425,
+            "sim time": 1.202068567276001,
+            "world cycles": 458
+        },
+        {
+            "batch num": 164,
+            "samples": 296,
+            "sim time": 0.7810444831848145,
+            "world cycles": 329
+        },
+        {
+            "batch num": 165,
+            "samples": 478,
+            "sim time": 1.9671125411987305,
+            "world cycles": 511
+        },
+        {
+            "batch num": 166,
+            "samples": 310,
+            "sim time": 0.8360476493835449,
+            "world cycles": 343
+        },
+        {
+            "batch num": 167,
+            "samples": 299,
+            "sim time": 0.837047815322876,
+            "world cycles": 332
+        },
+        {
+            "batch num": 168,
+            "samples": 481,
+            "sim time": 1.8931083679199219,
+            "world cycles": 514
+        },
+        {
+            "batch num": 169,
+            "samples": 478,
+            "sim time": 1.898108720779419,
+            "world cycles": 511
+        },
+        {
+            "batch num": 170,
+            "samples": 293,
+            "sim time": 0.8930511474609375,
+            "world cycles": 326
+        },
+        {
+            "batch num": 171,
+            "samples": 467,
+            "sim time": 2.1981258392333984,
+            "world cycles": 500
+        },
+        {
+            "batch num": 172,
+            "samples": 454,
+            "sim time": 1.31807541847229,
+            "world cycles": 487
+        },
+        {
+            "batch num": 173,
+            "samples": 460,
+            "sim time": 1.2960741519927979,
+            "world cycles": 493
+        },
+        {
+            "batch num": 174,
+            "samples": 478,
+            "sim time": 1.9491114616394043,
+            "world cycles": 511
+        },
+        {
+            "batch num": 175,
+            "samples": 517,
+            "sim time": 2.0611181259155273,
+            "world cycles": 550
+        },
+        {
+            "batch num": 176,
+            "samples": 421,
+            "sim time": 1.209069013595581,
+            "world cycles": 454
+        },
+        {
+            "batch num": 177,
+            "samples": 480,
+            "sim time": 2.156123399734497,
+            "world cycles": 513
+        },
+        {
+            "batch num": 178,
+            "samples": 429,
+            "sim time": 1.8111035823822021,
+            "world cycles": 462
+        },
+        {
+            "batch num": 179,
+            "samples": 518,
+            "sim time": 2.0871193408966064,
+            "world cycles": 551
+        },
+        {
+            "batch num": 180,
+            "samples": 470,
+            "sim time": 1.4930853843688965,
+            "world cycles": 503
+        },
+        {
+            "batch num": 181,
+            "samples": 492,
+            "sim time": 2.033116340637207,
+            "world cycles": 525
+        },
+        {
+            "batch num": 182,
+            "samples": 433,
+            "sim time": 1.8511059284210205,
+            "world cycles": 466
+        },
+        {
+            "batch num": 183,
+            "samples": 444,
+            "sim time": 1.2430710792541504,
+            "world cycles": 477
+        },
+        {
+            "batch num": 184,
+            "samples": 416,
+            "sim time": 1.1170639991760254,
+            "world cycles": 449
+        },
+        {
+            "batch num": 185,
+            "samples": 297,
+            "sim time": 0.8220469951629639,
+            "world cycles": 330
+        },
+        {
+            "batch num": 186,
+            "samples": 438,
+            "sim time": 1.1570661067962646,
+            "world cycles": 471
+        },
+        {
+            "batch num": 187,
+            "samples": 454,
+            "sim time": 1.3790788650512695,
+            "world cycles": 487
+        },
+        {
+            "batch num": 188,
+            "samples": 465,
+            "sim time": 1.4040803909301758,
+            "world cycles": 498
+        },
+        {
+            "batch num": 189,
+            "samples": 510,
+            "sim time": 1.9771132469177246,
+            "world cycles": 543
+        },
+        {
+            "batch num": 190,
+            "samples": 426,
+            "sim time": 1.1240642070770264,
+            "world cycles": 459
+        },
+        {
+            "batch num": 191,
+            "samples": 525,
+            "sim time": 2.0631179809570312,
+            "world cycles": 558
+        },
+        {
+            "batch num": 192,
+            "samples": 293,
+            "sim time": 0.7860450744628906,
+            "world cycles": 326
+        },
+        {
+            "batch num": 193,
+            "samples": 432,
+            "sim time": 1.807103157043457,
+            "world cycles": 465
+        },
+        {
+            "batch num": 194,
+            "samples": 423,
+            "sim time": 1.8121037483215332,
+            "world cycles": 456
+        },
+        {
+            "batch num": 195,
+            "samples": 292,
+            "sim time": 0.7950453758239746,
+            "world cycles": 325
+        },
+        {
+            "batch num": 196,
+            "samples": 418,
+            "sim time": 1.788102388381958,
+            "world cycles": 451
+        },
+        {
+            "batch num": 197,
+            "samples": 477,
+            "sim time": 1.923110008239746,
+            "world cycles": 510
+        },
+        {
+            "batch num": 198,
+            "samples": 524,
+            "sim time": 2.048117160797119,
+            "world cycles": 557
+        },
+        {
+            "batch num": 199,
+            "samples": 281,
+            "sim time": 0.7640438079833984,
+            "world cycles": 314
+        },
+        {
+            "batch num": 200,
+            "samples": 485,
+            "sim time": 1.910109281539917,
+            "world cycles": 518
+        },
+        {
+            "batch num": 201,
+            "samples": 432,
+            "sim time": 1.8291046619415283,
+            "world cycles": 465
+        },
+        {
+            "batch num": 202,
+            "samples": 302,
+            "sim time": 0.7920453548431396,
+            "world cycles": 335
+        },
+        {
+            "batch num": 203,
+            "samples": 414,
+            "sim time": 1.1000628471374512,
+            "world cycles": 447
+        },
+        {
+            "batch num": 204,
+            "samples": 422,
+            "sim time": 1.800102949142456,
+            "world cycles": 455
+        },
+        {
+            "batch num": 205,
+            "samples": 482,
+            "sim time": 1.911109447479248,
+            "world cycles": 515
+        },
+        {
+            "batch num": 206,
+            "samples": 418,
+            "sim time": 1.1140635013580322,
+            "world cycles": 451
+        },
+        {
+            "batch num": 207,
+            "samples": 482,
+            "sim time": 1.8881080150604248,
+            "world cycles": 515
+        },
+        {
+            "batch num": 208,
+            "samples": 300,
+            "sim time": 0.7920453548431396,
+            "world cycles": 333
+        },
+        {
+            "batch num": 209,
+            "samples": 508,
+            "sim time": 1.9621121883392334,
+            "world cycles": 541
+        },
+        {
+            "batch num": 210,
+            "samples": 469,
+            "sim time": 1.8671066761016846,
+            "world cycles": 502
+        },
+        {
+            "batch num": 211,
+            "samples": 477,
+            "sim time": 1.8911082744598389,
+            "world cycles": 510
+        },
+        {
+            "batch num": 212,
+            "samples": 299,
+            "sim time": 0.8080461025238037,
+            "world cycles": 332
+        },
+        {
+            "batch num": 213,
+            "samples": 430,
+            "sim time": 1.1380650997161865,
+            "world cycles": 463
+        },
+        {
+            "batch num": 214,
+            "samples": 305,
+            "sim time": 0.8370475769042969,
+            "world cycles": 338
+        },
+        {
+            "batch num": 215,
+            "samples": 281,
+            "sim time": 0.7530429363250732,
+            "world cycles": 314
+        },
+        {
+            "batch num": 216,
+            "samples": 285,
+            "sim time": 0.7660436630249023,
+            "world cycles": 318
+        },
+        {
+            "batch num": 217,
+            "samples": 440,
+            "sim time": 1.8631064891815186,
+            "world cycles": 473
+        },
+        {
+            "batch num": 218,
+            "samples": 465,
+            "sim time": 1.8821074962615967,
+            "world cycles": 498
+        },
+        {
+            "batch num": 219,
+            "samples": 479,
+            "sim time": 1.8901081085205078,
+            "world cycles": 512
+        },
+        {
+            "batch num": 220,
+            "samples": 449,
+            "sim time": 1.204068899154663,
+            "world cycles": 482
+        },
+        {
+            "batch num": 221,
+            "samples": 522,
+            "sim time": 2.049117088317871,
+            "world cycles": 555
+        },
+        {
+            "batch num": 222,
+            "samples": 303,
+            "sim time": 0.8040459156036377,
+            "world cycles": 336
+        },
+        {
+            "batch num": 223,
+            "samples": 481,
+            "sim time": 1.912109375,
+            "world cycles": 514
+        },
+        {
+            "batch num": 224,
+            "samples": 275,
+            "sim time": 0.7390422821044922,
+            "world cycles": 308
+        },
+        {
+            "batch num": 225,
+            "samples": 470,
+            "sim time": 1.4070804119110107,
+            "world cycles": 503
+        },
+        {
+            "batch num": 226,
+            "samples": 427,
+            "sim time": 1.1290645599365234,
+            "world cycles": 460
+        },
+        {
+            "batch num": 227,
+            "samples": 438,
+            "sim time": 1.196068525314331,
+            "world cycles": 471
+        },
+        {
+            "batch num": 228,
+            "samples": 454,
+            "sim time": 1.3770787715911865,
+            "world cycles": 487
+        },
+        {
+            "batch num": 229,
+            "samples": 420,
+            "sim time": 1.8291046619415283,
+            "world cycles": 453
+        },
+        {
+            "batch num": 230,
+            "samples": 478,
+            "sim time": 1.921109914779663,
+            "world cycles": 511
+        },
+        {
+            "batch num": 231,
+            "samples": 306,
+            "sim time": 0.8580489158630371,
+            "world cycles": 339
+        },
+        {
+            "batch num": 232,
+            "samples": 451,
+            "sim time": 1.2270700931549072,
+            "world cycles": 484
+        },
+        {
+            "batch num": 233,
+            "samples": 430,
+            "sim time": 1.7531003952026367,
+            "world cycles": 463
+        },
+        {
+            "batch num": 234,
+            "samples": 460,
+            "sim time": 1.4070804119110107,
+            "world cycles": 493
+        },
+        {
+            "batch num": 235,
+            "samples": 281,
+            "sim time": 0.7500426769256592,
+            "world cycles": 314
+        },
+        {
+            "batch num": 236,
+            "samples": 300,
+            "sim time": 0.7930452823638916,
+            "world cycles": 333
+        },
+        {
+            "batch num": 237,
+            "samples": 448,
+            "sim time": 1.2320704460144043,
+            "world cycles": 481
+        },
+        {
+            "batch num": 238,
+            "samples": 298,
+            "sim time": 0.8040459156036377,
+            "world cycles": 331
+        },
+        {
+            "batch num": 239,
+            "samples": 294,
+            "sim time": 0.7820446491241455,
+            "world cycles": 327
+        },
+        {
+            "batch num": 240,
+            "samples": 417,
+            "sim time": 1.798102855682373,
+            "world cycles": 450
+        },
+        {
+            "batch num": 241,
+            "samples": 299,
+            "sim time": 0.7970454692840576,
+            "world cycles": 332
+        },
+        {
+            "batch num": 242,
+            "samples": 445,
+            "sim time": 1.188068151473999,
+            "world cycles": 478
+        },
+        {
+            "batch num": 243,
+            "samples": 460,
+            "sim time": 1.416081190109253,
+            "world cycles": 493
+        },
+        {
+            "batch num": 244,
+            "samples": 417,
+            "sim time": 1.8051033020019531,
+            "world cycles": 450
+        },
+        {
+            "batch num": 245,
+            "samples": 292,
+            "sim time": 0.8020458221435547,
+            "world cycles": 325
+        },
+        {
+            "batch num": 246,
+            "samples": 459,
+            "sim time": 1.2570719718933105,
+            "world cycles": 492
+        },
+        {
+            "batch num": 247,
+            "samples": 475,
+            "sim time": 1.8921082019805908,
+            "world cycles": 508
+        },
+        {
+            "batch num": 248,
+            "samples": 443,
+            "sim time": 1.208069086074829,
+            "world cycles": 476
+        },
+        {
+            "batch num": 249,
+            "samples": 411,
+            "sim time": 1.8091034889221191,
+            "world cycles": 444
+        },
+        {
+            "batch num": 250,
+            "samples": 427,
+            "sim time": 1.1490657329559326,
+            "world cycles": 460
+        },
+        {
+            "batch num": 251,
+            "samples": 429,
+            "sim time": 1.9291102886199951,
+            "world cycles": 462
+        },
+        {
+            "batch num": 252,
+            "samples": 290,
+            "sim time": 0.8070461750030518,
+            "world cycles": 323
+        },
+        {
+            "batch num": 253,
+            "samples": 299,
+            "sim time": 0.8300473690032959,
+            "world cycles": 332
+        },
+        {
+            "batch num": 254,
+            "samples": 434,
+            "sim time": 1.910109281539917,
+            "world cycles": 467
+        },
+        {
+            "batch num": 255,
+            "samples": 478,
+            "sim time": 1.9961140155792236,
+            "world cycles": 511
+        },
+        {
+            "batch num": 256,
+            "samples": 464,
+            "sim time": 1.315075159072876,
+            "world cycles": 497
+        },
+        {
+            "batch num": 257,
+            "samples": 490,
+            "sim time": 2.034116268157959,
+            "world cycles": 523
+        },
+        {
+            "batch num": 258,
+            "samples": 425,
+            "sim time": 1.1300647258758545,
+            "world cycles": 458
+        },
+        {
+            "batch num": 259,
+            "samples": 457,
+            "sim time": 1.3780789375305176,
+            "world cycles": 490
+        },
+        {
+            "batch num": 260,
+            "samples": 457,
+            "sim time": 1.3870792388916016,
+            "world cycles": 490
+        },
+        {
+            "batch num": 261,
+            "samples": 482,
+            "sim time": 1.909109354019165,
+            "world cycles": 515
+        },
+        {
+            "batch num": 262,
+            "samples": 302,
+            "sim time": 0.7980456352233887,
+            "world cycles": 335
+        },
+        {
+            "batch num": 263,
+            "samples": 463,
+            "sim time": 1.2690725326538086,
+            "world cycles": 496
+        },
+        {
+            "batch num": 264,
+            "samples": 469,
+            "sim time": 1.293074131011963,
+            "world cycles": 502
+        },
+        {
+            "batch num": 265,
+            "samples": 293,
+            "sim time": 0.7760443687438965,
+            "world cycles": 326
+        },
+        {
+            "batch num": 266,
+            "samples": 297,
+            "sim time": 0.842048168182373,
+            "world cycles": 330
+        },
+        {
+            "batch num": 267,
+            "samples": 478,
+            "sim time": 1.899108648300171,
+            "world cycles": 511
+        },
+        {
+            "batch num": 268,
+            "samples": 279,
+            "sim time": 0.7720439434051514,
+            "world cycles": 312
+        },
+        {
+            "batch num": 269,
+            "samples": 462,
+            "sim time": 1.44108247756958,
+            "world cycles": 495
+        },
+        {
+            "batch num": 270,
+            "samples": 445,
+            "sim time": 1.2600719928741455,
+            "world cycles": 478
+        },
+        {
+            "batch num": 271,
+            "samples": 482,
+            "sim time": 1.9641122817993164,
+            "world cycles": 515
+        },
+        {
+            "batch num": 272,
+            "samples": 407,
+            "sim time": 1.8201041221618652,
+            "world cycles": 440
+        },
+        {
+            "batch num": 273,
+            "samples": 437,
+            "sim time": 1.196068525314331,
+            "world cycles": 470
+        },
+        {
+            "batch num": 274,
+            "samples": 447,
+            "sim time": 1.329075813293457,
+            "world cycles": 480
+        },
+        {
+            "batch num": 275,
+            "samples": 463,
+            "sim time": 1.445082664489746,
+            "world cycles": 496
+        },
+        {
+            "batch num": 276,
+            "samples": 480,
+            "sim time": 1.9701128005981445,
+            "world cycles": 513
+        },
+        {
+            "batch num": 277,
+            "samples": 439,
+            "sim time": 1.192068099975586,
+            "world cycles": 472
+        },
+        {
+            "batch num": 278,
+            "samples": 441,
+            "sim time": 1.3360764980316162,
+            "world cycles": 474
+        },
+        {
+            "batch num": 279,
+            "samples": 289,
+            "sim time": 0.8050460815429688,
+            "world cycles": 322
+        },
+        {
+            "batch num": 280,
+            "samples": 427,
+            "sim time": 1.783102035522461,
+            "world cycles": 460
+        },
+        {
+            "batch num": 281,
+            "samples": 414,
+            "sim time": 1.074061393737793,
+            "world cycles": 447
+        },
+        {
+            "batch num": 282,
+            "samples": 291,
+            "sim time": 0.8070461750030518,
+            "world cycles": 324
+        },
+        {
+            "batch num": 283,
+            "samples": 448,
+            "sim time": 1.191068172454834,
+            "world cycles": 481
+        },
+        {
+            "batch num": 284,
+            "samples": 445,
+            "sim time": 1.2070691585540771,
+            "world cycles": 478
+        },
+        {
+            "batch num": 285,
+            "samples": 447,
+            "sim time": 1.2420709133148193,
+            "world cycles": 480
+        },
+        {
+            "batch num": 286,
+            "samples": 473,
+            "sim time": 1.9351108074188232,
+            "world cycles": 506
+        },
+        {
+            "batch num": 287,
+            "samples": 469,
+            "sim time": 1.9561119079589844,
+            "world cycles": 502
+        },
+        {
+            "batch num": 288,
+            "samples": 458,
+            "sim time": 1.2440712451934814,
+            "world cycles": 491
+        },
+        {
+            "batch num": 289,
+            "samples": 302,
+            "sim time": 0.7860448360443115,
+            "world cycles": 335
+        },
+        {
+            "batch num": 290,
+            "samples": 409,
+            "sim time": 1.8251044750213623,
+            "world cycles": 442
+        },
+        {
+            "batch num": 291,
+            "samples": 463,
+            "sim time": 1.899108648300171,
+            "world cycles": 496
+        },
+        {
+            "batch num": 292,
+            "samples": 453,
+            "sim time": 1.3580777645111084,
+            "world cycles": 486
+        },
+        {
+            "batch num": 293,
+            "samples": 446,
+            "sim time": 1.196068525314331,
+            "world cycles": 479
+        },
+        {
+            "batch num": 294,
+            "samples": 436,
+            "sim time": 1.896108627319336,
+            "world cycles": 469
+        },
+        {
+            "batch num": 295,
+            "samples": 414,
+            "sim time": 1.1680667400360107,
+            "world cycles": 447
+        },
+        {
+            "batch num": 296,
+            "samples": 423,
+            "sim time": 1.8481056690216064,
+            "world cycles": 456
+        },
+        {
+            "batch num": 297,
+            "samples": 414,
+            "sim time": 1.7801017761230469,
+            "world cycles": 447
+        },
+        {
+            "batch num": 298,
+            "samples": 465,
+            "sim time": 1.3920795917510986,
+            "world cycles": 498
+        },
+        {
+            "batch num": 299,
+            "samples": 440,
+            "sim time": 1.8201041221618652,
+            "world cycles": 473
+        },
+        {
+            "batch num": 300,
+            "samples": 467,
+            "sim time": 1.317075490951538,
+            "world cycles": 500
+        },
+        {
+            "batch num": 301,
+            "samples": 416,
+            "sim time": 1.8031032085418701,
+            "world cycles": 449
+        },
+        {
+            "batch num": 302,
+            "samples": 487,
+            "sim time": 1.921109914779663,
+            "world cycles": 520
+        },
+        {
+            "batch num": 303,
+            "samples": 456,
+            "sim time": 1.2450711727142334,
+            "world cycles": 489
+        },
+        {
+            "batch num": 304,
+            "samples": 461,
+            "sim time": 1.448082685470581,
+            "world cycles": 494
+        },
+        {
+            "batch num": 305,
+            "samples": 421,
+            "sim time": 1.8081035614013672,
+            "world cycles": 454
+        },
+        {
+            "batch num": 306,
+            "samples": 418,
+            "sim time": 1.8881080150604248,
+            "world cycles": 451
+        },
+        {
+            "batch num": 307,
+            "samples": 293,
+            "sim time": 0.9380538463592529,
+            "world cycles": 326
+        },
+        {
+            "batch num": 308,
+            "samples": 467,
+            "sim time": 2.49214243888855,
+            "world cycles": 500
+        },
+        {
+            "batch num": 309,
+            "samples": 458,
+            "sim time": 1.5070860385894775,
+            "world cycles": 491
+        },
+        {
+            "batch num": 310,
+            "samples": 418,
+            "sim time": 1.2890737056732178,
+            "world cycles": 451
+        },
+        {
+            "batch num": 311,
+            "samples": 449,
+            "sim time": 1.210069179534912,
+            "world cycles": 482
+        },
+        {
+            "batch num": 312,
+            "samples": 298,
+            "sim time": 0.8100461959838867,
+            "world cycles": 331
+        },
+        {
+            "batch num": 313,
+            "samples": 459,
+            "sim time": 1.4150807857513428,
+            "world cycles": 492
+        },
+        {
+            "batch num": 314,
+            "samples": 428,
+            "sim time": 1.1690669059753418,
+            "world cycles": 461
+        },
+        {
+            "batch num": 315,
+            "samples": 276,
+            "sim time": 0.7710440158843994,
+            "world cycles": 309
+        },
+        {
+            "batch num": 316,
+            "samples": 447,
+            "sim time": 1.2570717334747314,
+            "world cycles": 480
+        },
+        {
+            "batch num": 317,
+            "samples": 423,
+            "sim time": 1.8911080360412598,
+            "world cycles": 456
+        },
+        {
+            "batch num": 318,
+            "samples": 422,
+            "sim time": 1.1730670928955078,
+            "world cycles": 455
+        },
+        {
+            "batch num": 319,
+            "samples": 299,
+            "sim time": 0.8260471820831299,
+            "world cycles": 332
+        },
+        {
+            "batch num": 320,
+            "samples": 282,
+            "sim time": 0.7960455417633057,
+            "world cycles": 315
+        },
+        {
+            "batch num": 321,
+            "samples": 441,
+            "sim time": 1.2220699787139893,
+            "world cycles": 474
+        },
+        {
+            "batch num": 322,
+            "samples": 440,
+            "sim time": 1.8431053161621094,
+            "world cycles": 473
+        },
+        {
+            "batch num": 323,
+            "samples": 289,
+            "sim time": 0.7860448360443115,
+            "world cycles": 322
+        },
+        {
+            "batch num": 324,
+            "samples": 437,
+            "sim time": 1.1790673732757568,
+            "world cycles": 470
+        },
+        {
+            "batch num": 325,
+            "samples": 415,
+            "sim time": 1.1430652141571045,
+            "world cycles": 448
+        },
+        {
+            "batch num": 326,
+            "samples": 297,
+            "sim time": 0.8040459156036377,
+            "world cycles": 330
+        },
+        {
+            "batch num": 327,
+            "samples": 430,
+            "sim time": 1.1750671863555908,
+            "world cycles": 463
+        },
+        {
+            "batch num": 328,
+            "samples": 455,
+            "sim time": 1.312075138092041,
+            "world cycles": 488
+        },
+        {
+            "batch num": 329,
+            "samples": 445,
+            "sim time": 1.9331107139587402,
+            "world cycles": 478
+        },
+        {
+            "batch num": 330,
+            "samples": 413,
+            "sim time": 1.1500656604766846,
+            "world cycles": 446
+        },
+        {
+            "batch num": 331,
+            "samples": 418,
+            "sim time": 1.1480658054351807,
+            "world cycles": 451
+        },
+        {
+            "batch num": 332,
+            "samples": 461,
+            "sim time": 1.313075065612793,
+            "world cycles": 494
+        },
+        {
+            "batch num": 333,
+            "samples": 428,
+            "sim time": 1.1810674667358398,
+            "world cycles": 461
+        },
+        {
+            "batch num": 334,
+            "samples": 426,
+            "sim time": 1.1630663871765137,
+            "world cycles": 459
+        },
+        {
+            "batch num": 335,
+            "samples": 470,
+            "sim time": 1.9821133613586426,
+            "world cycles": 503
+        },
+        {
+            "batch num": 336,
+            "samples": 455,
+            "sim time": 1.4010801315307617,
+            "world cycles": 488
+        },
+        {
+            "batch num": 337,
+            "samples": 447,
+            "sim time": 1.3570775985717773,
+            "world cycles": 480
+        },
+        {
+            "batch num": 338,
+            "samples": 295,
+            "sim time": 0.7890450954437256,
+            "world cycles": 328
+        },
+        {
+            "batch num": 339,
+            "samples": 294,
+            "sim time": 0.7740442752838135,
+            "world cycles": 327
+        },
+        {
+            "batch num": 340,
+            "samples": 294,
+            "sim time": 0.7880451679229736,
+            "world cycles": 327
+        },
+        {
+            "batch num": 341,
+            "samples": 424,
+            "sim time": 1.1600663661956787,
+            "world cycles": 457
+        },
+        {
+            "batch num": 342,
+            "samples": 444,
+            "sim time": 1.2720727920532227,
+            "world cycles": 477
+        },
+        {
+            "batch num": 343,
+            "samples": 483,
+            "sim time": 2.018115520477295,
+            "world cycles": 516
+        },
+        {
+            "batch num": 344,
+            "samples": 417,
+            "sim time": 1.2460713386535645,
+            "world cycles": 450
+        },
+        {
+            "batch num": 345,
+            "samples": 450,
+            "sim time": 1.2730727195739746,
+            "world cycles": 483
+        },
+        {
+            "batch num": 346,
+            "samples": 467,
+            "sim time": 1.922109842300415,
+            "world cycles": 500
+        },
+        {
+            "batch num": 347,
+            "samples": 434,
+            "sim time": 1.8901081085205078,
+            "world cycles": 467
+        },
+        {
+            "batch num": 348,
+            "samples": 443,
+            "sim time": 1.2540717124938965,
+            "world cycles": 476
+        },
+        {
+            "batch num": 349,
+            "samples": 304,
+            "sim time": 0.8770501613616943,
+            "world cycles": 337
+        },
+        {
+            "batch num": 350,
+            "samples": 447,
+            "sim time": 1.2430710792541504,
+            "world cycles": 480
+        },
+        {
+            "batch num": 351,
+            "samples": 314,
+            "sim time": 0.8780503273010254,
+            "world cycles": 347
+        },
+        {
+            "batch num": 352,
+            "samples": 294,
+            "sim time": 0.8270473480224609,
+            "world cycles": 327
+        },
+        {
+            "batch num": 353,
+            "samples": 433,
+            "sim time": 1.8561062812805176,
+            "world cycles": 466
+        },
+        {
+            "batch num": 354,
+            "samples": 276,
+            "sim time": 0.7950453758239746,
+            "world cycles": 309
+        },
+        {
+            "batch num": 355,
+            "samples": 452,
+            "sim time": 1.2370707988739014,
+            "world cycles": 485
+        },
+        {
+            "batch num": 356,
+            "samples": 498,
+            "sim time": 1.915109634399414,
+            "world cycles": 531
+        },
+        {
+            "batch num": 357,
+            "samples": 294,
+            "sim time": 0.7760443687438965,
+            "world cycles": 327
+        },
+        {
+            "batch num": 358,
+            "samples": 412,
+            "sim time": 1.082062005996704,
+            "world cycles": 445
+        },
+        {
+            "batch num": 359,
+            "samples": 450,
+            "sim time": 1.303074598312378,
+            "world cycles": 483
+        },
+        {
+            "batch num": 360,
+            "samples": 431,
+            "sim time": 1.1430654525756836,
+            "world cycles": 464
+        },
+        {
+            "batch num": 361,
+            "samples": 468,
+            "sim time": 2.284130573272705,
+            "world cycles": 501
+        },
+        {
+            "batch num": 362,
+            "samples": 425,
+            "sim time": 1.326075792312622,
+            "world cycles": 458
+        },
+        {
+            "batch num": 363,
+            "samples": 510,
+            "sim time": 2.029115915298462,
+            "world cycles": 543
+        },
+        {
+            "batch num": 364,
+            "samples": 488,
+            "sim time": 1.9441111087799072,
+            "world cycles": 521
+        },
+        {
+            "batch num": 365,
+            "samples": 296,
+            "sim time": 0.8630492687225342,
+            "world cycles": 329
+        },
+        {
+            "batch num": 366,
+            "samples": 454,
+            "sim time": 1.3850791454315186,
+            "world cycles": 487
+        },
+        {
+            "batch num": 367,
+            "samples": 301,
+            "sim time": 0.8010456562042236,
+            "world cycles": 334
+        },
+        {
+            "batch num": 368,
+            "samples": 295,
+            "sim time": 0.7760443687438965,
+            "world cycles": 328
+        },
+        {
+            "batch num": 369,
+            "samples": 282,
+            "sim time": 0.7620437145233154,
+            "world cycles": 315
+        },
+        {
+            "batch num": 370,
+            "samples": 429,
+            "sim time": 1.8551061153411865,
+            "world cycles": 462
+        },
+        {
+            "batch num": 371,
+            "samples": 419,
+            "sim time": 1.1340649127960205,
+            "world cycles": 452
+        },
+        {
+            "batch num": 372,
+            "samples": 308,
+            "sim time": 0.84004807472229,
+            "world cycles": 341
+        },
+        {
+            "batch num": 373,
+            "samples": 445,
+            "sim time": 1.3400766849517822,
+            "world cycles": 478
+        },
+        {
+            "batch num": 374,
+            "samples": 300,
+            "sim time": 0.9320533275604248,
+            "world cycles": 333
+        },
+        {
+            "batch num": 375,
+            "samples": 423,
+            "sim time": 1.2400708198547363,
+            "world cycles": 456
+        },
+        {
+            "batch num": 376,
+            "samples": 471,
+            "sim time": 2.031116008758545,
+            "world cycles": 504
+        },
+        {
+            "batch num": 377,
+            "samples": 487,
+            "sim time": 1.9981141090393066,
+            "world cycles": 520
+        },
+        {
+            "batch num": 378,
+            "samples": 311,
+            "sim time": 0.8820505142211914,
+            "world cycles": 344
+        },
+        {
+            "batch num": 379,
+            "samples": 456,
+            "sim time": 1.317075252532959,
+            "world cycles": 489
+        },
+        {
+            "batch num": 380,
+            "samples": 464,
+            "sim time": 1.4650838375091553,
+            "world cycles": 497
+        },
+        {
+            "batch num": 381,
+            "samples": 282,
+            "sim time": 0.7800445556640625,
+            "world cycles": 315
+        },
+        {
+            "batch num": 382,
+            "samples": 415,
+            "sim time": 1.8631064891815186,
+            "world cycles": 448
+        },
+        {
+            "batch num": 383,
+            "samples": 423,
+            "sim time": 1.1410653591156006,
+            "world cycles": 456
+        },
+        {
+            "batch num": 384,
+            "samples": 277,
+            "sim time": 0.7590432167053223,
+            "world cycles": 310
+        },
+        {
+            "batch num": 385,
+            "samples": 437,
+            "sim time": 1.2510714530944824,
+            "world cycles": 470
+        },
+        {
+            "batch num": 386,
+            "samples": 428,
+            "sim time": 1.180067539215088,
+            "world cycles": 461
+        },
+        {
+            "batch num": 387,
+            "samples": 434,
+            "sim time": 1.194068193435669,
+            "world cycles": 467
+        },
+        {
+            "batch num": 388,
+            "samples": 438,
+            "sim time": 1.9001085758209229,
+            "world cycles": 471
+        },
+        {
+            "batch num": 389,
+            "samples": 483,
+            "sim time": 1.9651122093200684,
+            "world cycles": 516
+        },
+        {
+            "batch num": 390,
+            "samples": 416,
+            "sim time": 1.1490657329559326,
+            "world cycles": 449
+        },
+        {
+            "batch num": 391,
+            "samples": 429,
+            "sim time": 1.1570661067962646,
+            "world cycles": 462
+        },
+        {
+            "batch num": 392,
+            "samples": 286,
+            "sim time": 0.8160467147827148,
+            "world cycles": 319
+        },
+        {
+            "batch num": 393,
+            "samples": 272,
+            "sim time": 0.7550432682037354,
+            "world cycles": 305
+        },
+        {
+            "batch num": 394,
+            "samples": 304,
+            "sim time": 0.8260471820831299,
+            "world cycles": 337
+        },
+        {
+            "batch num": 395,
+            "samples": 418,
+            "sim time": 1.1500656604766846,
+            "world cycles": 451
+        },
+        {
+            "batch num": 396,
+            "samples": 457,
+            "sim time": 1.2710728645324707,
+            "world cycles": 490
+        },
+        {
+            "batch num": 397,
+            "samples": 444,
+            "sim time": 1.2240700721740723,
+            "world cycles": 477
+        },
+        {
+            "batch num": 398,
+            "samples": 479,
+            "sim time": 1.9481112957000732,
+            "world cycles": 512
+        },
+        {
+            "batch num": 399,
+            "samples": 426,
+            "sim time": 1.8871078491210938,
+            "world cycles": 459
+        },
+        {
+            "batch num": 400,
+            "samples": 441,
+            "sim time": 1.8521060943603516,
+            "world cycles": 474
+        },
+        {
+            "batch num": 401,
+            "samples": 474,
+            "sim time": 1.9441111087799072,
+            "world cycles": 507
+        },
+        {
+            "batch num": 402,
+            "samples": 503,
+            "sim time": 2.018115520477295,
+            "world cycles": 536
+        },
+        {
+            "batch num": 403,
+            "samples": 441,
+            "sim time": 1.1810674667358398,
+            "world cycles": 474
+        },
+        {
+            "batch num": 404,
+            "samples": 294,
+            "sim time": 0.7920453548431396,
+            "world cycles": 327
+        },
+        {
+            "batch num": 405,
+            "samples": 489,
+            "sim time": 2.017115354537964,
+            "world cycles": 522
+        },
+        {
+            "batch num": 406,
+            "samples": 459,
+            "sim time": 1.43408203125,
+            "world cycles": 492
+        },
+        {
+            "batch num": 407,
+            "samples": 422,
+            "sim time": 1.8491058349609375,
+            "world cycles": 455
+        },
+        {
+            "batch num": 408,
+            "samples": 466,
+            "sim time": 1.303074598312378,
+            "world cycles": 499
+        },
+        {
+            "batch num": 409,
+            "samples": 458,
+            "sim time": 1.2780730724334717,
+            "world cycles": 491
+        },
+        {
+            "batch num": 410,
+            "samples": 465,
+            "sim time": 1.4900851249694824,
+            "world cycles": 498
+        },
+        {
+            "batch num": 411,
+            "samples": 446,
+            "sim time": 1.2500715255737305,
+            "world cycles": 479
+        },
+        {
+            "batch num": 412,
+            "samples": 312,
+            "sim time": 0.8870506286621094,
+            "world cycles": 345
+        },
+        {
+            "batch num": 413,
+            "samples": 292,
+            "sim time": 0.8480486869812012,
+            "world cycles": 325
+        },
+        {
+            "batch num": 414,
+            "samples": 412,
+            "sim time": 1.1590664386749268,
+            "world cycles": 445
+        },
+        {
+            "batch num": 415,
+            "samples": 498,
+            "sim time": 2.0041146278381348,
+            "world cycles": 531
+        },
+        {
+            "batch num": 416,
+            "samples": 301,
+            "sim time": 0.7970457077026367,
+            "world cycles": 334
+        },
+        {
+            "batch num": 417,
+            "samples": 289,
+            "sim time": 0.7930452823638916,
+            "world cycles": 322
+        },
+        {
+            "batch num": 418,
+            "samples": 475,
+            "sim time": 1.9621121883392334,
+            "world cycles": 508
+        },
+        {
+            "batch num": 419,
+            "samples": 418,
+            "sim time": 1.1520659923553467,
+            "world cycles": 451
+        },
+        {
+            "batch num": 420,
+            "samples": 280,
+            "sim time": 0.8170466423034668,
+            "world cycles": 313
+        },
+        {
+            "batch num": 421,
+            "samples": 418,
+            "sim time": 1.911109209060669,
+            "world cycles": 451
+        },
+        {
+            "batch num": 422,
+            "samples": 495,
+            "sim time": 2.060117721557617,
+            "world cycles": 528
+        },
+        {
+            "batch num": 423,
+            "samples": 475,
+            "sim time": 1.9921138286590576,
+            "world cycles": 508
+        },
+        {
+            "batch num": 424,
+            "samples": 485,
+            "sim time": 2.04111647605896,
+            "world cycles": 518
+        },
+        {
+            "batch num": 425,
+            "samples": 292,
+            "sim time": 0.8450484275817871,
+            "world cycles": 325
+        },
+        {
+            "batch num": 426,
+            "samples": 431,
+            "sim time": 1.8591063022613525,
+            "world cycles": 464
+        },
+        {
+            "batch num": 427,
+            "samples": 415,
+            "sim time": 1.1690669059753418,
+            "world cycles": 448
+        },
+        {
+            "batch num": 428,
+            "samples": 455,
+            "sim time": 1.4850850105285645,
+            "world cycles": 488
+        },
+        {
+            "batch num": 429,
+            "samples": 414,
+            "sim time": 1.1790673732757568,
+            "world cycles": 447
+        },
+        {
+            "batch num": 430,
+            "samples": 432,
+            "sim time": 1.194068431854248,
+            "world cycles": 465
+        },
+        {
+            "batch num": 431,
+            "samples": 487,
+            "sim time": 2.0041146278381348,
+            "world cycles": 520
+        },
+        {
+            "batch num": 432,
+            "samples": 505,
+            "sim time": 2.0861194133758545,
+            "world cycles": 538
+        },
+        {
+            "batch num": 433,
+            "samples": 427,
+            "sim time": 1.198068618774414,
+            "world cycles": 460
+        },
+        {
+            "batch num": 434,
+            "samples": 307,
+            "sim time": 0.842048168182373,
+            "world cycles": 340
+        },
+        {
+            "batch num": 435,
+            "samples": 485,
+            "sim time": 2.01411509513855,
+            "world cycles": 518
+        },
+        {
+            "batch num": 436,
+            "samples": 280,
+            "sim time": 0.7990458011627197,
+            "world cycles": 313
+        },
+        {
+            "batch num": 437,
+            "samples": 280,
+            "sim time": 0.7870450019836426,
+            "world cycles": 313
+        },
+        {
+            "batch num": 438,
+            "samples": 420,
+            "sim time": 1.1790673732757568,
+            "world cycles": 453
+        },
+        {
+            "batch num": 439,
+            "samples": 479,
+            "sim time": 2.014115333557129,
+            "world cycles": 512
+        },
+        {
+            "batch num": 440,
+            "samples": 481,
+            "sim time": 2.0001142024993896,
+            "world cycles": 514
+        },
+        {
+            "batch num": 441,
+            "samples": 302,
+            "sim time": 0.9180524349212646,
+            "world cycles": 335
+        },
+        {
+            "batch num": 442,
+            "samples": 440,
+            "sim time": 1.8941082954406738,
+            "world cycles": 473
+        },
+        {
+            "batch num": 443,
+            "samples": 434,
+            "sim time": 1.8691067695617676,
+            "world cycles": 467
+        },
+        {
+            "batch num": 444,
+            "samples": 276,
+            "sim time": 0.7880451679229736,
+            "world cycles": 309
+        },
+        {
+            "batch num": 445,
+            "samples": 467,
+            "sim time": 1.4930853843688965,
+            "world cycles": 500
+        },
+        {
+            "batch num": 446,
+            "samples": 435,
+            "sim time": 1.8821074962615967,
+            "world cycles": 468
+        },
+        {
+            "batch num": 447,
+            "samples": 416,
+            "sim time": 1.8951084613800049,
+            "world cycles": 449
+        },
+        {
+            "batch num": 448,
+            "samples": 446,
+            "sim time": 1.2630722522735596,
+            "world cycles": 479
+        },
+        {
+            "batch num": 449,
+            "samples": 285,
+            "sim time": 0.8040459156036377,
+            "world cycles": 318
+        },
+        {
+            "batch num": 450,
+            "samples": 295,
+            "sim time": 0.9250528812408447,
+            "world cycles": 328
+        },
+        {
+            "batch num": 451,
+            "samples": 466,
+            "sim time": 1.5220870971679688,
+            "world cycles": 499
+        },
+        {
+            "batch num": 452,
+            "samples": 290,
+            "sim time": 0.830047607421875,
+            "world cycles": 323
+        },
+        {
+            "batch num": 453,
+            "samples": 435,
+            "sim time": 1.330075979232788,
+            "world cycles": 468
+        },
+        {
+            "batch num": 454,
+            "samples": 436,
+            "sim time": 1.8861079216003418,
+            "world cycles": 469
+        },
+        {
+            "batch num": 455,
+            "samples": 281,
+            "sim time": 0.7740442752838135,
+            "world cycles": 314
+        },
+        {
+            "batch num": 456,
+            "samples": 422,
+            "sim time": 1.8911082744598389,
+            "world cycles": 455
+        },
+        {
+            "batch num": 457,
+            "samples": 290,
+            "sim time": 0.8150465488433838,
+            "world cycles": 323
+        },
+        {
+            "batch num": 458,
+            "samples": 483,
+            "sim time": 1.9681124687194824,
+            "world cycles": 516
+        },
+        {
+            "batch num": 459,
+            "samples": 420,
+            "sim time": 1.8181040287017822,
+            "world cycles": 453
+        },
+        {
+            "batch num": 460,
+            "samples": 455,
+            "sim time": 1.422081470489502,
+            "world cycles": 488
+        },
+        {
+            "batch num": 461,
+            "samples": 431,
+            "sim time": 1.2620723247528076,
+            "world cycles": 464
+        },
+        {
+            "batch num": 462,
+            "samples": 482,
+            "sim time": 2.0091147422790527,
+            "world cycles": 515
+        },
+        {
+            "batch num": 463,
+            "samples": 460,
+            "sim time": 1.3830790519714355,
+            "world cycles": 493
+        },
+        {
+            "batch num": 464,
+            "samples": 468,
+            "sim time": 1.9911139011383057,
+            "world cycles": 501
+        },
+        {
+            "batch num": 465,
+            "samples": 469,
+            "sim time": 1.425081491470337,
+            "world cycles": 502
+        },
+        {
+            "batch num": 466,
+            "samples": 492,
+            "sim time": 2.0671181678771973,
+            "world cycles": 525
+        },
+        {
+            "batch num": 467,
+            "samples": 461,
+            "sim time": 1.4770843982696533,
+            "world cycles": 494
+        },
+        {
+            "batch num": 468,
+            "samples": 442,
+            "sim time": 1.3580777645111084,
+            "world cycles": 475
+        },
+        {
+            "batch num": 469,
+            "samples": 449,
+            "sim time": 1.2650721073150635,
+            "world cycles": 482
+        },
+        {
+            "batch num": 470,
+            "samples": 454,
+            "sim time": 1.2560718059539795,
+            "world cycles": 487
+        },
+        {
+            "batch num": 471,
+            "samples": 301,
+            "sim time": 0.8570489883422852,
+            "world cycles": 334
+        },
+        {
+            "batch num": 472,
+            "samples": 302,
+            "sim time": 0.8470485210418701,
+            "world cycles": 335
+        },
+        {
+            "batch num": 473,
+            "samples": 492,
+            "sim time": 2.030116081237793,
+            "world cycles": 525
+        },
+        {
+            "batch num": 474,
+            "samples": 422,
+            "sim time": 1.9241101741790771,
+            "world cycles": 455
+        },
+        {
+            "batch num": 475,
+            "samples": 419,
+            "sim time": 1.9601120948791504,
+            "world cycles": 452
+        },
+        {
+            "batch num": 476,
+            "samples": 500,
+            "sim time": 2.0901196002960205,
+            "world cycles": 533
+        },
+        {
+            "batch num": 477,
+            "samples": 482,
+            "sim time": 1.9491114616394043,
+            "world cycles": 515
+        },
+        {
+            "batch num": 478,
+            "samples": 440,
+            "sim time": 1.195068359375,
+            "world cycles": 473
+        },
+        {
+            "batch num": 479,
+            "samples": 442,
+            "sim time": 1.2010688781738281,
+            "world cycles": 475
+        },
+        {
+            "batch num": 480,
+            "samples": 440,
+            "sim time": 1.2110693454742432,
+            "world cycles": 473
+        },
+        {
+            "batch num": 481,
+            "samples": 454,
+            "sim time": 1.429081678390503,
+            "world cycles": 487
+        },
+        {
+            "batch num": 482,
+            "samples": 489,
+            "sim time": 2.039116859436035,
+            "world cycles": 522
+        },
+        {
+            "batch num": 483,
+            "samples": 460,
+            "sim time": 1.2580721378326416,
+            "world cycles": 493
+        },
+        {
+            "batch num": 484,
+            "samples": 460,
+            "sim time": 1.3470771312713623,
+            "world cycles": 493
+        },
+        {
+            "batch num": 485,
+            "samples": 470,
+            "sim time": 2.0641181468963623,
+            "world cycles": 503
+        },
+        {
+            "batch num": 486,
+            "samples": 307,
+            "sim time": 1.1490657329559326,
+            "world cycles": 340
+        },
+        {
+            "batch num": 487,
+            "samples": 431,
+            "sim time": 1.205068826675415,
+            "world cycles": 464
+        },
+        {
+            "batch num": 488,
+            "samples": 479,
+            "sim time": 2.048117160797119,
+            "world cycles": 512
+        },
+        {
+            "batch num": 489,
+            "samples": 465,
+            "sim time": 2.0741186141967773,
+            "world cycles": 498
+        },
+        {
+            "batch num": 490,
+            "samples": 425,
+            "sim time": 1.330075979232788,
+            "world cycles": 458
+        },
+        {
+            "batch num": 491,
+            "samples": 461,
+            "sim time": 1.5680897235870361,
+            "world cycles": 494
+        },
+        {
+            "batch num": 492,
+            "samples": 290,
+            "sim time": 0.8220469951629639,
+            "world cycles": 323
+        },
+        {
+            "batch num": 493,
+            "samples": 303,
+            "sim time": 1.2130694389343262,
+            "world cycles": 336
+        },
+        {
+            "batch num": 494,
+            "samples": 421,
+            "sim time": 2.1121206283569336,
+            "world cycles": 454
+        },
+        {
+            "batch num": 495,
+            "samples": 450,
+            "sim time": 1.4930853843688965,
+            "world cycles": 483
+        },
+        {
+            "batch num": 496,
+            "samples": 279,
+            "sim time": 0.8070461750030518,
+            "world cycles": 312
+        },
+        {
+            "batch num": 497,
+            "samples": 304,
+            "sim time": 0.8690497875213623,
+            "world cycles": 337
+        },
+        {
+            "batch num": 498,
+            "samples": 300,
+            "sim time": 0.836047887802124,
+            "world cycles": 333
+        },
+        {
+            "batch num": 499,
+            "samples": 279,
+            "sim time": 0.7530431747436523,
+            "world cycles": 312
+        }
+    ]
+}

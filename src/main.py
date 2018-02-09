@@ -45,9 +45,11 @@ FOV_ANGLE = 120
 KERNEL_RADIUS = 10
 INPUT_DIM = (KERNEL_RADIUS*2+1)**2
 OUTPUT_DIM = 6
-FRAME_SKIP_THRESHOLD = .15 #pick frame if random number [0,1] under threshold
+FRAME_SKIP_THRESHOLD = .5 #pick frame if random number [0,1] under threshold
 MOVING_AVERAGE_SIZE = 10
 OUTPUT_LOWER_BIAS = .25
+TRAINGING_ROUNDS = 5000
+DROPOUT_TRAINING = 1
 
 bl_ind = {None:0,'wood':1,'stone':2,'crafting bench':3,'iron ore':4,'coal':5,'wall':6}
 action_set = ['locateObject:wood','locateObject:stone','locateObject:crafting bench','locateObject:iron ore','locateObject:coal']
@@ -302,7 +304,7 @@ def run2d3d(config_name,select_method,select_name="",save_tree=False,save_path=F
 
 def main():
     learning_rate = 0
-    training_rounds = 100
+    training_rounds = TRAINGING_ROUNDS
 
     input_tensor = tf.placeholder(tf.float32,shape=[None,INPUT_DIM],name='input_tensor')
     label_tensor = tf.placeholder(tf.float32, [None, len(action_set)])
@@ -359,7 +361,7 @@ def main():
             trainingSet = tf.contrib.data.Dataset.from_tensor_slices(batch_set)
             next_element_training = trainingSet.make_one_shot_iterator().get_next()
             '''
-            train_step.run(feed_dict={input_tensor: batch[0], label_tensor: batch[1], dropout_rate: 0.5})
+            train_step.run(feed_dict={input_tensor: batch[0], label_tensor: batch[1], dropout_rate: DROPOUT_TRAINING})
     print('total samples trained: ' + str(total_samples))
     training_time = time.time() - training_time
     analysis = {}
