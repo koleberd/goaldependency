@@ -1,0 +1,10 @@
+{
+    "simulation_name":"dense_1",
+    "world_2d_location":"resources/2d/dense_1.png",
+    "spawn_pos":[2,2],
+    "target_ps":{
+        "inventory":{
+            "stone pickaxe":50
+        }
+    }
+}

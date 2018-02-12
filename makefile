@@ -2,7 +2,7 @@ run_basic: clean
 	@rm -r -f simulation/2Dpath/*
 	@rm -r -f simulation/trees/*
 	@python src/main.py
-	@python src/util/simAnalysis.py
+	
 t:
 	@python src/test.py
 

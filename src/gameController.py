@@ -55,7 +55,7 @@ def harvestObject(obj,gs,tool=None):#potentially will break if the player doesn'
     #swap to correct tool
     toolLevel = 0
     if tool != None:
-        toolLevel = 0
+        gs.inv.withdraw(tool,1)
         #needs to withdraw one use from tool
 
     gs.world_2d.updateLoc(gs.pm.target['pos'],None)

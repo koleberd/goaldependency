@@ -1,0 +1,322 @@
+{
+    "analysis": {
+        "moving average": [
+            928.4,
+            983.4,
+            976.0,
+            948.0,
+            1064.4,
+            818.2,
+            908.6,
+            993.8,
+            917.2,
+            920.8
+        ],
+        "time per simulation": 4.770512862205505,
+        "total samples": 40144,
+        "total simulations": 50,
+        "training time": 238.52564311027527
+    },
+    "stats": [
+        {
+            "batch num": 0,
+            "samples": 936,
+            "sim time": 5.729327917098999,
+            "world cycles": 1079
+        },
+        {
+            "batch num": 1,
+            "samples": 778,
+            "sim time": 4.656266450881958,
+            "world cycles": 921
+        },
+        {
+            "batch num": 2,
+            "samples": 804,
+            "sim time": 4.801274538040161,
+            "world cycles": 947
+        },
+        {
+            "batch num": 3,
+            "samples": 680,
+            "sim time": 4.28124475479126,
+            "world cycles": 823
+        },
+        {
+            "batch num": 4,
+            "samples": 729,
+            "sim time": 4.682267665863037,
+            "world cycles": 872
+        },
+        {
+            "batch num": 5,
+            "samples": 816,
+            "sim time": 4.703269004821777,
+            "world cycles": 959
+        },
+        {
+            "batch num": 6,
+            "samples": 801,
+            "sim time": 4.714269638061523,
+            "world cycles": 944
+        },
+        {
+            "batch num": 7,
+            "samples": 1072,
+            "sim time": 6.224355936050415,
+            "world cycles": 1215
+        },
+        {
+            "batch num": 8,
+            "samples": 829,
+            "sim time": 4.941282749176025,
+            "world cycles": 972
+        },
+        {
+            "batch num": 9,
+            "samples": 684,
+            "sim time": 4.409252166748047,
+            "world cycles": 827
+        },
+        {
+            "batch num": 10,
+            "samples": 1080,
+            "sim time": 6.096348762512207,
+            "world cycles": 1223
+        },
+        {
+            "batch num": 11,
+            "samples": 843,
+            "sim time": 4.765272378921509,
+            "world cycles": 986
+        },
+        {
+            "batch num": 12,
+            "samples": 799,
+            "sim time": 4.5902626514434814,
+            "world cycles": 942
+        },
+        {
+            "batch num": 13,
+            "samples": 639,
+            "sim time": 4.22724175453186,
+            "world cycles": 782
+        },
+        {
+            "batch num": 14,
+            "samples": 804,
+            "sim time": 4.54826021194458,
+            "world cycles": 947
+        },
+        {
+            "batch num": 15,
+            "samples": 721,
+            "sim time": 4.475255966186523,
+            "world cycles": 864
+        },
+        {
+            "batch num": 16,
+            "samples": 678,
+            "sim time": 4.232242107391357,
+            "world cycles": 821
+        },
+        {
+            "batch num": 17,
+            "samples": 855,
+            "sim time": 5.054289102554321,
+            "world cycles": 998
+        },
+        {
+            "batch num": 18,
+            "samples": 809,
+            "sim time": 4.524258852005005,
+            "world cycles": 952
+        },
+        {
+            "batch num": 19,
+            "samples": 962,
+            "sim time": 5.72232723236084,
+            "world cycles": 1105
+        },
+        {
+            "batch num": 20,
+            "samples": 1031,
+            "sim time": 5.790331125259399,
+            "world cycles": 1174
+        },
+        {
+            "batch num": 21,
+            "samples": 644,
+            "sim time": 4.313246726989746,
+            "world cycles": 787
+        },
+        {
+            "batch num": 22,
+            "samples": 1025,
+            "sim time": 5.8033318519592285,
+            "world cycles": 1168
+        },
+        {
+            "batch num": 23,
+            "samples": 839,
+            "sim time": 4.94428277015686,
+            "world cycles": 982
+        },
+        {
+            "batch num": 24,
+            "samples": 1068,
+            "sim time": 5.868335485458374,
+            "world cycles": 1211
+        },
+        {
+            "batch num": 25,
+            "samples": 778,
+            "sim time": 4.450254440307617,
+            "world cycles": 921
+        },
+        {
+            "batch num": 26,
+            "samples": 628,
+            "sim time": 4.064232349395752,
+            "world cycles": 771
+        },
+        {
+            "batch num": 27,
+            "samples": 641,
+            "sim time": 4.059232234954834,
+            "world cycles": 784
+        },
+        {
+            "batch num": 28,
+            "samples": 685,
+            "sim time": 4.308246374130249,
+            "world cycles": 828
+        },
+        {
+            "batch num": 29,
+            "samples": 644,
+            "sim time": 4.063232421875,
+            "world cycles": 787
+        },
+        {
+            "batch num": 30,
+            "samples": 655,
+            "sim time": 4.146237134933472,
+            "world cycles": 798
+        },
+        {
+            "batch num": 31,
+            "samples": 766,
+            "sim time": 4.394251346588135,
+            "world cycles": 909
+        },
+        {
+            "batch num": 32,
+            "samples": 894,
+            "sim time": 5.150294542312622,
+            "world cycles": 1037
+        },
+        {
+            "batch num": 33,
+            "samples": 741,
+            "sim time": 4.6042633056640625,
+            "world cycles": 884
+        },
+        {
+            "batch num": 34,
+            "samples": 772,
+            "sim time": 4.470255613327026,
+            "world cycles": 915
+        },
+        {
+            "batch num": 35,
+            "samples": 1033,
+            "sim time": 5.495314359664917,
+            "world cycles": 1176
+        },
+        {
+            "batch num": 36,
+            "samples": 823,
+            "sim time": 4.679267644882202,
+            "world cycles": 966
+        },
+        {
+            "batch num": 37,
+            "samples": 647,
+            "sim time": 4.0012290477752686,
+            "world cycles": 790
+        },
+        {
+            "batch num": 38,
+            "samples": 767,
+            "sim time": 4.381250381469727,
+            "world cycles": 910
+        },
+        {
+            "batch num": 39,
+            "samples": 984,
+            "sim time": 5.740328073501587,
+            "world cycles": 1127
+        },
+        {
+            "batch num": 40,
+            "samples": 960,
+            "sim time": 5.845334529876709,
+            "world cycles": 1103
+        },
+        {
+            "batch num": 41,
+            "samples": 679,
+            "sim time": 4.3712499141693115,
+            "world cycles": 822
+        },
+        {
+            "batch num": 42,
+            "samples": 922,
+            "sim time": 5.0722901821136475,
+            "world cycles": 1065
+        },
+        {
+            "batch num": 43,
+            "samples": 678,
+            "sim time": 4.399251461029053,
+            "world cycles": 821
+        },
+        {
+            "batch num": 44,
+            "samples": 632,
+            "sim time": 4.182239294052124,
+            "world cycles": 775
+        },
+        {
+            "batch num": 45,
+            "samples": 1021,
+            "sim time": 5.384307861328125,
+            "world cycles": 1164
+        },
+        {
+            "batch num": 46,
+            "samples": 789,
+            "sim time": 4.322247266769409,
+            "world cycles": 932
+        },
+        {
+            "batch num": 47,
+            "samples": 768,
+            "sim time": 4.2582433223724365,
+            "world cycles": 911
+        },
+        {
+            "batch num": 48,
+            "samples": 632,
+            "sim time": 3.8742215633392334,
+            "world cycles": 775
+        },
+        {
+            "batch num": 49,
+            "samples": 679,
+            "sim time": 4.3532490730285645,
+            "world cycles": 822
+        }
+    ]
+}
