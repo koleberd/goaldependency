@@ -2,9 +2,6 @@
 *.xlsx
 *.bat
 
-training
-models
-trainedModels
 json/oldjson
 simulation/trees
 

@@ -19,12 +19,9 @@ import sys
 import math
 
 
-
-
-
 #--- SIMULATION PARAMETERS ---
 RAND_SPAWN = True
-sim_name = 'rv_2'
+sim_name = 'rv_1'
 bl_ind = {None:0,'wood':1,'stone':2,'crafting bench':3,'iron ore':4,'coal':5,'wall':6}
 action_set = ['locateObject:wood','locateObject:stone','locateObject:crafting bench','locateObject:iron ore','locateObject:coal']
 
@@ -39,9 +36,9 @@ FRAME_SKIP_THRESHOLD = .45 #pick frame if random number [0,1] under threshold
 FRAME_DENSITY_THRESHOLD = .09 #pick frame if frame density over threshold (frame density is ratio of non-empty units to all units in input kernel)
 MOVING_AVERAGE_SIZE = 10 #moving average is compared to current run to determine if current run should be positively or negatively reinforced
 OUTPUT_LOWER_BIAS = .25 #lowest possible output weight (max is always 1)
-DROPOUT_TRAINING = 1 #chance a node will be kept during dropout during training
-TRAINGING_ROUNDS = 100 #number of rounds to train
-LEARNING_RATE = 0.1
+DROPOUT_TRAINING = 1.0 #chance a node will be kept during dropout during training
+TRAINGING_ROUNDS = 200 #number of rounds to train
+LEARNING_RATE = 0.01
 BATCH_CUTOFF = 2000
 VALIDATION_ROUNDS = 20
 CROSS_BENCHMARK_SAMPLES = 20
@@ -407,7 +404,7 @@ def train():
                 end_avg += sim_len
                 end_valid_rounds += 1
 
-
+        #--- OUTPUT STATS ---
         total_time = time.time() - total_time
         end_avg = float(end_avg)/float(end_valid_rounds)
         improvement = end_avg/init_avg
@@ -425,20 +422,25 @@ def train():
                 'frame density threshold':FRAME_DENSITY_THRESHOLD,
                 'hidden 1 dim': hidden1_dim,
                 'hidden 2 dim': hidden2_dim,
-                'performance improvement':improvement
+                'performance improvement':improvement,
+                'random spawn during training':str(RAND_SPAWN)
                 }
         with open(sim_stat_dir + sim_name + '-' + str(time.time())[5:11] + '.json','w+') as output_json:
             json.dump(data,output_json,indent=4,sort_keys=True)
 
+
+
+        #--- SAVE MODEL IF EFFECTIVE ---
         if improvement < 1.0:
             m_name = sim_name + '_' + str(improvement)
             print('Saving model "' + m_name + '"')
             saver.save(sess,'trainedModels/' + m_name)
-
+            m_name = 'trainedModels/' + n_name
+            benchmarkAgainstAlternates(m_name)
         return improvement
 
 
-def benchmarkAgainstAlternates():
+def benchmarkAgainstAlternates(model_name):
     simulation_config_name = sim_config_dir + sim_name + '.json'
 
     #load world config
@@ -450,7 +452,7 @@ def benchmarkAgainstAlternates():
     average_costs = getWorldCosts(temp_world,simcf['simulation_name'])
     sample_locs = [temp_world.randomizePos() for x in range(CROSS_BENCHMARK_SAMPLES)]
 
-    model_name = 'trainedModels/rv_2_0.9710257656781721'
+
     with tf.Session() as sess:
         saver = tf.train.import_meta_graph(model_name + '.meta')
         saver.restore(sess,model_name)
@@ -467,8 +469,9 @@ def benchmarkAgainstAlternates():
             avg = 0
             count = 0
             for loc in sample_locs:
-                print('running ' + str(count+1) + '/' + str(len(sample_locs)) + ' for ' + s_name)
+
                 sim_out,sim_len,sim_time = run2d3d(simulation_config_name,select_method = selection_set[s_name],select_name=s_name,random_spawn=False,spawn_pos=loc)
+                print('running ' + str(count+1) + '/' + str(len(sample_locs)) + ' for ' + s_name + ' - ' + str(sim_len))
                 if sim_len != -1:
                     avg += sim_len
                     count += 1
@@ -481,4 +484,4 @@ def benchmarkAgainstAlternates():
 #sim = run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x,f: selectCheapest(x,f),select_name='cheapest')
 #print(sim[1])
 #train()
-benchmarkAgainstAlternates()
+benchmarkAgainstAlternates('trainedModels/rv_2_0.5392337205024439')

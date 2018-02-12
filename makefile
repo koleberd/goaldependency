@@ -2,7 +2,7 @@ run_basic: clean
 	@rm -r -f simulation/2Dpath/*
 	@rm -r -f simulation/trees/*
 	@python src/main.py
-	
+
 t:
 	@python src/test.py
 
@@ -18,13 +18,6 @@ init:
 	@pip install imageio
 
 	@mkdir json/simulation_stats
-
-mv: clean
-	@python src/controller.py
-
-
-learn:
-	@python src/tensorflow/blockDetector3.py
 
 doc:
 	@asciidoctor README.adoc -b html5

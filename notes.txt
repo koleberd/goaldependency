@@ -1,21 +1,3 @@
-TODO:
-	- determine how CV will be incorporated into 2d world
-	- will there be CV in the 3d world?
-	- find way to match 2d with 3d during/after movement decisions are made in 2d
-	- RL vs CV
-
-	Lower priority:
-		Dependency tree:
-			cross-level pooling
-		Runtime AI:
-			keep track of sunken costs
-			making decision under uncertainty vs under risk
-		Testing:
-			deeper test level
-		Misc:
-			look at sims for scheduling processes
-
-
 
 
 
@@ -43,12 +25,6 @@ Working Project Description:
 	-	learn relations of previously pursued actions on a given action in addition to scales
 	- 	randomness of environment
 	-	training data vs simualtion data
-
-
-
-/gamerule doDaylightCycle false
-/time set 6000
-
 
 NAMING CONVENTIONS:
 For class, method, and file names: camel case
@@ -79,20 +55,3 @@ points in paper:
 	why not 3d
 		why not cv
 	MATH AND FORMULAS AND MORE MATH AND FORMULAS
-
-2d advantages
-	- faster sims
-	- no issue with handling 3d game
-	- avatar vision simplified
-	- potentially less domain specific
-	- less 3d overhead
-
-todo:
-	revamp action selection method to be more abstract
-	write decision maker
-	rewrite 2d world to allow for better positioning
-	write gui
-	make list of sections in writeup (index)
-
-
-generated labels shouldn't always be 1 for actions that are ones besides the one that the label corresponds with. the labels should have values for the average in the simulatino rather than the specific one
