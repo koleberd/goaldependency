@@ -5,6 +5,7 @@ import time
 import imageio
 import random
 
+#for parsing input world
 BLOCK_IND = {
     (0,0,0):'wall',
     (127,127,127):'stone',
@@ -15,7 +16,7 @@ BLOCK_IND = {
     (34,177,76):'crafting bench',
     (255,255,255):None
 }
-
+#for printing output world
 COLOR_IND = {
     'wood': (0,0,255),
     'crafting bench':(0,255,0),
@@ -24,6 +25,7 @@ COLOR_IND = {
     'coal':(70,70,70),
     'default':(0,0,0)
 }
+
 BLOCK_TYPES = ['wood','crafting bench', 'iron ore', 'stone', 'coal']
 
 
@@ -51,7 +53,7 @@ class GameWorld2d:
 
     def findClosest(self,obj,number):#not used
         '''
-        finds the closest <number> instancse of <obj> from self.pos, in terms of euclidian distance
+        finds the closest <number> instances of <obj> from self.pos, in terms of euclidian distance
         '''
         locs = []
         for col in range(0,self.width):
@@ -288,6 +290,25 @@ class GameWorld2d:
         for bl in BLOCK_TYPES:
             avg_set[bl] = sum(dist_set[bl])/float(len(dist_set[bl]))
         return avg_set
+
+    def getDensities(self):
+        counts = [0 for x in range(len(BLOCK_TYPES)+1)]
+        total = 0
+        for col in range(self.width):
+            for row in range(self.height):
+                if self.grid[col][row] in BLOCK_TYPES:
+                    counts[BLOCK_TYPES.index(self.grid[col][row])] += 1
+                    total += 1
+                elif self.grid[col][row] != None:
+                    counts[-1] += 1
+                    total += 1
+
+        counts = [float(x)/float(self.width*self.height) for x in counts]
+        print(BLOCK_TYPES)
+        print(counts)
+        print('total: ' + str(float(total)/float(self.width*self.height)))
+        return counts
+
 
 def resize_no_blur(img,factor):
     res = Image.new('RGB',(img.width*factor,img.height*factor))

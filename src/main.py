@@ -21,7 +21,7 @@ import math
 
 #--- SIMULATION PARAMETERS ---
 RAND_SPAWN = True
-sim_name = 'rv_1'
+sim_name = 'rv_2'
 bl_ind = {None:0,'wood':1,'stone':2,'crafting bench':3,'iron ore':4,'coal':5,'wall':6}
 action_set = ['locateObject:wood','locateObject:stone','locateObject:crafting bench','locateObject:iron ore','locateObject:coal']
 
@@ -65,6 +65,14 @@ def getWorldCosts(world,world_name):
 
     with open(flnm) as wldcf:
         return json.load(wldcf)
+
+def getWorldDensities():
+    simulation_config_name = sim_config_dir + sim_name + '.json'
+    with open(simulation_config_name) as simjs:
+        simcf = json.load(simjs)
+    world = GameWorld2d(simcf['world_2d_location'],spawn_random=False)
+
+    return world.getDensities()
 
 # action target selection functions
 def selectMostShallow(at_arr,frame,prev,prev_time):
@@ -425,7 +433,7 @@ def train():
                 'performance improvement':improvement,
                 'random spawn during training':str(RAND_SPAWN)
                 }
-        with open(sim_stat_dir + sim_name + '-' + str(time.time())[5:11] + '.json','w+') as output_json:
+        with open(sim_stat_dir + sim_name + '-' + str(time.time())[5:10] + '.json','w+') as output_json:
             json.dump(data,output_json,indent=4,sort_keys=True)
 
 
@@ -484,4 +492,5 @@ def benchmarkAgainstAlternates(model_name):
 #sim = run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x,f: selectCheapest(x,f),select_name='cheapest')
 #print(sim[1])
 #train()
-benchmarkAgainstAlternates('trainedModels/rv_2_0.5392337205024439')
+#benchmarkAgainstAlternates('trainedModels/rv_2_0.5392337205024439')
+getWorldDensities()
