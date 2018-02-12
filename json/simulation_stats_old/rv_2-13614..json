@@ -1,0 +1,94 @@
+{
+    "benchmark size": 10,
+    "dropout": 1,
+    "final benchmark": 1020.0,
+    "frame density threshold": 0.1,
+    "frame skip threshold": 0.25,
+    "hidden 1 dim": 256,
+    "hidden 2 dim": 256,
+    "init benchmark": 1019.4,
+    "stats": [
+        {
+            "loss": 0.0,
+            "performance": 869
+        },
+        {
+            "loss": 4.680578231811523,
+            "performance": 532
+        },
+        {
+            "loss": 6.722858428955078,
+            "performance": 549
+        },
+        {
+            "loss": 4.484463214874268,
+            "performance": 473
+        },
+        {
+            "loss": 6.398592948913574,
+            "performance": 588
+        },
+        {
+            "loss": 6.660117149353027,
+            "performance": 526
+        },
+        {
+            "loss": 2.9832653999328613,
+            "performance": 375
+        },
+        {
+            "loss": 6.4257707595825195,
+            "performance": 464
+        },
+        {
+            "loss": 4.630709648132324,
+            "performance": 391
+        },
+        {
+            "loss": 8.120477676391602,
+            "performance": 557
+        },
+        {
+            "loss": 2.9089465141296387,
+            "performance": 480
+        },
+        {
+            "loss": 4.576204299926758,
+            "performance": 462
+        },
+        {
+            "loss": 8.14686393737793,
+            "performance": 494
+        },
+        {
+            "loss": 6.534040927886963,
+            "performance": 482
+        },
+        {
+            "loss": 6.532621383666992,
+            "performance": 688
+        },
+        {
+            "loss": 8.141067504882812,
+            "performance": 885
+        },
+        {
+            "loss": 8.12252426147461,
+            "performance": 1009
+        },
+        {
+            "loss": 4.557159423828125,
+            "performance": 889
+        },
+        {
+            "loss": 6.525044918060303,
+            "performance": 919
+        },
+        {
+            "loss": 6.633708477020264,
+            "performance": 959
+        }
+    ],
+    "training size": 20,
+    "world configuration": "json/simulation_configs/rv_2.json"
+}

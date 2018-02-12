@@ -47,6 +47,7 @@ class GameWorld2d:
         while self.grid[npos[0]][npos[1]] != None:
             npos = (random.randint(0,self.width-1),random.randint(0,self.height-1))
         self.pos = npos
+        return npos
 
     def findClosest(self,obj,number):#not used
         '''

@@ -1,0 +1,29 @@
+{
+    "benchmark size": 10,
+    "final benchmark": 518.2,
+    "init benchmark": 439.2,
+    "stats": [
+        364,
+        488,
+        392,
+        430,
+        446,
+        402,
+        437,
+        408,
+        446,
+        476,
+        494,
+        486,
+        401,
+        552,
+        564,
+        667,
+        382,
+        539,
+        506,
+        562
+    ],
+    "training size": 20,
+    "world configuration": "json/simulation_configs/rv_2.json"
+}
