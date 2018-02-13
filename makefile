@@ -24,3 +24,6 @@ doc:
 
 analysis:
 	@python src/util/simAnalysis.py
+
+loc:
+	find . -name '*.py' | xargs wc -l

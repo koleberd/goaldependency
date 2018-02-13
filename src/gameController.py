@@ -21,8 +21,6 @@ with open('json/craftingIndex.json') as cfjs:
 with open('json/environmentIndex.json') as envjs:
     environmentIndex = json.load(envjs)
 
-with open('json/toolIndex.json') as tooljs:
-    toolIndex = json.load(tooljs)
 
 def craftObject(obj,gs):
     if not obj in craftingRecipes.keys():

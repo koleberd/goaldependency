@@ -1,0 +1,8 @@
+actionMemory
+    every known action with the output and required PlayerState
+craftingIndex
+    where and what is placed in a crafting bench during crafting
+environmentIndex
+    what tool to use and how long to take to harvest a block
+inventoryItem
+    tool level, stack size, tool type

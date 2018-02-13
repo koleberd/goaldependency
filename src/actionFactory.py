@@ -8,8 +8,6 @@ import json
 class ActionFactory:
 
     def __init__(self,costs):
-        with open('json/resourceIndex.json') as jsfl:
-            self.resourceIndex = json.load(jsfl)
         with open('json/actionMemory.json') as jsfl:
             actMemory = json.load(jsfl)
         self.costs = costs

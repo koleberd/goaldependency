@@ -22,8 +22,8 @@ import math
 #--- SIMULATION PARAMETERS ---
 RAND_SPAWN = True
 sim_name = 'rv_2'
-bl_ind = {None:0,'wood':1,'stone':2,'crafting bench':3,'iron ore':4,'coal':5,'wall':6}
-action_set = ['locateObject:wood','locateObject:stone','locateObject:crafting bench','locateObject:iron ore','locateObject:coal']
+bl_ind = {None:0,'wood':1,'stone':2,'crafting bench':3,'iron ore':4,'coal':5,'furnace':6,'wall':7} #for encoding data for input into nn
+action_set = ['locateObject:wood','locateObject:stone','locateObject:crafting bench','locateObject:iron ore','locateObject:coal'] #for decoding data from output of nn
 
 #--- NETWORK PARAMETERS ---
 KERNEL_RADIUS = 10
@@ -443,10 +443,9 @@ def train():
             m_name = sim_name + '_' + str(improvement)
             print('Saving model "' + m_name + '"')
             saver.save(sess,'trainedModels/' + m_name)
-            m_name = 'trainedModels/' + n_name
+            m_name = 'trainedModels/' + m_name
             benchmarkAgainstAlternates(m_name)
         return improvement
-
 
 def benchmarkAgainstAlternates(model_name):
     simulation_config_name = sim_config_dir + sim_name + '.json'
@@ -493,4 +492,5 @@ def benchmarkAgainstAlternates(model_name):
 #print(sim[1])
 #train()
 #benchmarkAgainstAlternates('trainedModels/rv_2_0.5392337205024439')
-getWorldDensities()
+#getWorldDensities()
+benchmarkAgainstAlternates('trainedModels/rv_3_0.7041499330655957')

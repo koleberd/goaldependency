@@ -8,7 +8,7 @@
         "function":"locateObject:wood",
         "cost":15
     },
-    "harvestWoodPlayerand":{
+    "harvestWoodPlayerHand":{
         "prereq":{
             "inFrontOf":"wood"
         },
@@ -124,7 +124,7 @@
         "result":{
             "inFrontOf":"iron ore"
         },
-        "function":"locateObject:iron",
+        "function":"locateObject:iron ore",
         "cost":15
     },
     "harvestCoalWoodPickaxe":{
@@ -197,7 +197,6 @@
         "function":"craftObject:iron pickaxe",
         "cost":1
     },
-
     "craftWoodAxe":{
         "prereq":{
             "inventory":{
@@ -214,7 +213,6 @@
         "function":"craftObject:wood axe",
         "cost":1
     },
-
     "harvestWoodWoodAxe":{
         "prereq":{
             "inFrontOf":"wood",
@@ -313,6 +311,4 @@
         "function":"craftObject:",
         "cost":1
     }
-
-
 }

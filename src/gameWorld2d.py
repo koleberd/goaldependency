@@ -14,7 +14,8 @@ BLOCK_IND = {
     (255,201,14):'coal',
     (185,122,87):'wood',
     (34,177,76):'crafting bench',
-    (255,255,255):None
+    (255,255,255):None,
+    (163,73,164):'furnace'
 }
 #for printing output world
 COLOR_IND = {
@@ -23,10 +24,12 @@ COLOR_IND = {
     'iron ore':(255,150,100),
     'stone':(130,130,130),
     'coal':(70,70,70),
+    'furnace':(190,190,190),
     'default':(0,0,0)
 }
 
-BLOCK_TYPES = ['wood','crafting bench', 'iron ore', 'stone', 'coal']
+BLOCK_TYPES = ['wood','crafting bench', 'iron ore', 'stone', 'coal','furnace']
+bl_ind = {None:0,'wood':1,'stone':2,'crafting bench':3,'iron ore':4,'coal':5,'furnace':6,'wall':7}
 
 
 class GameWorld2d:
@@ -263,7 +266,7 @@ class GameWorld2d:
         endy = min([self.height-1,self.pos[1]+radius])
         '''
 
-        bl_ind = {None:0,'wood':1,'stone':2,'crafting bench':3,'iron ore':4,'coal':5,'wall':6}
+
         res = [[0 for x in range(0,radius*2+1)] for y in range(0,radius*2+1)]
         for col in range(self.pos[0]-radius,self.pos[0]+radius+1):
             for row in range(self.pos[1]-radius,self.pos[1]+radius+1):

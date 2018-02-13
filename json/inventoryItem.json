@@ -31,6 +31,22 @@
             "level":2
         }
     },
+    "iron pickaxe":{
+        "stackSize":1,
+        "tool":{
+            "type":"pickaxe",
+            "uses":300,
+            "level":3
+        }
+    },
+    "iron axe":{
+        "stackSize":1,
+        "tool":{
+            "type":"axe",
+            "uses":300,
+            "level":3
+        }
+    },
     "wood":{
         "placeable":"block",
         "stackSize":64
