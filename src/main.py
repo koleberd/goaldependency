@@ -19,11 +19,19 @@ import sys
 import math
 
 
+#--- CONFIGURATION CONSTANTS ---
+sim_stat_dir = 'json/simulation_stats/'
+sim_config_dir = 'json/simulation_configs/'
+world_config_dir = 'json/world_configs/'
+world_benchmark_set_dir = 'json/benchmark_sets/'
+
 #--- SIMULATION PARAMETERS ---
 RAND_SPAWN = True
 sim_name = 'rv_2'
 bl_ind = {None:0,'wood':1,'stone':2,'crafting bench':3,'iron ore':4,'coal':5,'furnace':6,'wall':7} #for encoding data for input into nn
 action_set = ['locateObject:wood','locateObject:stone','locateObject:crafting bench','locateObject:iron ore','locateObject:coal'] #for decoding data from output of nn
+simulation_config_name = sim_config_dir + sim_name + '.json'
+
 
 #--- NETWORK PARAMETERS ---
 KERNEL_RADIUS = 10
@@ -41,16 +49,12 @@ TRAINGING_ROUNDS = 200 #number of rounds to train
 LEARNING_RATE = 0.01
 BATCH_CUTOFF = 2000
 VALIDATION_ROUNDS = 20
-CROSS_BENCHMARK_SAMPLES = 20
-
-#--- CONFIGURATION CONSTANTS ---
-sim_stat_dir = 'json/simulation_stats/'
-sim_config_dir = 'json/simulation_configs/'
+BENCHMARK_SAMPLES = 20
 
 
 #gets average distance for every object from every open position for a world, and puts it in a json file
 def getWorldCosts(world,world_name):
-    flnm = 'json/world_configs/'+world_name+'_costs.json'
+    flnm = world_config_dir + world_name + '_costs.json'
     if not os.path.isfile(flnm):
         dists = world.getAverageDistances()
         dists2 = {}
@@ -65,6 +69,19 @@ def getWorldCosts(world,world_name):
 
     with open(flnm) as wldcf:
         return json.load(wldcf)
+
+def getWorldBenchmarkPositions(world,world_name):
+    flnm = world_benchmark_set_dir + world_name + '_positions.json'
+    if not os.path.isfile(flnm):
+        positions = []
+        while len(positions) < BENCHMARK_SAMPLES:
+            r_pos = world.randomizePos()
+            if r_pos not in positions:
+                positions.append(r_pos)
+        with open(flnm,'w+') as posjs:
+            json.dump({'positions':positions},posjs,indent=4)
+    with open(flnm) as posjs:
+        return json.load(posjs)['positions']
 
 def getWorldDensities():
     simulation_config_name = sim_config_dir + sim_name + '.json'
@@ -243,7 +260,7 @@ def generateAnalysis(in_flnm,out_flnm):
     with open(out_flnm,'w+') as sim_js:
         json.dump(sim_stats,sim_js,indent=4,sort_keys=True)
 
-def run2d3d(config_name,select_method,select_name='',save_tree=False,save_path=False,random_spawn=False,spawn_pos=(0,0)):
+def run2d3d(simulation_name,select_method,random_spawn=False,spawn_pos=None):
     '''
     Returns arr,int,float
         where arr is in form of [{'frame':[],'at':id,'completed':bool,'type':string},
@@ -251,19 +268,25 @@ def run2d3d(config_name,select_method,select_name='',save_tree=False,save_path=F
         and int is the number of world cycles
         and float is the millis to execute simulation
 
-    '''
-    full_start = time.time()
-    PRINT = False
-    with open(config_name) as jscf:
-        config = json.load(jscf)
+        This runs a simulation
 
-    world_2d = GameWorld2d( config['world_2d_location'],spawn_random=random_spawn,spawn_pos=spawn_pos)# (config['spawn_pos'][0],config['spawn_pos'][1]))
-    default_costs = getWorldCosts(world_2d,config['simulation_name'])
+    '''
+    simulation_config_name = sim_config_dir + '/' + simulation_name + '.json'
+    full_start = time.time()
+    with open(simulation_config_name) as jscf:
+        config = json.load(jscf)
+    world_name = '.'.join(config['world_location'].split('.')[:-1]).split('/')[-1]
+
+    if spawn_pos == None and not random_spawn:
+        spawn_pos = (config['spawn_pos'][0],config['spawn_pos'][1])
+
+    world_2d = GameWorld2d(config['world_location'],spawn_random=random_spawn,spawn_pos=spawn_pos)
+    default_costs = getWorldCosts(world_2d,world_name)
     action_factory = ActionFactory(default_costs)
-    level_index = dtree.decomposePS(PlayerState.parsePlayerStateJSON(config['target_ps']),config['simulation_name'],action_factory)
+    level_index = dtree.decomposePS(PlayerState.parsePlayerStateJSON(config['target_ps']),world_name,action_factory)
     inv_manager = InventoryManager()
     pm = PlayerMemory()
-    gs = GameState(ps=None,pm=pm,fov=None,inv=inv_manager,world_2d=world_2d)
+    gs = GameState(ps=None,pm=pm,inv=inv_manager,world_2d=world_2d)
 
     root = level_index[0][0]
     scales = {} #action_factory.scaleCosts(gs.fov)
@@ -274,8 +297,6 @@ def run2d3d(config_name,select_method,select_name='',save_tree=False,save_path=F
     images = [] #used for gif rendering
     sim_output = []
 
-    print('---- STARTING SIMUILATION  ----') if PRINT else None
-    print('selection method: ' + str(select_name)) if PRINT else None
     full_start2 = time.time()
     prev_at = None
     steps_this_act = 0
@@ -306,24 +327,24 @@ def run2d3d(config_name,select_method,select_name='',save_tree=False,save_path=F
         if gs.world_step > BATCH_CUTOFF:
             gs.world_step = -1
             break
-        #print('.',end='')
-        #sys.stdout.flush()
     full_start = time.time() - full_start
-    print(str(full_start) + ' sec full run') if PRINT else None
-    print(str(time.time()-full_start2) + ' sec sim') if PRINT else None
-    print('steps taken: ' + str(len(gs.pm.metrics['path']))) if PRINT else None
-    '''
-    print('rendering .gif')
-    render_t = time.time()
-    imageio.mimsave('simulation/' + select_name + '_animation.gif',images)
-    print('rendered .gif in ' + str(time.time() - render_t) + ' sec')
-    '''
 
     sim_len = gs.world_step#len(gs.pm.metrics['path'])
     return sim_output,sim_len,full_start
 
 def train():
-    simulation_config_name = sim_config_dir + sim_name + '.json'
+    full_config_path = sim_config_dir + sim_name + '.json'
+    with open(full_config_path) as simjs:
+        simcf = json.load(simjs)
+    world_name = '.'.join(simcf['world_location'].split('.')[:-1]).split('/')[-1]
+
+    #load world costs
+    temp_world = GameWorld2d(simcf['world_location'],spawn_random=False)
+    average_costs = getWorldCosts(temp_world,world_name)
+    validation_pos = [temp_world.randomizePos() for x in range(VALIDATION_ROUNDS)]
+
+    #load world benchmark positions
+    benchmark_positions = getWorldBenchmarkPositions(temp_world,world_name)
 
     #set up NN
     input_tensor = tf.placeholder(tf.float32,shape=[None,INPUT_DIM],name='input_tensor')
@@ -333,16 +354,8 @@ def train():
     optimizer = tf.train.AdamOptimizer(learning_rate=LEARNING_RATE)
     train_step = optimizer.minimize(loss)
 
-    #load world config
-    with open(simulation_config_name) as simjs:
-        simcf = json.load(simjs)
 
-     #load world costs
-    temp_world = GameWorld2d(simcf['world_2d_location'],spawn_random=False)
-    average_costs = getWorldCosts(temp_world,simcf['simulation_name'])
-    validation_pos = [temp_world.randomizePos() for x in range(VALIDATION_ROUNDS)]
 
-    #stats = []
     moving_averages = [[average_costs[x] for x in action_set]]
     with tf.Session() as sess:
         training_performance = []
@@ -359,7 +372,7 @@ def train():
         init_time_sum = 0
         for step in range(VALIDATION_ROUNDS):
 
-            sim_out,sim_len,sim_time = run2d3d(simulation_config_name,select_method = lambda x,frame,prev,prev_time: selectCheapestDNN(x,frame,prev,prev_time,output_tensor),select_name='cheapest',random_spawn=False,spawn_pos=validation_pos[step])
+            sim_out,sim_len,sim_time = run2d3d(sim_name,select_method = lambda x,frame,prev,prev_time: selectCheapestDNN(x,frame,prev,prev_time,output_tensor),random_spawn=False,spawn_pos=validation_pos[step])
             print('Benchmarking... round ' + str(step+1) + '/' + str(VALIDATION_ROUNDS) + ' - ' + str(sim_len))
             init_time_sum += sim_time
             if sim_len != -1:
@@ -373,12 +386,11 @@ def train():
 
         #--- TRAINING ---
         for step in range(0,TRAINGING_ROUNDS):
-            sim_out,sim_len,sim_time = run2d3d(simulation_config_name,select_method = lambda x,frame,prev,prev_time: selectCheapestDNN(x,frame,prev,prev_time,output_tensor),select_name='cheapest',random_spawn=RAND_SPAWN)
+            sim_out,sim_len,sim_time = run2d3d(sim_name,select_method = lambda x,frame,prev,prev_time: selectCheapestDNN(x,frame,prev,prev_time,output_tensor),random_spawn=RAND_SPAWN)
 
             if sim_len == -1:
                 print('Bad batch')
                 continue
-
 
             #calculate moving average to compare current performance against
             current_averages = [0 for x in range(len(action_set))]
@@ -389,10 +401,6 @@ def train():
             batch, sim_averages = generateBatch(sim_out,current_averages)
             moving_averages = moving_averages[1:]
             moving_averages.append(sim_averages)
-
-
-            #stats.append({'samples':len(batch[0]),'world cycles':sim_len,'batch num':step,'sim time':sim_time})
-            #print(('training on batch ' + str(step) + ' with ' + str(len(batch[0])) + ' samples (sim world cycles: ' + str(sim_len) + ') ' + str(batch[1][0])).encode('utf-8').decode('ascii'))
 
             current_loss = loss.eval(feed_dict={input_tensor: batch[0], label_tensor: batch[1], dropout_rate: 1.0})
             print('training... round ' + str(step+1) + '/' + str(TRAINGING_ROUNDS) + ' - performance: ' + str(sim_len) + ' - samples: ' + str(len(batch[0])) + ' - loss: ' + str(current_loss))
@@ -405,7 +413,7 @@ def train():
         end_time_sum = 0
         for step in range(VALIDATION_ROUNDS):
 
-            sim_out,sim_len,sim_time = run2d3d(simulation_config_name,select_method = lambda x,frame,prev,prev_time: selectCheapestDNN(x,frame,prev,prev_time,output_tensor),select_name='cheapest',random_spawn=False,spawn_pos=validation_pos[step])
+            sim_out,sim_len,sim_time = run2d3d(sim_name,select_method = lambda x,frame,prev,prev_time: selectCheapestDNN(x,frame,prev,prev_time,output_tensor),random_spawn=False,spawn_pos=validation_pos[step])
             print('Validating... round ' + str(step+1) + '/' + str(VALIDATION_ROUNDS) + ' - ' + str(sim_len))
             end_time_sum += sim_time
             if sim_len != -1:
@@ -436,8 +444,6 @@ def train():
         with open(sim_stat_dir + sim_name + '-' + str(time.time())[5:10] + '.json','w+') as output_json:
             json.dump(data,output_json,indent=4,sort_keys=True)
 
-
-
         #--- SAVE MODEL IF EFFECTIVE ---
         if improvement < 1.0:
             m_name = sim_name + '_' + str(improvement)
@@ -453,12 +459,14 @@ def benchmarkAgainstAlternates(model_name):
     #load world config
     with open(simulation_config_name) as simjs:
         simcf = json.load(simjs)
-
+    world_name = '.'.join(simcf['world_location'].split('.')[:-1]).split('/')[-1]
      #load world costs
-    temp_world = GameWorld2d(simcf['world_2d_location'],spawn_random=False)
-    average_costs = getWorldCosts(temp_world,simcf['simulation_name'])
-    sample_locs = [temp_world.randomizePos() for x in range(CROSS_BENCHMARK_SAMPLES)]
+    temp_world = GameWorld2d(simcf['world_location'],spawn_random=False)
+    average_costs = getWorldCosts(temp_world,world_name)
+    sample_locs = [temp_world.randomizePos() for x in range(BENCHMARK_SAMPLES)]
 
+    #load world benchmark positions
+    benchmark_positions = getWorldBenchmarkPositions(temp_world,world_name)
 
     with tf.Session() as sess:
         saver = tf.train.import_meta_graph(model_name + '.meta')
@@ -477,7 +485,7 @@ def benchmarkAgainstAlternates(model_name):
             count = 0
             for loc in sample_locs:
 
-                sim_out,sim_len,sim_time = run2d3d(simulation_config_name,select_method = selection_set[s_name],select_name=s_name,random_spawn=False,spawn_pos=loc)
+                sim_out,sim_len,sim_time = run2d3d(sim_name,select_method = selection_set[s_name],random_spawn=False,spawn_pos=loc)
                 print('running ' + str(count+1) + '/' + str(len(sample_locs)) + ' for ' + s_name + ' - ' + str(sim_len))
                 if sim_len != -1:
                     avg += sim_len
@@ -486,9 +494,9 @@ def benchmarkAgainstAlternates(model_name):
             print(s_name + ': ' + str(avg))
 
 
-#run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x: selectMostShallow(x),select_name='most shallow')
-#run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x: selectUser(x),select_name='user')
-#sim = run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x,f: selectCheapest(x,f),select_name='cheapest')
+#run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x: selectMostShallow(x))
+#run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x: selectUser(x))
+#sim = run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x,f: selectCheapest(x,f))
 #print(sim[1])
 #train()
 #benchmarkAgainstAlternates('trainedModels/rv_2_0.5392337205024439')

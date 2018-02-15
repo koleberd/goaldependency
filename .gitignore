@@ -4,6 +4,6 @@
 
 json/oldjson
 simulation/trees
-
-
+training/*
+models/*
 src/__pycache__
