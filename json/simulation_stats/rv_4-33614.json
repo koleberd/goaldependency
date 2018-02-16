@@ -1,0 +1,24 @@
+{
+    "benchmark size": 2,
+    "dropout": 1.0,
+    "final benchmark": 1270.5,
+    "frame density threshold": 0.09,
+    "frame skip threshold": 0.45,
+    "hidden 1 dim": 256,
+    "hidden 2 dim": 256,
+    "init benchmark": 1270.5,
+    "performance improvement": 1.0,
+    "random spawn during training": "True",
+    "stats": [
+        {
+            "loss": 4.848295211791992,
+            "performance": 1087
+        },
+        {
+            "loss": 1.6013143062591553,
+            "performance": 1150
+        }
+    ],
+    "training size": 2,
+    "world configuration": "json/simulation_configs/rv_4.json"
+}
