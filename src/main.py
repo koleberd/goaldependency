@@ -47,7 +47,7 @@ OUTPUT_LOWER_BIAS = .25 #lowest possible output weight (max is always 1)
 DROPOUT_TRAINING = 1.0 #chance a neuron will be kept during dropout during training
 TRAINGING_ROUNDS = 100 #number of rounds to train
 LEARNING_RATE = 0.001
-BATCH_CUTOFF = 2500
+BATCH_CUTOFF = 4000
 VALIDATION_ROUNDS = 20 #must be less than MAX_BENCHMARK_SAMPLES
 BENCHMARK_SAMPLES = 20 #must be less than MAX_BENCHMARK_SAMPLES
 MAX_BENCHMARK_SAMPLES = 100
@@ -314,7 +314,7 @@ def run2d3d(simulation_name,select_method,random_spawn=False,spawn_pos=None):
             #print(selected_at.act.name+ '-' + str(id(selected_at)))
             #dtree.upwardPruneTree(level_index) #only need to prune if you're graphing the tree - BUGGED
             #dtree.downwardPruneTree(level_index)
-            #dtree.graphTree(level_index,config['simulation_name'] + '_' + str(gs.world_step),selectedAT=selected_at)
+            #dtree.graphTree(level_index,simulation_name + '_' + str(gs.world_step),selectedAT=selected_at)
         else:
             steps_this_act += 1
 
@@ -454,17 +454,18 @@ def train():
                         'performance improvement':improvement,
                         'random spawn during training':str(RAND_SPAWN)
                         }
-                with open(sim_stat_dir + sim_name + '-' + str(time.time())[5:10] + '.json','w+') as output_json:
-                    json.dump(data,output_json,indent=4,sort_keys=True)
+
 
                 #--- SAVE MODEL IF EFFECTIVE ---
                 if improvement < 1.0:
+                    with open(sim_stat_dir + sim_name + '-' + str(time.time())[5:10] + '.json','w+') as output_json:
+                        json.dump(data,output_json,indent=4,sort_keys=True)
                     m_name = sim_name + '_' + str(improvement)
                     print('Saving model "' + m_name + '"')
                     saver.save(sess,'trainedModels/' + m_name)
                     m_name = 'trainedModels/' + m_name
                     #benchmarkAgainstAlternates(m_name)
-                valid_batches += 1
+                    valid_batches += 1
         #return improvement
 
 def benchmarkAgainstAlternates(model_name):
@@ -508,11 +509,14 @@ def benchmarkAgainstAlternates(model_name):
             print(s_name + ': ' + str(avg))
 
 
-#run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x: selectMostShallow(x))
-#run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x: selectUser(x))
-#sim = run2d3d('json/simulation_configs/rv_1.json',select_method = lambda x,f: selectCheapest(x,f))
-#print(sim[1])
+
+#run2d3d('just_for_tree',select_method = lambda x,frame,prev,prev_time: selectCheapest(x,frame,prev,prev_time))
 train()
-#benchmarkAgainstAlternates('trainedModels/rv_2_0.5392337205024439')
-#getWorldDensities()
-#benchmarkAgainstAlternates('trainedModels/rv_3_0.7041499330655957')
+#benchmarkAgainstAlternates('trainedModels/rv_4_0.7211828010070593')
+
+
+
+
+
+
+#

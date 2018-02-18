@@ -1,0 +1,9 @@
+{
+    "world_location":"resources/2d/rv_1.png",
+    "spawn_pos":[2,2],
+    "target_ps":{
+        "inventory":{
+            "wood pickaxe":1
+        }
+    }
+}

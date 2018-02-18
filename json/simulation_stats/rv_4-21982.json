@@ -1,0 +1,412 @@
+{
+    "benchmark size": 20,
+    "dropout": 1.0,
+    "final benchmark": 1494.55,
+    "frame density threshold": 0.1,
+    "frame skip threshold": 0.45,
+    "hidden 1 dim": 256,
+    "hidden 2 dim": 256,
+    "init benchmark": 1519.35,
+    "performance improvement": 0.9836772303945767,
+    "random spawn during training": "True",
+    "stats": [
+        {
+            "loss": 3.1905057430267334,
+            "performance": 1186
+        },
+        {
+            "loss": 6.428533554077148,
+            "performance": 1641
+        },
+        {
+            "loss": 3.2063794136047363,
+            "performance": 1141
+        },
+        {
+            "loss": 6.427788734436035,
+            "performance": 1697
+        },
+        {
+            "loss": 3.206416368484497,
+            "performance": 1259
+        },
+        {
+            "loss": 4.84025764465332,
+            "performance": 1715
+        },
+        {
+            "loss": 8.047712326049805,
+            "performance": 1747
+        },
+        {
+            "loss": 1.5906939506530762,
+            "performance": 1105
+        },
+        {
+            "loss": 6.416590690612793,
+            "performance": 1202
+        },
+        {
+            "loss": 8.047590255737305,
+            "performance": 1590
+        },
+        {
+            "loss": 6.432990074157715,
+            "performance": 1622
+        },
+        {
+            "loss": 0.0,
+            "performance": 1206
+        },
+        {
+            "loss": 8.047728538513184,
+            "performance": 1669
+        },
+        {
+            "loss": 1.6130926609039307,
+            "performance": 1253
+        },
+        {
+            "loss": 3.2337779998779297,
+            "performance": 1143
+        },
+        {
+            "loss": 6.452287197113037,
+            "performance": 1672
+        },
+        {
+            "loss": 8.047928810119629,
+            "performance": 1684
+        },
+        {
+            "loss": 1.610107183456421,
+            "performance": 1205
+        },
+        {
+            "loss": 6.438833713531494,
+            "performance": 1668
+        },
+        {
+            "loss": 6.448860168457031,
+            "performance": 1659
+        },
+        {
+            "loss": 6.446439266204834,
+            "performance": 1626
+        },
+        {
+            "loss": 4.797366619110107,
+            "performance": 1664
+        },
+        {
+            "loss": 4.84738826751709,
+            "performance": 1614
+        },
+        {
+            "loss": 1.6017022132873535,
+            "performance": 1197
+        },
+        {
+            "loss": 3.1998226642608643,
+            "performance": 1144
+        },
+        {
+            "loss": 4.803830146789551,
+            "performance": 1255
+        },
+        {
+            "loss": 6.445965766906738,
+            "performance": 1638
+        },
+        {
+            "loss": 1.6015747785568237,
+            "performance": 1219
+        },
+        {
+            "loss": 6.449032783508301,
+            "performance": 1647
+        },
+        {
+            "loss": 6.447585105895996,
+            "performance": 1718
+        },
+        {
+            "loss": 4.84276008605957,
+            "performance": 1754
+        },
+        {
+            "loss": 4.848374366760254,
+            "performance": 1828
+        },
+        {
+            "loss": 3.2458407878875732,
+            "performance": 1823
+        },
+        {
+            "loss": 4.844857692718506,
+            "performance": 1815
+        },
+        {
+            "loss": 3.2031731605529785,
+            "performance": 1875
+        },
+        {
+            "loss": 3.198765754699707,
+            "performance": 1693
+        },
+        {
+            "loss": 4.849909782409668,
+            "performance": 1641
+        },
+        {
+            "loss": 6.449342250823975,
+            "performance": 1689
+        },
+        {
+            "loss": 1.5994740724563599,
+            "performance": 1241
+        },
+        {
+            "loss": 6.446863651275635,
+            "performance": 1215
+        },
+        {
+            "loss": 6.45012092590332,
+            "performance": 1815
+        },
+        {
+            "loss": 1.600365400314331,
+            "performance": 1182
+        },
+        {
+            "loss": 8.04824447631836,
+            "performance": 1241
+        },
+        {
+            "loss": 8.048177719116211,
+            "performance": 1248
+        },
+        {
+            "loss": 3.254483222961426,
+            "performance": 1127
+        },
+        {
+            "loss": 4.849320411682129,
+            "performance": 1146
+        },
+        {
+            "loss": 6.395847320556641,
+            "performance": 1209
+        },
+        {
+            "loss": 6.451634407043457,
+            "performance": 1717
+        },
+        {
+            "loss": 6.451492786407471,
+            "performance": 1686
+        },
+        {
+            "loss": 1.599696159362793,
+            "performance": 1187
+        },
+        {
+            "loss": 6.451953887939453,
+            "performance": 1700
+        },
+        {
+            "loss": 1.600345492362976,
+            "performance": 1199
+        },
+        {
+            "loss": 6.448912620544434,
+            "performance": 1713
+        },
+        {
+            "loss": 4.852978706359863,
+            "performance": 1701
+        },
+        {
+            "loss": 1.5976872444152832,
+            "performance": 1147
+        },
+        {
+            "loss": 6.453901290893555,
+            "performance": 1588
+        },
+        {
+            "loss": 1.5979809761047363,
+            "performance": 1203
+        },
+        {
+            "loss": 6.454168319702148,
+            "performance": 1708
+        },
+        {
+            "loss": 1.6017587184906006,
+            "performance": 1176
+        },
+        {
+            "loss": 3.2554798126220703,
+            "performance": 1103
+        },
+        {
+            "loss": 8.049348831176758,
+            "performance": 1645
+        },
+        {
+            "loss": 4.854709625244141,
+            "performance": 1636
+        },
+        {
+            "loss": 3.192125082015991,
+            "performance": 1615
+        },
+        {
+            "loss": 8.0494384765625,
+            "performance": 1656
+        },
+        {
+            "loss": 1.6003069877624512,
+            "performance": 1181
+        },
+        {
+            "loss": 3.2528316974639893,
+            "performance": 1147
+        },
+        {
+            "loss": 6.455080032348633,
+            "performance": 1724
+        },
+        {
+            "loss": 4.855470180511475,
+            "performance": 1687
+        },
+        {
+            "loss": 4.852983474731445,
+            "performance": 1625
+        },
+        {
+            "loss": 0.0,
+            "performance": 1142
+        },
+        {
+            "loss": 6.391359329223633,
+            "performance": 1207
+        },
+        {
+            "loss": 6.4522247314453125,
+            "performance": 1638
+        },
+        {
+            "loss": 4.7871928215026855,
+            "performance": 1670
+        },
+        {
+            "loss": 6.4511919021606445,
+            "performance": 1640
+        },
+        {
+            "loss": 3.1935150623321533,
+            "performance": 1702
+        },
+        {
+            "loss": 4.855470657348633,
+            "performance": 1625
+        },
+        {
+            "loss": 4.786344528198242,
+            "performance": 1699
+        },
+        {
+            "loss": 1.5956337451934814,
+            "performance": 1124
+        },
+        {
+            "loss": 6.453702926635742,
+            "performance": 1692
+        },
+        {
+            "loss": 1.596355676651001,
+            "performance": 1138
+        },
+        {
+            "loss": 6.455953598022461,
+            "performance": 1685
+        },
+        {
+            "loss": 4.854748249053955,
+            "performance": 1624
+        },
+        {
+            "loss": 4.782731056213379,
+            "performance": 1646
+        },
+        {
+            "loss": 4.853084564208984,
+            "performance": 1601
+        },
+        {
+            "loss": 4.782915115356445,
+            "performance": 1647
+        },
+        {
+            "loss": 8.049635887145996,
+            "performance": 1702
+        },
+        {
+            "loss": 1.596919298171997,
+            "performance": 1193
+        },
+        {
+            "loss": 3.191807985305786,
+            "performance": 1196
+        },
+        {
+            "loss": 6.4499382972717285,
+            "performance": 1229
+        },
+        {
+            "loss": 3.270714044570923,
+            "performance": 1131
+        },
+        {
+            "loss": 6.455812454223633,
+            "performance": 1134
+        },
+        {
+            "loss": 4.864705562591553,
+            "performance": 1132
+        },
+        {
+            "loss": 6.455150604248047,
+            "performance": 1719
+        },
+        {
+            "loss": 1.5949351787567139,
+            "performance": 1258
+        },
+        {
+            "loss": 6.4586873054504395,
+            "performance": 1667
+        },
+        {
+            "loss": 6.454688549041748,
+            "performance": 1624
+        },
+        {
+            "loss": 3.1860649585723877,
+            "performance": 1645
+        },
+        {
+            "loss": 8.050374984741211,
+            "performance": 1812
+        },
+        {
+            "loss": 1.5947864055633545,
+            "performance": 1221
+        }
+    ],
+    "training size": 100,
+    "world configuration": "json/simulation_configs/rv_4.json"
+}
