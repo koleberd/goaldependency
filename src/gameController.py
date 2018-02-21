@@ -5,7 +5,6 @@ import random
 import numpy as np
 from gameState import *
 from playerState import *
-from gameObject import *
 from inventoryManager import *
 
 TURN_TIME = .25

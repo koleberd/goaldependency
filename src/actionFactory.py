@@ -1,4 +1,3 @@
-from gameObject import *
 from action import *
 from playerState import *
 import gameController

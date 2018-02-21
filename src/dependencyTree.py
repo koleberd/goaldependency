@@ -3,7 +3,6 @@ from playerState import *
 from playerStateTarget import *
 from playerStateSolution import *
 from actionTarget import *
-from playerStateFactory import *
 from actionFactory import *
 from graphviz import *
 

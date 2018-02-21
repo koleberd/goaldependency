@@ -4,7 +4,6 @@ from playerState import *
 from playerStateTarget import *
 from playerStateSolution import *
 from actionTarget import *
-from playerStateFactory import *
 from actionFactory import *
 from graphviz import *
 from inventoryManager import *
@@ -287,7 +286,7 @@ def run2d3d(simulation_name,select_method,random_spawn=False,spawn_pos=None):
     level_index = dtree.decomposePS(PlayerState.parsePlayerStateJSON(config['target_ps']),world_name,action_factory)
     inv_manager = InventoryManager()
     pm = PlayerMemory()
-    gs = GameState(ps=None,pm=pm,inv=inv_manager,world_2d=world_2d)
+    gs = GameState(pm=pm,inv=inv_manager,world_2d=world_2d)
 
     root = level_index[0][0]
     scales = {} #action_factory.scaleCosts(gs.fov)

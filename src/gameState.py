@@ -1,8 +1,7 @@
 from playerState import *
 from playerMemory import *
 class GameState:
-    def __init__(self,ps=PlayerState(),pm=PlayerMemory(),inv={},world_2d=None,world_step=0):
-        self.ps = ps
+    def __init__(self,pm=PlayerMemory(),inv={},world_2d=None,world_step=0):
         self.pm = pm
         self.inv = inv
         self.world_2d = world_2d
