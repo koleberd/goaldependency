@@ -46,14 +46,12 @@ class GameWorld2d:
         if spawn_random:
             self.randomizePos()
         self.yaw = 0
-
     def randomizePos(self):
         npos = (random.randint(0,self.width-1),random.randint(0,self.height-1))
         while self.grid[npos[0]][npos[1]] != None:
             npos = (random.randint(0,self.width-1),random.randint(0,self.height-1))
         self.pos = npos
         return npos
-
     def findClosest(self,obj,number):#not used
         '''
         finds the closest <number> instances of <obj> from self.pos, in terms of euclidian distance
@@ -81,14 +79,12 @@ class GameWorld2d:
             ranked.append(locs[minP])
             del locs[i]
         return ranked
-
     def isExposed(self,col,row):
         top = row - 1 >= 0 and self.grid[col][row-1] == None
         left = col - 1 >= 0 and self.grid[col-1][row] == None
         right = col + 1 < len(self.grid) and self.grid[col+1][row] == None
         bottom = row + 1 < len(self.grid[0]) and self.grid[col][row+1] == None
         return top or left or right or bottom
-
     def printWorld(self,path=[]):
         render = Image.new('RGB',(self.width,self.height),color=(255,255,255))
         for col in range(0,self.width):
@@ -103,7 +99,6 @@ class GameWorld2d:
             render.putpixel(pos,(193,28,181))
 
         render.show()
-
     def saveWorld(self,path=[],name=time.time(),resize=4):
         render = Image.new('RGB',(self.width,self.height),color=(255,255,255))
 
@@ -124,7 +119,6 @@ class GameWorld2d:
         if resize != 1:
             render = resize_no_blur(render,resize)
         render.save('simulation/2Dpath/'+str(name)+'.jpg')
-
     def astar(self,start,goal):
         start_time = time.time()
         evaluatedNodes = []
@@ -167,7 +161,6 @@ class GameWorld2d:
                 fromStartCost[neighbor] = tentativeFromStartcost
                 fromStartToGoalThroughNode[neighbor] = fromStartCost[neighbor] + estimate_cost(neighbor,goal)
         return None
-
     def getNeighbors(self,pos):
         neighbors = []
         if pos[0] >= 1 and self.isValidMovement((pos[0]-1,pos[1])):#left
@@ -179,13 +172,10 @@ class GameWorld2d:
         if pos[1] < len(self.grid[0]) - 2 and self.isValidMovement((pos[0],pos[1]+1)):#down
             neighbors.append((pos[0],pos[1]+1))
         return neighbors
-
     def isValidMovement(self,pos,exception='not none'):
         return self.grid[pos[0]][pos[1]] == None or self.grid[pos[0]][pos[1]] == exception
-
     def updateLoc(self,pos,newVal):
         self.grid[pos[0]][pos[1]] = newVal
-
     def renderPath(self,path):
         render = Image.new('RGB',(self.width,self.height),color=(255,255,255))
 
@@ -204,7 +194,6 @@ class GameWorld2d:
             render.putpixel(pos,((int(193*mul),int(28*mul),int(181*mul))))
             path_dark -= 1
         return render
-
     def rayCast(self,angle,distance):
         ng = (self.yaw+angle+360)%360
         angr = np.deg2rad(ng)
@@ -257,7 +246,6 @@ class GameWorld2d:
         return cl_d, self.grid[cl_x][cl_y]
         #find actual distance to intersection with location
         #return distance and the object #and coord tuple
-
     def getKernel(self,radius):
         '''
         startx = max([0,self.pos[0]-radius])
@@ -274,7 +262,6 @@ class GameWorld2d:
                     res[col+radius-self.pos[0]][row+radius-self.pos[1]] = bl_ind[self.grid[col][row]]
         return np.array(res).flatten()
         #return [[bl_ind[self.grid[i][j]] for j in range(0,self.height)] for i in range(0,self.width)]
-
     def getAverageDistances(self):
         print('Calculating average distances...')
         dist_set = {}
@@ -293,7 +280,6 @@ class GameWorld2d:
         for bl in BLOCK_TYPES:
             avg_set[bl] = sum(dist_set[bl])/float(len(dist_set[bl]))
         return avg_set
-
     def getDensities(self):
         counts = [0 for x in range(len(BLOCK_TYPES)+1)]
         total = 0
@@ -321,7 +307,6 @@ def resize_no_blur(img,factor):
                 for rrow in range(row*factor,(row+1)*factor):
                     res.putpixel((rcol,rrow),img.getpixel((col,row)))
     return res
-
 def parseBlock(pixel):
     #print(type(pixel))
     npx = (pixel[0],pixel[1],pixel[2])
@@ -329,25 +314,20 @@ def parseBlock(pixel):
         if match == npx:
             return BLOCK_IND[match]
     return 'OCCUPIED'
-
 def isAdjacentTo(p1,p2):
     #print(p1,p2,abs(p2[0]-p1[0]) == 1 != abs(p2[1]-p1[1]) == 1)
     return (np.abs(p2[0]-p1[0]) == 1 and np.abs(p2[1]-p1[1]) == 0 ) or (np.abs(p2[0]-p1[0]) == 0 and np.abs(p2[1]-p1[1]) == 1)
-
 def distance_between(n1,n2):
     return np.sqrt(np.abs(n2[0]-n1[0])**2 + np.abs(n2[1]-n1[1])**2)
-
 def estimate_cost(start,goal):
     #return np.sqrt(np.abs(goal[0]-start[0])**2 + np.abs(goal[1]-start[1])**2)
     return distance_between(start,goal)
-
 def reconstruct_path(movements,target):
     total_path = [target]
     while target in movements.keys():
         target = movements[target]
         total_path.append(target)
     return total_path
-
 def getNodeWithLowestCost(vals,costs):
     lowest = costs[vals[0]]
     lowestN = None
@@ -356,7 +336,6 @@ def getNodeWithLowestCost(vals,costs):
             lowest = costs[val]
             lowestN = val
     return lowestN
-
 def deleteNodeFromList(vals,node):
     for x in range(len(vals)):
         if vals[x] == node:

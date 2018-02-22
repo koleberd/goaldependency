@@ -301,8 +301,7 @@ def run2d3d(simulation_name,select_method,random_spawn=False,spawn_pos=None):
     prev_at = None
     steps_this_act = 0
     while(not root.isComplete()):
-        #calculate cost scalars based on field of view
-        #root.calculateCostUp(scales)
+
         #images.append(np.array(resize_no_blur(gs.world_2d.renderPath(gs.pm.metrics['path'][-10:]),2))) #uncomment if rendering a gif
         leaf_set = root.getLeafNodes()
         frame = world_2d.getKernel(KERNEL_RADIUS)
@@ -329,7 +328,10 @@ def run2d3d(simulation_name,select_method,random_spawn=False,spawn_pos=None):
             break
     full_start = time.time() - full_start
 
-    sim_len = gs.world_step#len(gs.pm.metrics['path'])
+
+    #imageio.mimsave('simulation/' + simulation_name + '_animation.gif',images)
+
+    sim_len = gs.world_step
     return sim_output,sim_len,full_start
 
 def train():
