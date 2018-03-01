@@ -1,0 +1,10 @@
+{
+    "world_location":"resources/2d/dense_2.png",
+    "spawn_pos":[2,2],
+    "target_ps":{
+        "inventory":{
+            "stone pickaxe":50,
+            "iron":10
+        }
+    }
+}

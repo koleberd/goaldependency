@@ -313,7 +313,7 @@ def parseBlock(pixel):
     for match in BLOCK_IND:
         if match == npx:
             return BLOCK_IND[match]
-    return 'OCCUPIED'
+    return 'wall'
 def isAdjacentTo(p1,p2):
     #print(p1,p2,abs(p2[0]-p1[0]) == 1 != abs(p2[1]-p1[1]) == 1)
     return (np.abs(p2[0]-p1[0]) == 1 and np.abs(p2[1]-p1[1]) == 0 ) or (np.abs(p2[0]-p1[0]) == 0 and np.abs(p2[1]-p1[1]) == 1)

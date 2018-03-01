@@ -26,7 +26,7 @@ world_benchmark_set_dir = 'json/benchmark_sets/'
 
 #--- SIMULATION PARAMETERS ---
 RAND_SPAWN = True
-sim_name = 'rv_4'
+sim_name = 'dense_2'
 bl_ind = {None:0,'wood':1,'stone':2,'crafting bench':3,'iron ore':4,'coal':5,'furnace':6,'wall':7} #for encoding data for input into nn
 action_set = ['locateObject:wood','locateObject:stone','locateObject:crafting bench','locateObject:iron ore','locateObject:coal'] #for decoding data from output of nn
 simulation_config_name = sim_config_dir + sim_name + '.json'
@@ -512,8 +512,8 @@ def benchmarkAgainstAlternates(model_name):
 
 
 #run2d3d('just_for_tree',select_method = lambda x,frame,prev,prev_time: selectCheapest(x,frame,prev,prev_time))
-train()
-#benchmarkAgainstAlternates('trainedModels/rv_4_0.7211828010070593')
+#train()
+benchmarkAgainstAlternates('trainedModels/rv_4_0.7211828010070593')
 
 
 
