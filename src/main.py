@@ -26,7 +26,7 @@ world_benchmark_set_dir = 'json/benchmark_sets/'
 
 #--- SIMULATION PARAMETERS ---
 RAND_SPAWN = True
-sim_name = 'dense_2'
+sim_name = 'medium_2'
 bl_ind = {None:0,'wood':1,'stone':2,'crafting bench':3,'iron ore':4,'coal':5,'furnace':6,'wall':7} #for encoding data for input into nn
 action_set = ['locateObject:wood','locateObject:stone','locateObject:crafting bench','locateObject:iron ore','locateObject:coal'] #for decoding data from output of nn
 simulation_config_name = sim_config_dir + sim_name + '.json'
@@ -301,7 +301,8 @@ def run2d3d(simulation_name,select_method,random_spawn=False,spawn_pos=None):
     prev_at = None
     steps_this_act = 0
     while(not root.isComplete()):
-
+        #calculate cost scalars based on field of view
+        #root.calculateCostUp(scales)
         #images.append(np.array(resize_no_blur(gs.world_2d.renderPath(gs.pm.metrics['path'][-10:]),2))) #uncomment if rendering a gif
         leaf_set = root.getLeafNodes()
         frame = world_2d.getKernel(KERNEL_RADIUS)
@@ -328,10 +329,7 @@ def run2d3d(simulation_name,select_method,random_spawn=False,spawn_pos=None):
             break
     full_start = time.time() - full_start
 
-
-    #imageio.mimsave('simulation/' + simulation_name + '_animation.gif',images)
-
-    sim_len = gs.world_step
+    sim_len = gs.world_step#len(gs.pm.metrics['path'])
     return sim_output,sim_len,full_start
 
 def train():
