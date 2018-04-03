@@ -2,8 +2,6 @@
 *.xlsx
 *.bat
 
-json/oldjson
 simulation/trees
-training/*
-models/*
+simluation/2Dpath
 src/__pycache__
