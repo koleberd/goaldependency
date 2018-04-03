@@ -2,6 +2,9 @@ from playerState import *
 from actionTarget import *
 from playerStateSolution import *
 
+###
+#Contains the PlayerStateTarget class. refer to the thesis document for more information about PlayerStateTargets
+###
 
 class PlayerStateTarget:
     def __init__(self,ps):
@@ -43,18 +46,7 @@ class PlayerStateTarget:
     #-------------------------------------------
 
     #calculates cost based on recursive getCost calls on children and on table lookups if available
-    '''
-    def getCost(self,scalars,table={}):
-        total = 0
-        for attr in self.attributeList:
-            cheapest = None
-            for sol in self.attributeList[attr]:
-                if cheapest == None or sol.getCost(scalars,table) < cheapest:
-                    cheapest = sol.getCost(scalars,table)/len(sol.parents)
-            total += cheapest
-        self.temp_cost_up = total
-        return total
-    '''
+
     #calculates cost based on recursive calculateCost on children; no table lookups
     def calculateCostUp(self,scalars):
         total = 0
@@ -66,6 +58,8 @@ class PlayerStateTarget:
             total += cheapest
         self.temp_cost_up = total
         return total
+
+
     def calculateCostDown(self,scalars):
         return self.calculateCostDownR(scalars,0)
     def calculateCostDownR(self,scalars,passed_cost):
@@ -88,16 +82,7 @@ class PlayerStateTarget:
             for sol in self.attributeList[attr]:
                 for at in sol.children:
                     at.calculateDepth(depth)
-    '''
-    def select(self):
-        #cAttr = None
-        cSol = None
-        for attr in self.attributeList:
-            for sol in self.attributeList[attr]:
-                if (cSol == None or sol.temp_cost_up < cSol.temp_cost_up) and (sol.ps.inFrontOf == None or len(self.attributeList) == 1):
-                    cSol = sol
-        return cSol.select()
-    '''
+
     #adds ps to the attribute accumulation corresponding with pss.ps
     def updatePSS(self,pss,ps):
         self.attributeAccumulation[pss.ps] = ps + self.attributeAccumulation[pss.ps]
@@ -125,6 +110,7 @@ class PlayerStateTarget:
             if clean and ((leaf.getResult().inFrontOf != None and len(leaf.parent.parents[0].attributeList) == 1) or leaf.getResult().inFrontOf == None):#looked at can't be pooled so this is safe, but you would have to enforce priority order here
                 clean_set.append(leaf)
         return clean_set
+    #helper method for getLeafNodes
     def getLeafNodesR(self):
         leafs = []
         for attr in self.attributeList:

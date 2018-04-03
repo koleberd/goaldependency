@@ -6,9 +6,11 @@ from actionTarget import *
 from actionFactory import *
 from graphviz import *
 
+###
+#used to build and render a dependency tree
+###
 
-
-
+#gets the name for a node on the tree based on its contained PS.
 def getName(obj):
     if type(obj) == PlayerStateTarget:
         return 'PST - ' + (str(obj.ps) + ' - ' + str(id(obj))).replace(':',';')
@@ -22,6 +24,7 @@ def getName(obj):
 #len % 3 == 0 -> PST
 #len % 3 == 1 -> PSS
 #len % 3 == 2 -> AT
+#saves tree as simulation/trees/<name>.png
 def graphTree(levelIndex,name,selectedAT=None):
     print('Rendering graph for ' + name)
     g = Digraph('Tree',filename=('simulation/trees/' + name + '.gv'),format='png')
@@ -64,6 +67,7 @@ def graphTree(levelIndex,name,selectedAT=None):
                     g.edge(getName(item),getName(item.child))
     g.render()
 
+#prints the tree to console. not very nice to use.
 def printTree(levelIndex):
     print("=TREE=")
     for level in range(0,len(levelIndex)):
@@ -160,6 +164,9 @@ def downwardPruneTree(levelIndex):
         if somethingRemoved:
             levelIndex[treeLevel] = newLevelList
 
+
+
+#decomposes a playerstate using a given actionFactory and uses tree_name as the name for rendering the tree
 def decomposePS(ps,tree_name,actFactory):
     proxyAT = ActionTarget(Action(ps,PlayerState(),0,None))
 
@@ -230,6 +237,8 @@ def decomposePS(ps,tree_name,actFactory):
     levelIndex[0][0].parent = None
     return levelIndex
 
+
+#helper method for decomposePS(). Decomposes an AT.
 def decomposeAT(at,factory):
     levels = [[],[],[]]
     prune = False

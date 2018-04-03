@@ -4,6 +4,10 @@ import time
 #from os.path import isfile,join
 
 
+###
+#manages the player's inventory. has some lasting functionality from when this was used in minecraft
+###
+
 class InventoryManager:
     def __init__(self):
         with open('json/inventoryItem.json') as rsjs:

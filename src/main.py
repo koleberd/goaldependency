@@ -17,6 +17,17 @@ import dependencyTree as dtree
 import sys
 import math
 
+###
+#contains action target selectors,
+#utility methods for the world and training batch generation,
+#running simulations,
+#trianing agents,
+#and benchmarking agents
+###
+
+sim_name = 'medium_2'
+RENDER_TREE = False
+#RENDER_PATH = False
 
 #--- CONFIGURATION CONSTANTS ---
 sim_stat_dir = 'json/simulation_stats/'
@@ -26,7 +37,6 @@ world_benchmark_set_dir = 'json/benchmark_sets/'
 
 #--- SIMULATION PARAMETERS ---
 RAND_SPAWN = True
-sim_name = 'medium_2'
 bl_ind = {None:0,'wood':1,'stone':2,'crafting bench':3,'iron ore':4,'coal':5,'furnace':6,'wall':7} #for encoding data for input into nn
 action_set = ['locateObject:wood','locateObject:stone','locateObject:crafting bench','locateObject:iron ore','locateObject:coal'] #for decoding data from output of nn
 simulation_config_name = sim_config_dir + sim_name + '.json'
@@ -289,7 +299,7 @@ def run2d3d(simulation_name,select_method,random_spawn=False,spawn_pos=None):
     gs = GameState(pm=pm,inv=inv_manager,world_2d=world_2d)
 
     root = level_index[0][0]
-    scales = {} #action_factory.scaleCosts(gs.fov)
+    scales = {}
     root.calculateCostUp(scales)
     root.calculateCostSetDown([])
     root.calculateDepth(0)
@@ -312,8 +322,9 @@ def run2d3d(simulation_name,select_method,random_spawn=False,spawn_pos=None):
             steps.append(selected_at)
             #print(selected_at.act.name+ '-' + str(id(selected_at)))
             #dtree.upwardPruneTree(level_index) #only need to prune if you're graphing the tree - BUGGED
-            #dtree.downwardPruneTree(level_index)
-            #dtree.graphTree(level_index,simulation_name + '_' + str(gs.world_step),selectedAT=selected_at)
+            if(RENDER_TREE):
+                dtree.downwardPruneTree(level_index)
+                dtree.graphTree(level_index,simulation_name + '_' + str(gs.world_step),selectedAT=selected_at)
         else:
             steps_this_act += 1
 
@@ -509,13 +520,6 @@ def benchmarkAgainstAlternates(model_name):
 
 
 
-#run2d3d('just_for_tree',select_method = lambda x,frame,prev,prev_time: selectCheapest(x,frame,prev,prev_time))
+
 #train()
 benchmarkAgainstAlternates('trainedModels/rv_4_0.7211828010070593')
-
-
-
-
-
-
-#

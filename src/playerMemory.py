@@ -1,3 +1,8 @@
+###
+#contains structures used to track the user's path, world snapshots, and things used for rollbacks as well as extra metrics.
+###
+
+
 class PlayerMemory:
     def __init__(self,target=None):
         self.target = target

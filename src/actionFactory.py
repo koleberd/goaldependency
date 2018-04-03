@@ -2,8 +2,14 @@ from action import *
 from playerState import *
 import gameController
 import os.path
-
 import json
+
+
+###
+#parses json containing known actions
+#produces actions that return a specified PS
+###
+
 class ActionFactory:
 
     def __init__(self,costs):
@@ -14,6 +20,8 @@ class ActionFactory:
         for key in actMemory:
             self.actionMemory.append(self.parseActionJSON(actMemory[key]))
 
+
+    #parses json containing known actions
     def parseActionJSON(self,obj):
         psp = PlayerState.parsePlayerStateJSON(obj['prereq'])
         psr = PlayerState.parsePlayerStateJSON(obj['result'])
@@ -26,15 +34,15 @@ class ActionFactory:
         nm = obj['function']
         return Action(psp,psr,cst,func,nm)
 
-    #1. try to find an action with the desired output
-    #2. if that can't be found, try one that hasn't been tried with the lowest cost??? - not sure if this is the right way to experiment
-    def getActions(self,ps):#not complete
+    #produces actions that return a specified PS
+    def getActions(self,ps):
         ret = []
         for act in self.actionMemory:
-
             if act.ps_res.isParallel(ps):
                 ret.append(act)
         return ret
+
+        '''
     def scaleCosts(self,scalars):
         res = {}
         if scalars == None:
@@ -44,3 +52,4 @@ class ActionFactory:
             if ps.inFrontOf in scalars.keys():
                 res[act] = scalars[ps.inFrontOf]
         return res
+        '''

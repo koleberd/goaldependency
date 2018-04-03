@@ -5,6 +5,12 @@ import time
 import imageio
 import random
 
+###
+#the 2d world model
+#parses a world, supports moving within, pathfinding, and modifying the world
+###
+
+
 #for parsing input world
 BLOCK_IND = {
     (0,0,0):'wall',
@@ -46,12 +52,15 @@ class GameWorld2d:
         if spawn_random:
             self.randomizePos()
         self.yaw = 0
+    #randomizes spawn position to an available open location
     def randomizePos(self):
         npos = (random.randint(0,self.width-1),random.randint(0,self.height-1))
         while self.grid[npos[0]][npos[1]] != None:
             npos = (random.randint(0,self.width-1),random.randint(0,self.height-1))
         self.pos = npos
         return npos
+
+
     def findClosest(self,obj,number):#not used
         '''
         finds the closest <number> instances of <obj> from self.pos, in terms of euclidian distance
@@ -79,12 +88,17 @@ class GameWorld2d:
             ranked.append(locs[minP])
             del locs[i]
         return ranked
+
+
+    #returns if a position has an exposed/open adjacent position
     def isExposed(self,col,row):
         top = row - 1 >= 0 and self.grid[col][row-1] == None
         left = col - 1 >= 0 and self.grid[col-1][row] == None
         right = col + 1 < len(self.grid) and self.grid[col+1][row] == None
         bottom = row + 1 < len(self.grid[0]) and self.grid[col][row+1] == None
         return top or left or right or bottom
+
+    #renders the current world
     def printWorld(self,path=[]):
         render = Image.new('RGB',(self.width,self.height),color=(255,255,255))
         for col in range(0,self.width):
@@ -99,6 +113,10 @@ class GameWorld2d:
             render.putpixel(pos,(193,28,181))
 
         render.show()
+
+
+
+    #saves the current world
     def saveWorld(self,path=[],name=time.time(),resize=4):
         render = Image.new('RGB',(self.width,self.height),color=(255,255,255))
 
@@ -119,6 +137,8 @@ class GameWorld2d:
         if resize != 1:
             render = resize_no_blur(render,resize)
         render.save('simulation/2Dpath/'+str(name)+'.jpg')
+
+    #pathfinds between two points in the world
     def astar(self,start,goal):
         start_time = time.time()
         evaluatedNodes = []
@@ -161,6 +181,8 @@ class GameWorld2d:
                 fromStartCost[neighbor] = tentativeFromStartcost
                 fromStartToGoalThroughNode[neighbor] = fromStartCost[neighbor] + estimate_cost(neighbor,goal)
         return None
+
+    #helper method for astar
     def getNeighbors(self,pos):
         neighbors = []
         if pos[0] >= 1 and self.isValidMovement((pos[0]-1,pos[1])):#left
@@ -172,10 +194,15 @@ class GameWorld2d:
         if pos[1] < len(self.grid[0]) - 2 and self.isValidMovement((pos[0],pos[1]+1)):#down
             neighbors.append((pos[0],pos[1]+1))
         return neighbors
+    #helper method for astar
     def isValidMovement(self,pos,exception='not none'):
         return self.grid[pos[0]][pos[1]] == None or self.grid[pos[0]][pos[1]] == exception
+
+
     def updateLoc(self,pos,newVal):
         self.grid[pos[0]][pos[1]] = newVal
+
+    #renders an image with the last points in the user's path colored in a purple gradient
     def renderPath(self,path):
         render = Image.new('RGB',(self.width,self.height),color=(255,255,255))
 
@@ -194,6 +221,8 @@ class GameWorld2d:
             render.putpixel(pos,((int(193*mul),int(28*mul),int(181*mul))))
             path_dark -= 1
         return render
+
+    #casts a ray from the player's current position at an angle for a distance and returns if anything was hit by the ray.
     def rayCast(self,angle,distance):
         ng = (self.yaw+angle+360)%360
         angr = np.deg2rad(ng)
@@ -246,6 +275,9 @@ class GameWorld2d:
         return cl_d, self.grid[cl_x][cl_y]
         #find actual distance to intersection with location
         #return distance and the object #and coord tuple
+
+
+    #returns a square kernel of positions around the player's current location.
     def getKernel(self,radius):
         '''
         startx = max([0,self.pos[0]-radius])
@@ -262,6 +294,9 @@ class GameWorld2d:
                     res[col+radius-self.pos[0]][row+radius-self.pos[1]] = bl_ind[self.grid[col][row]]
         return np.array(res).flatten()
         #return [[bl_ind[self.grid[i][j]] for j in range(0,self.height)] for i in range(0,self.width)]
+
+
+    #calculates the average distance from every open point to every unique block type
     def getAverageDistances(self):
         print('Calculating average distances...')
         dist_set = {}
@@ -280,6 +315,8 @@ class GameWorld2d:
         for bl in BLOCK_TYPES:
             avg_set[bl] = sum(dist_set[bl])/float(len(dist_set[bl]))
         return avg_set
+
+    #gets the densities of each block in the world
     def getDensities(self):
         counts = [0 for x in range(len(BLOCK_TYPES)+1)]
         total = 0
@@ -298,7 +335,7 @@ class GameWorld2d:
         print('total: ' + str(float(total)/float(self.width*self.height)))
         return counts
 
-
+#resizes an image by a scalar, not blurring any pixels like other resize algorithms
 def resize_no_blur(img,factor):
     res = Image.new('RGB',(img.width*factor,img.height*factor))
     for col in range(0,img.width):
@@ -307,6 +344,9 @@ def resize_no_blur(img,factor):
                 for rrow in range(row*factor,(row+1)*factor):
                     res.putpixel((rcol,rrow),img.getpixel((col,row)))
     return res
+
+
+
 def parseBlock(pixel):
     #print(type(pixel))
     npx = (pixel[0],pixel[1],pixel[2])

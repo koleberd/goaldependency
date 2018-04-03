@@ -21,7 +21,7 @@ init:
 	@mkdir json/benchmark_sets
 	@mkdir json/simulation_stats
 	@mkdir -p resources/2d
-	@pip install imageio numpy graphviz PIL
+	@pip install imageio numpy graphviz pillow
 
 doc:
 	@asciidoctor README.adoc -b html5

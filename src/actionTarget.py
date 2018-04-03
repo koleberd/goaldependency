@@ -3,6 +3,11 @@ from action import *
 from playerStateTarget import *
 from playerStateSolution import *
 
+###
+#encompasses an Action as well as references to its parent PSS and its child PST (if it has one)
+###
+
+
 class ActionTarget:
     def __init__(self,act):
         self.act = act
@@ -79,25 +84,8 @@ class ActionTarget:
             self.child.calculateDepth(depth+1)
 
 
-    '''
-    def getCost(self,scalars,table={}):
-        scalar = 1
-        if self.act in scalars.keys():
-            scalar = scalars[self.act]
-        res = self.act.cost*scalar
-        if self.child != None and self.getRequirement() != PlayerState():
-            if not self.act in table.keys():
-                table[self.act] = res + self.child.getCost(scalars,table)
-            res = table[self.act]
-        self.temp_cost_up = res
-        return res
 
-    def select(self):
-        if self.child == None:
-            return self
-        return self.child.select()
-    '''
-    
+
     def getNodeDepth(self):
         #print('---')
         #print(self.parent)
@@ -106,10 +94,7 @@ class ActionTarget:
             return self.parent.parents[0].parent.getNodeDepth() + 1
         else:
             return 0
-    '''
-    def isComplete(self):
-        return True
-    '''
+
     def execute(self,gs):
         '''
         execute(gs) is a pretty round-a-bout method so here's how it works

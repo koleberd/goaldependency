@@ -430,10 +430,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Goal Dependency Thesis Project</h1>
 </div>
 <div id="content">
-<div id="preamble">
+<div class="sect1">
+<h2 id="_abstract">Abstract</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This project uses AI to efficiently accomplish top level goals in an environment with strict goal dependency hierarchies.</p>
+<p>In this project, the use of deep neural networks for the process of selecting actions to execute within an environment to achieve a goal is explored. Scenarios like this are common in crafting based games such as Terraria or Minecraft. Goals in these environments have recursive sub-goal dependencies which form a dependency tree. The agent operating within these environments have access to low amounts of data about the environment before interacting with it, so it is crucial that this agent is able to effectively utilize its tree of dependencies and its environmental surroundings to make judgements about which sub-goals are most efficient to pursue at any point in time. A successful agent minimizes cost when completing a given goal. A deep neural network in combination with Q-learning techniques was employed to act as the agent in this environment. This agent consistently performed better than agents using alternate models (models that used dependency tree heuristics or human-like approaches to make sub-goal oriented choices), with an average performance advantage of 22.56% over the best alternate agent. This shows that machine learning techniques can be effectively employed to make goal-oriented choices within an environment with recursive sub-goal dependencies and low amounts of pre-known information.</p>
 </div>
 </div>
 </div>
@@ -447,146 +448,23 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 If you plan on using Tensorflow with GPU support, this must be Python 3.5</p>
 </li>
 <li>
-<p>Graphviz
+<p>Graphviz (Optional)
 Graphviz has two components. There&#8217;s a pip package that&#8217;s noted below,
 but also has an <a href="https://www.graphviz.org/Download.php">executable</a> that you must have in your path in order for some components of this project to work.</p>
 </li>
 <li>
-<p>Tensorflow (with GPU support)
-For now, this is optional since no part of the main system uses Tensorflow</p>
-</li>
-<li>
-<p>Minecraft
-Optional. The current system doesn&#8217;t interface with Minecraft but will in the near future</p>
-</li>
-<li>
-<p>Minutor
-Optional. This allows you to capture layers of a Minecraft world. There are sample layers in <code>resources/2D</code> so you can use those if you don&#8217;t want to capture your own</p>
+<p>Tensorflow (optionally with GPU support)</p>
 </li>
 </ul>
 </div>
 <div class="sect2">
 <h3 id="_pip_requirements">pip Requirements</h3>
 <div class="paragraph">
-<p><code>$pip install pillow pyautogui graphviz</code></p>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_terminology_functionality_architecture_description">Terminology/Functionality/Architecture Description</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The purpose of this project is to use AI to make goal based decisions in an environment where top level goals have subgoals with strict dependencies.
-That is to say that a goal can&#8217;t be completed or even approached before its subgoals have been completed.
-Additionally, in this environment, there may be more than one way to achieve a goal, so there are potential decisions between different parallel subgoals.
-In the context of this project, the environment is a game environment for the game Minecraft.
-For the purposes of this project, the goals will be represented by a PlayerState (PS) which represents the state of the player&#8217;s inventory, buffs, and the current item under crosshairs.
-Nearly all goals in the game require a certain PS before they can be approached.
-For example, crafting a certain tool might require a set of resources to be present in the player&#8217;s inventory.
-This means the goal of the tool can be decomposed into subgoals for each of those resources required to be in the player&#8217;s inventory.
-Similarly, if a resource needs to be harvested, a specific tool might be required along with having a specific block in front of the player.
-This would mean there would be subgoals involving both acquiring the tool AND moving into a position where the block is in front of the player.</p>
+<p>Install pip requirements with</p>
 </div>
 <div class="paragraph">
-<p>As described above a goal might have multiple subgoals. Additionally, there may be multiple ways to approach a subgoal.
-Due to this, a goal can be represented with a PlayerStateTarget (PST) which breaks a PS goal into attributes.
-This would mean that if two different resources are required, then they would be split into separate PS&#8217;s contained by the PST.
-As previously mentioned, there might be multiple ways to complete one of these attribute PS&#8217;s.
-For that reason, each attribute in the PST has a set of one or more PlayerStateSolutions (PSS) which represent a single approach to complete that respective attribute PS.
-For example, if there were two tools that could harvest one unit of a specific resource, both would be added as PSS for that resource&#8217;s corresponding attribute PS in the PST.</p>
+<p><code>$make init</code></p>
 </div>
-<div class="paragraph">
-<p>With this environment, there is a set of known actions that have required inputs and expected outputs.
-The actions are contained by an ActionTarget (AT) which has a prerequisite PS and a result PS, and is connected to a PSS to act as an executable task.
-An PST is created to wrap the AT&#8217;s prerequisite PS. The AT may not have a prerequisite, which is why all leaf nodes on the dependency tree are AT&#8217;s.</p>
-</div>
-<div class="paragraph">
-<p>For the previous example, what if the output of the PSS using the first tool to harvest the resource was more than the required amount to satisfy the attribute PS corresponding to that PSS?
-This would create excess materials. To avoid this, the PSS can pool identical attribute PS&#8217;s from PST&#8217;s on the same tree layer. This means PSS&#8217;s may have multiple parents.
-In the reverse situation, if one execution of the PSS&#8217;s respective AT wouldn&#8217;t satisfy the attribute PS referenced by the PSS, then the PSS will hold enough children AT&#8217;s to satisfy the requirement.</p>
-</div>
-<div class="paragraph">
-<p>During each step during execution, a set of cost scalars are generated (more on this later) which correlate with each known action within the environment.
-These scalars are passed to each leaf AT node on the tree, then these costs are propagated upward until the topmost PST node.
-Starting from the topmost PST node, the cheapest attached PSS is picked, followed by that PSS&#8217;s first AT, followed (recursively) by the AT&#8217;s child PST&#8217;s cheapest attached PSS.
-Once a leaf AT is selected, it is executed. If it completes this step, it propagates its returned PS upward to its parent PSS, and removes itself from the tree.
-If its parent PSS doesn&#8217;t complete, that PSS&#8217;s parent PST updates the competing PSS&#8217;s with the lowered PS requirements.
-In turn, that PSS and its PST parent propagate upward if they have no children and are therefore complete.</p>
-</div>
-<hr>
-<div class="paragraph">
-<p>Since the system operates within a game without a direct Python interface, operating within the game requires a substantial amount of world modeling.
-Actions in the game are generally categorized into the following areas</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>harvesting resources</p>
-</li>
-<li>
-<p>locating and moving to resources</p>
-</li>
-<li>
-<p>crafting resources</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Crafting and harvesting resources require certain existing inventory states and player positioning relative to certain game objects, but aren&#8217;t very involved given those requirements are fulfilled.
-This means they can be completed with simple input scripts to move the mouse to certain locations within the game, given the player&#8217;s inventory and positioning is known.
-However, locating and moving to resources requires substantially more knowledge about the game world.
-Ideally, this would be handled by an AI subsystem which utilized computer vision to extract dimensional data and identify the locations of resources.
-Unfortunately, this proved to be unrealistic after a training set of over 6000 labeled images was manually generated only to yield extremely unreliable CV models.
-The alternative to this would be to directly extract dimensional data from game files but this isn&#8217;t possible, or at least isn&#8217;t reasonable for this scope of project.
-Due to these factors, the following world models are necessary.</p>
-</div>
-<div class="paragraph">
-<p>1) The 2D world Model
-In order to simplify the world, the test environments for the project are flatted to be essentially 2D. In addition, <code>gameWorld2d.py</code> holds a representation of the game world
-based on a set of layers of the world, and tracks the player&#8217;s position during execution.
-This gives the utility of locating game objects as well as pathfinding to those objects.</p>
-</div>
-<div class="paragraph">
-<p>2) The Inventory Model
-The player&#8217;s inventory must be tracked and managed during execution in order for scripts to target the right positions in the player&#8217;s inventory.
-<code>inventoryManager.py</code> contains an inventory manager that tracks the expected state of the player&#8217;s inventory throughout execution.
-Whenever a player takes an action that would affect the player&#8217;s inventory, the actual inventory needs to be cross referenced with the expected inventory.
-Luckily, the game can be temporarily paused and unpaused to save the player&#8217;s actual inventory to a file which can be parsed to line up against the expected inventory.</p>
-</div>
-<div class="paragraph">
-<p>3) The Player Memory Model
-Some knowledge that the player needs doesn&#8217;t fit within the abstraction level of PS.
-For example, during a 'locate and move to' action, the player initially establishes the ideal path to a game object.
-The player needs to know the path the establish initially so execution isn&#8217;t bogged down by pathfinding each step of the way,
-and so heuristics don&#8217;t falsely throw the player off the ideal path.
-Additionally, the it&#8217;s possible that the player will deviate from that specific goal due to cost scaling (see below) at a later game step, so that previous path needs to be voided from memory at that point.</p>
-</div>
-<div class="paragraph">
-<p><code>gameController.py</code> utilizes these models and executes actions in the 2D world model, then attempts to mirror those actions in the 3D game world.
-Unfortunately, due to imprecision of inputs in the 3D world, it is common for the two worlds to get out of sync.</p>
-</div>
-<div class="paragraph">
-<p>Currently, there is no strict dependency of the backend system on the 3D world, and the 3D world mostly just acts as a flashier front end to represent the execution of actions.
-This may change depending on the inputs of the cost scalar NN (see below).</p>
-</div>
-<hr>
-<div class="paragraph">
-<p>The AI component of this project comes in the form of the cost scaling each step of execution.
-Given environmental inputs, different actions might be more efficient to pursue than others.
-Neural networks are employed to take limited environmental inputs and produce scalars (on an interval of (0:1] ) for each known action in the environment.</p>
-</div>
-<div class="paragraph">
-<p>Options for AI input:</p>
-</div>
-<div class="paragraph">
-<p>1) 2d world flattened (input: 64 x 64 + xpos + ypos)</p>
-</div>
-<div class="paragraph">
-<p>2) 1 + 2n input neurons as raycasts in 2d</p>
-</div>
-<div class="paragraph">
-<p>3) frame from 3d, cut as horizontal slice</p>
 </div>
 </div>
 </div>
@@ -595,59 +473,233 @@ Neural networks are employed to take limited environmental inputs and produce sc
 <div class="sectionbody">
 <div class="paragraph">
 <p>The project has a makefile that can be used for convenience rather than calling the scripts directly.
-At this point in the project, none of the scripts are set up to handle CLI calls, so you&#8217;ll have to edit the last line of the script that actually executes functions.
-Primarily, you&#8217;ll need to edit the last line of <code>src/main.py</code> to handle what you want it to do.</p>
-</div>
-<div class="paragraph">
-<p>Off the bat, you can run</p>
+At this point in the project, none of the scripts are set up to handle CLI calls, so you&#8217;ll have to edit parts of the scripts (namely <code>src/main.py</code>) to have the functionality you want. Running</p>
 </div>
 <div class="paragraph">
 <p><code>$make</code></p>
 </div>
 <div class="paragraph">
-<p>which will run a simulation in 2D space to create 10 units of 'stone pickaxe'.
-This will display a sequence of images which show the paths to take to complete the task.</p>
+<p>will run <code>src/main.py</code>.</p>
 </div>
-<div class="paragraph">
-<p>Path image color code:</p>
-</div>
+<div class="sect2">
+<h3 id="_editing_scripts_for_different_functionality">Editing Scripts for Different Functionality</h3>
 <div class="ulist">
 <ul>
 <li>
-<p>purple: the path</p>
-</li>
+<p>change the value of <code>simname</code> at the top of <code>main.py</code> to change between simulation configs</p>
+<div class="ulist">
+<ul>
 <li>
-<p>black: stone</p>
-</li>
-<li>
-<p>green: crafting bench</p>
-</li>
-<li>
-<p>blue: tree</p>
-</li>
-<li>
-<p>red: unknown</p>
+<p>Simulation configs are located in <code>json/simulation_configs</code>. Duplicate and edit one of the existing ones to specifiy alternate worlds/goals.</p>
 </li>
 </ul>
 </div>
-<div class="paragraph">
-<p>If you&#8217;re interested in the dependency trees along the way, uncomment line 338 of <code>main.py</code>.
-Then, run the simulation and look in <code>trees/</code>, which will have the dependency tree after every decision.
-Tree rendering takes a lot of time so this will slow down the simulation considerably.</p>
+</li>
+<li>
+<p>change the value of RENDER_TREE at the top of <code>main.py</code> to enable or disable rendering of the dependency tree</p>
+</li>
+<li>
+<p>change the last line of <code>main.py</code> to switch between training/searching for a model and benchmarking a specific model</p>
+<div class="ulist">
+<ul>
+<li>
+<p>to specify the specific model to benchmark, use the filepath (excluding the extension) of a model in <code>trainedModels</code> (including <code>trainedModels</code> in the filepath)</p>
+</li>
+</ul>
 </div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_file_overviews">File overviews</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_code_src_code"><code>src</code></h3>
+<div class="ulist">
+<ul>
+<li>
+<p>action.py: Contains the Action class.</p>
+</li>
+<li>
+<p>actionFactory.py: Contains the ActionFactory class.</p>
+</li>
+<li>
+<p>actionTarget.py: Contains the ActionTarget class.</p>
+</li>
+<li>
+<p>dependencyTree.py: Is used to construct a dependency tree given an ActionFactory and a goal PS.</p>
+</li>
+<li>
+<p>gameController.py: Contains the GameController class. GameController executes actions on the current GameState.</p>
+</li>
+<li>
+<p>gameState.py: Contains the GameState class. GameState contains PlayerMemory, an InventoryManager, and a GameWorld2d.</p>
+</li>
+<li>
+<p>gameWorld2d.py: Contains the GameWorld2d class. GameWorld2d is the world model for the simulation. It is initialized with an image which it parses to determine the world environment. GameWorld2d contains methods relevant to movement such as pathfinding algorithms, as well as world visualization and analysis methods.</p>
+</li>
+<li>
+<p>inventoryManager.py: Contains the InventoryManager class. InventoryManager is the inventory model for the simulation.</p>
+</li>
+<li>
+<p>main.py: The system’s main file. Is responsible for building and training the goal selection DNN, as well as benchmarking and analyzing the DNN.</p>
+</li>
+<li>
+<p>playerMemory.py: Contains the PlayerMemory class. PlayerMemory contains execution overhead such as the agent’s currently selected AT as well as metrics and information about the current simulation so far.</p>
+</li>
+<li>
+<p>playerState.py: Contains the PlayerState class.</p>
+</li>
+<li>
+<p>playerStateSolution.py: Contains the PlayerStateSolution class.</p>
+</li>
+<li>
+<p>playerStateTarget.py: Contains the PlayerStateTarget class.</p>
+</li>
+<li>
+<p>test.py: Contains tests (mostly unit tests) for PlayerState/ PlayerStateSolution/ PlayerStateTarget/ Dependency Tree functionality.</p>
+</li>
+<li>
+<p>util.py: Contains convenience utility methods.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_code_json_code"><code>json</code></h3>
+<div class="ulist">
+<ul>
+<li>
+<p>benchmark_sets: contains set of positions used to benchmark agents on given worlds</p>
+</li>
+<li>
+<p>simulation_configs: contains set of config files that lay out worlds and goals for different simulations</p>
+</li>
+<li>
+<p>simulation_stats: contains simulation statistics for different simulation runs</p>
+</li>
+<li>
+<p>world_configs: contains precalculated static costs for specific actions for given worlds.</p>
+</li>
+<li>
+<p>actionMemory.json: contains every known action with the required and resultant PlayerState</p>
+</li>
+<li>
+<p>craftingIndex.json: contains where and what is placed in a crafting bench during crafting. Contains some extra information which at one point pertained to minecraft but is still valueable in BlockLand.</p>
+</li>
+<li>
+<p>environmentIndex.json: contains what tool to use and how long to take to harvest a block (used by gameController.py)</p>
+</li>
+<li>
+<p>inventoryItem.json: contains information about tools including tool level, stack size, and tool type</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_code_resources_code"><code>resources</code></h3>
+<div class="ulist">
+<ul>
+<li>
+<p>2d: contains 2d world files that are parsed to create a world at the beginning of a simulation</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_code_simulation_code"><code>simulation</code></h3>
+<div class="ulist">
+<ul>
+<li>
+<p>2Dpath: contains snapshots of worlds at points where actions are completed during simulation. Only populated when world rendering is enabled in <code>src/main.py</code></p>
+</li>
+<li>
+<p>trees: contians shapshots of the dependency tree at points where actions are completed during simulation. Only populated when tree rendering is enabled in <code>src/main.py</code></p>
+</li>
+<li>
+<p>[selection_method]_animation.gif: rendering of a simulation using a specified selection method. Only used for demonstration purposes.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_code_trainedmodels_code"><code>trainedModels</code></h3>
+<div class="ulist">
+<ul>
+<li>
+<p>[simulation_config_name]_[performance_improvement].meta: a trained tensorflow model for [simulation_config_name] (found in <code>json/simulation_configs</code>) that exhibited an improvement of [performance_improvement] during training.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_code_uml_code"><code>uml</code></h3>
+<div class="ulist">
+<ul>
+<li>
+<p>system_activity.jpg: an activity diagram demonstrating the general flow of a simulation</p>
+</li>
+<li>
+<p>system_class.jpg: a system-level class diagram</p>
+</li>
+<li>
+<p>uml_sem_2.mdj: a StarUML file containing the aformentioned UML diagrams.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_recommended_code_improvements">Recommended Code Improvements</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>Tree color code:</p>
+<p>Note: these improvements are separate from the improvements outlined in the thesis document.</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>purple: selected AT node</p>
+<p><code>src/main.c</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Stop training models once they have a specific advantage over other agents (based on initial benchmarking) rather than having a specific level of improvement over its previous self (based on initial benchmarking)</p>
 </li>
 <li>
-<p>green: leaf AT node</p>
+<p>ActionTargetSelectors</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Refactor switching costs to factor in the sum of the switching costs for an entire chain of sequentially dependent actions if there is such a chain of sequentially dependent actions</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
 </li>
 <li>
-<p>blue: pooled PSS node</p>
+<p><code>src/gameWorld2d.py</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Add option to randomly generate a world</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>src/dependencyTree.py</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Show rewound/rolled back nodes on the rendered graphs (they need to be added back into levelIndex after being rewound since they&#8217;re pruned from levelIndex when initially completed)</p>
+</li>
+</ul>
+</div>
 </li>
 </ul>
 </div>
@@ -664,7 +716,7 @@ Tree rendering takes a lot of time so this will slow down the simulation conside
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-01-16 14:36:52 US Mountain Standard Time
+Last updated 2018-04-03 12:56:24 US Mountain Standard Time
 </div>
 </div>
 </body>

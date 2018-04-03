@@ -4,6 +4,9 @@ from util import *
 #once instnatiated, will produce one self.ps for every parent
 #PSS is only supposed to satisfy one attribute of a PS, while a PST satisfies multiple attributes
 
+###
+#Contains the PlayerStateSoluion class. refer to the thesis document for more information about PlayerStateSolutions
+###
 
 #pss.ps != pss.getTotal() initially. for example, the pss.ps for wood pickaxe = 1 but pss.getTotal() = 4 or however many units of pickaxe it returns
 class PlayerStateSolution:
@@ -69,16 +72,6 @@ class PlayerStateSolution:
     #-------------------------------------------
     #RUN TIME METHODS
     #-------------------------------------------
-    '''
-    def getCost(self,scalars,table={}):
-        total = self.children[0].calculateCost(scalars,table)
-        if len(self.children) > 1:
-            for child in self.children[1:]:
-                total += child.getCost(scalars,table)
-        self.temp_cost_up = total
-        return total
-    '''
-
 
     def calculateCostUp(self,scalars):
         total = 0
@@ -86,10 +79,6 @@ class PlayerStateSolution:
             total += child.calculateCostUp(scalars)
         self.temp_cost_up = total
         return total
-    '''
-    def calculateCostDown(self,scalars):
-        return 0
-    '''
 
     def select(self):
         return self.children[0].select()
@@ -112,6 +101,8 @@ class PlayerStateSolution:
                 accumulation = accumulation - self.ps
         if self.isComplete():
             self.parents = []
+
+    #adjusts the current ps req after adding in the provided ps
     def adjust(self,ps):
         self.adjustment = self.adjustment + ps
         if self.adjustment.fulfills(self.children[-1].getResult()):

@@ -1,5 +1,10 @@
 #PLEASE UNDERSTAND THAT MOST PLAYERSTATE METHODS ARE NOT COMMUTATIVE, INCLUDING ADDITION
 
+###
+#Contains the PlayerState class. refer to the thesis document for more information about PlayerStates
+###
+
+
 class PlayerState:
     def __init__(self,inventory={},inFrontOf=None):
         self.inventory = inventory
@@ -54,26 +59,6 @@ class PlayerState:
                 nn_inv[item] = n_inv[item]
 
         return PlayerState(nn_inv,self.inFrontOf)
-    '''
-    def __lt__(self,other):
-        res = True
-        for item in self.inventory:
-            if other.inventory[item] != None and self.inventory[item] >= other.inventory[item]:
-                res = False
-
-        return res
-    def __le__(self,other):
-        return not self.__gt__(other)
-    def __gt__(self,other):
-        res = True
-        for item in self.inventory:
-            if other.inventory[item] != None and self.inventory[item] <= other.inventory[item]:
-                res = False
-
-        return res
-    def __ge__(self,other):
-        return not self.__lt__(other)
-    '''
     def __hash__(self):
         return hash((frozenset(self.inventory.keys()),frozenset(self.inventory.items()),self.inFrontOf))
     def __str__(self):

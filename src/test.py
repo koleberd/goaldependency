@@ -8,6 +8,11 @@ from playerStateFactory import *
 from actionFactory import *
 from viewer import *
 
+###
+#tests grandular behavior for PS/PST/PSS/AT
+###
+
+
 def test():
     testHash()
     testPS()

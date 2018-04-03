@@ -1,5 +1,7 @@
 from playerState import PlayerState
-
+###
+#represents a standalone, executable action with a PS requirement and resultant, and a cost.
+###
 
 class Action:
     def __init__(self,ps_req,ps_res,cost,executionFunction,name=''):

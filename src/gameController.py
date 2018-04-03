@@ -21,6 +21,11 @@ with open('json/environmentIndex.json') as envjs:
     environmentIndex = json.load(envjs)
 
 
+###
+#contains methods for executing specific actions within the gameworld based on the gamestate, the action, and action parameters
+###
+
+
 def craftObject(obj,gs):
     if not obj in craftingRecipes.keys():
         return True
@@ -65,6 +70,8 @@ def harvestObject(obj,gs,tool=None):#potentially will break if the player doesn'
 
     return True
 
+
+#rolls back a layer based on at
 def relink(at,pss,pst,pat):
     pss.addChild(at)
     at.addParent(pss)
@@ -146,6 +153,9 @@ def moveForward(gs,units):#moves forward 1 unit
     gs.world_2d.pos = (gs.world_2d.pos[0]+int(math.sin(math.radians(gs.world_2d.yaw))),
            gs.world_2d.pos[1]+int(math.cos(math.radians(gs.world_2d.yaw))))
 
+
+
+#calls the appropriate function for execution based on an action name and parameters
 def executeFunction(name,gs,params):
     #print(name + ': ' + str(params))
     if name == 'craftObject':
