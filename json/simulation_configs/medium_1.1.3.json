@@ -1,0 +1,9 @@
+{
+    "world_location":"resources/2d/medium_1.1.3.png",
+    "spawn_pos":[2,2],
+    "target_ps":{
+        "inventory":{
+            "stone pickaxe":20
+        }
+    }
+}

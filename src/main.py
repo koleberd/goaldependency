@@ -25,7 +25,7 @@ import math
 #and benchmarking agents
 ###
 
-sim_name = 'medium_2'
+sim_name = 'medium_1.1.3'
 RENDER_TREE = False
 #RENDER_PATH = False
 
